@@ -1,0 +1,18 @@
+{
+  "symbol": "LOTUSDEV",
+  "name": "Sri Lotus Developers & Realty Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/LOTUSDEV/",
+  "industry_tag": "",
+  "business_description": "Sri Lotus Developers & Realty Ltd develops and sells residential and commercial real estate properties, primarily through redevelopment projects in Mumbai's western suburbs. The company generates revenue by constructing ultra-luxury and luxury properties and selling them to end-users or investors.",
+  "key_products": [
+    "Redeveloped ultra-luxury residential properties",
+    "Redeveloped luxury commercial properties"
+  ],
+  "input_sensitivity": "(1) Cost risks: Highly sensitive to land acquisition costs, construction materials (cement, steel), labor expenses, and interest rates, all of which directly impact project margins. (2) Revenue/demand risks: Demand is driven by the health of the Mumbai luxury real estate market, interest rates, and overall economic sentiment among high-net-worth individuals and businesses seeking premium properties.",
+  "output_industries": [
+    "Real Estate Development (Luxury Residential & Commercial)"
+  ],
+  "output_note": "End-users (individuals and businesses) directly pay the company for completed ultra-luxury and luxury residential or commercial real estate units.",
+  "fetched_date": "2026-03-01T15:43:47.315228"
+}

@@ -1,0 +1,18 @@
+{
+  "symbol": "ZAGGLE",
+  "name": "Zaggle Prepaid Ocean Services Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/ZAGGLE/",
+  "industry_tag": "",
+  "business_description": "Zaggle Prepaid Ocean Services Ltd develops and sells financial technology solutions that help businesses automate and manage their expense workflows. The company generates revenue primarily by providing prepaid cards, expense management platforms, and related SaaS-based financial products to corporates, SMEs, and startups, typically charging fees for usage, subscriptions, and transaction processing.",
+  "key_products": [
+    "Prepaid expense management cards",
+    "Automated expense management SaaS platform"
+  ],
+  "input_sensitivity": "Cost risks: Sensitive to technology infrastructure costs (cloud services, software development), payment network fees, and employee expenses; not materially exposed to raw materials, energy, or fuel. Revenue/demand risks: Directly driven by the pace of digital adoption and expense automation among Indian corporates, SMEs, and startups, as well as overall business spending activity.",
+  "output_industries": [
+    "Expense Management & Prepaid Card Solutions"
+  ],
+  "output_note": "Corporate, SME, and startup clients pay Zaggle for access to its prepaid card solutions and automated expense management software.",
+  "fetched_date": "2026-03-01T15:44:45.522364"
+}

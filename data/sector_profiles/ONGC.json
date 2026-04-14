@@ -1,0 +1,18 @@
+{
+  "symbol": "ONGC",
+  "name": "Oil & Natural Gas Corpn Ltd",
+  "exchange": "BSE",
+  "screener_url": "https://www.screener.in/company/ONGC/",
+  "industry_tag": "",
+  "business_description": "Oil & Natural Gas Corporation Ltd (ONGC) is India's largest producer of crude oil and natural gas. The company explores, extracts, and produces crude oil and natural gas, which it sells primarily to government-owned refining and gas distribution companies. ONGC generates revenue by selling these hydrocarbons at regulated or market-linked prices.",
+  "key_products": [
+    "Crude oil",
+    "Natural gas"
+  ],
+  "input_sensitivity": "Cost risks: ONGC's margins are sensitive to exploration and production costs, including drilling, equipment, labor, and energy expenses, as well as government-imposed levies and royalties. Revenue/demand risks: The company's revenue is directly driven by global crude oil and natural gas prices, domestic energy policy, and demand from Indian oil refiners and gas utilities.",
+  "output_industries": [
+    "Crude Oil & Natural Gas Supply"
+  ],
+  "output_note": "ONGC is paid directly by oil refining companies and gas distribution utilities for the supply of crude oil and natural gas.",
+  "fetched_date": "2026-03-01T15:44:08.029542"
+}

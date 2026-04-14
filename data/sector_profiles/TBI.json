@@ -1,0 +1,18 @@
+{
+  "symbol": "TBI-SM",
+  "name": "TBI Corn Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/TBI/",
+  "industry_tag": "",
+  "business_description": "TBI Corn Ltd manufactures and exports corn-based products, generating revenue by selling processed corn goods to domestic and international buyers. Its business model is centered on converting raw corn into value-added products for food and industrial applications.",
+  "key_products": [
+    "corn starch",
+    "corn flour"
+  ],
+  "input_sensitivity": "Cost risks include fluctuations in corn prices (raw material), energy costs for processing, and labour expenses, all of which directly impact margins. Revenue and demand are sensitive to the health of the food processing and industrial sectors, as demand for corn-based ingredients depends on their production volumes.",
+  "output_industries": [
+    "Food Ingredients & Industrial Starch"
+  ],
+  "output_note": "Food manufacturers and industrial buyers pay TBI Corn Ltd for processed corn products such as corn starch and corn flour.",
+  "fetched_date": "2026-03-01T15:37:58.000701"
+}

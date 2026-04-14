@@ -1,0 +1,18 @@
+{
+  "symbol": "FABTECH",
+  "name": "Fabtech Technologies Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/FABTECH/",
+  "industry_tag": "",
+  "business_description": "Fabtech Technologies Ltd is a biopharma engineering company that designs, manufactures, and installs specialized equipment and turnkey solutions for pharmaceutical and biotechnology manufacturing facilities. The company generates revenue by selling engineered systems and services to pharma and biopharma manufacturers, including cleanroom setups, process equipment, and facility integration.",
+  "key_products": [
+    "pharmaceutical manufacturing equipment",
+    "turnkey biopharma facility engineering services"
+  ],
+  "input_sensitivity": "Cost risks include fluctuations in prices of engineering materials (such as stainless steel and electrical components), skilled labor costs, and energy expenses, all of which impact project margins. Revenue is directly sensitive to capital expenditure cycles in the pharmaceutical and biotechnology manufacturing sectors, as demand for new facilities and upgrades drives orders for Fabtech's products and services.",
+  "output_industries": [
+    "Pharma & Biopharma Facility Engineering"
+  ],
+  "output_note": "Pharmaceutical and biotechnology manufacturing companies pay Fabtech Technologies Ltd for engineered equipment and turnkey facility solutions used in their production operations.",
+  "fetched_date": "2026-03-01T15:45:03.248213"
+}

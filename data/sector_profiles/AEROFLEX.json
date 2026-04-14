@@ -1,0 +1,18 @@
+{
+  "symbol": "AEROFLEX",
+  "name": "Aeroflex Industries Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/AEROFLEX/",
+  "industry_tag": "",
+  "business_description": "Aeroflex Industries Ltd manufactures and sells metallic flexible flow solution products, primarily metallic hoses and related assemblies. The company generates revenue by supplying these products to industrial customers who require flexible, durable piping solutions for fluid and gas transfer applications.",
+  "key_products": [
+    "metallic flexible hoses",
+    "hose assemblies"
+  ],
+  "input_sensitivity": "Cost risks: Margins are sensitive to the prices of metals (such as stainless steel), energy costs, and labor expenses, as these are key inputs in manufacturing metallic hoses. Revenue/demand risks: Demand is directly driven by industrial capex cycles, especially in sectors requiring fluid and gas transfer solutions, and is sensitive to macro factors affecting industrial production and infrastructure investment.",
+  "output_industries": [
+    "Flexible Metallic Hose / Flow Systems"
+  ],
+  "output_note": "Aeroflex is paid directly by industrial and infrastructure companies for supplying metallic flexible hoses and flow system assemblies used in their operations.",
+  "fetched_date": "2026-03-01T15:37:24.931442"
+}

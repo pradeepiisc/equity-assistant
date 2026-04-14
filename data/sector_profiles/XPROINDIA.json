@@ -1,0 +1,18 @@
+{
+  "symbol": "XPROINDIA",
+  "name": "XPRO India Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/XPROINDIA/",
+  "industry_tag": "",
+  "business_description": "XPRO India Ltd manufactures and sells coextruded plastic films, thermoformed liners, and specialty films, including dielectric and special purpose BOPP films. The company generates revenue by supplying these polymer-based products to industrial customers who use them for packaging, electrical insulation, and specialty applications.",
+  "key_products": [
+    "Coextruded Plastic Films",
+    "Dielectric and Special Purpose BOPP Films"
+  ],
+  "input_sensitivity": "Cost risks: Margins are sensitive to fluctuations in polymer/raw material prices (primarily petrochemical derivatives), energy costs, and labor expenses. Revenue/demand risks: Demand is directly driven by the health of the packaging and electrical insulation sectors, which are influenced by manufacturing and consumer goods activity.",
+  "output_industries": [
+    "Flexible Packaging Films & Industrial Liners"
+  ],
+  "output_note": "Industrial manufacturers and packaging converters directly pay XPRO India Ltd for coextruded plastic films, specialty BOPP films, and thermoformed liners used in packaging and insulation applications.",
+  "fetched_date": "2026-03-01T15:39:53.626510"
+}

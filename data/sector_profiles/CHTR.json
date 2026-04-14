@@ -1,0 +1,18 @@
+{
+  "symbol": "CHTR",
+  "name": "CHTR",
+  "exchange": "BSE",
+  "screener_url": "",
+  "industry_tag": "",
+  "business_description": "Charter Communications (CHTR) is a major U.S. cable operator that provides broadband internet, video (TV), and voice services primarily to residential and commercial customers. The company generates revenue mainly through monthly subscription fees for its internet and cable TV packages, as well as additional charges for phone services and advertising sales.",
+  "key_products": [
+    "Broadband internet service",
+    "Cable television service"
+  ],
+  "input_sensitivity": "Cost risks include labor expenses, network infrastructure investment, and energy costs for operating cable and internet systems. Revenue is sensitive to consumer demand for high-speed internet and pay-TV, which is influenced by macroeconomic conditions, competitive offerings from streaming and telecom providers, and regional population growth.",
+  "output_industries": [
+    "Broadband & Cable Services"
+  ],
+  "output_note": "Residential and business customers pay Charter Communications directly for broadband internet, cable TV, and voice services.",
+  "fetched_date": "2026-03-01T15:43:39.546017"
+}

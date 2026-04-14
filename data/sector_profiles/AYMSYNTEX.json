@@ -1,0 +1,18 @@
+{
+  "symbol": "AYMSYNTEX",
+  "name": "AYM Syntex Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/AYMSYNTEX/",
+  "industry_tag": "",
+  "business_description": "AYM Syntex Ltd manufactures and exports polyester filament yarn, nylon filament yarn, and bulk continuous filament yarn. The company generates revenue by selling these synthetic yarns to textile and industrial manufacturers, both in India and internationally.",
+  "key_products": [
+    "Polyester Filament Yarn",
+    "Nylon Filament Yarn"
+  ],
+  "input_sensitivity": "Cost risks: Margins are sensitive to fluctuations in crude oil-derived raw material prices (such as PTA and MEG for polyester, caprolactam for nylon), energy costs, and labor expenses. Revenue/demand risks: Demand is directly driven by the health of the textile manufacturing sector, especially in apparel, home textiles, and industrial fabrics, which are cyclical and sensitive to consumer spending and export market trends.",
+  "output_industries": [
+    "Synthetic Yarn Manufacturing"
+  ],
+  "output_note": "Textile and industrial manufacturers directly pay AYM Syntex Ltd for polyester and nylon filament yarns used as raw materials in their production processes.",
+  "fetched_date": "2026-03-01T15:43:21.514975"
+}

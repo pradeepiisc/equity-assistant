@@ -1,0 +1,63 @@
+{
+  "gaps_identified": [
+    {
+      "sector": "Power Transmission & Distribution Equipment",
+      "portfolio_status": "Absent",
+      "watchlist_candidates": [
+        "QPOWER"
+      ]
+    },
+    {
+      "sector": "E-Waste Recycling & Precious Metal Recovery",
+      "portfolio_status": "Absent",
+      "watchlist_candidates": [
+        "NAMOEWASTE"
+      ]
+    },
+    {
+      "sector": "Defence Simulation & Training Systems",
+      "portfolio_status": "Absent",
+      "watchlist_candidates": [
+        "ZENTEC"
+      ]
+    },
+    {
+      "sector": "Pharma APIs / CRDMO",
+      "portfolio_status": "Thin (1 company)",
+      "watchlist_candidates": [
+        "DCAL",
+        "BIOCON"
+      ]
+    }
+  ],
+  "top_3_picks": [
+    {
+      "rank": 1,
+      "symbol": "NAMOEWASTE",
+      "name": "Namo e-Waste Management Ltd",
+      "new_sector_added": "E-Waste Recycling & Precious Metal Recovery",
+      "portfolio_gap_filled": "Absent",
+      "rationale": "E-waste recycling is a critical and fast-growing sector in India, currently unrepresented in the portfolio, exposing it to regulatory and sustainability blind spots. Namo e-Waste Management Ltd stands out for its strong execution, regulatory tailwinds, and consistent financial delivery, making it the best candidate to add this unique exposure.",
+      "investment_rating": "Unknown"
+    },
+    {
+      "rank": 2,
+      "symbol": "QPOWER",
+      "name": "Quality Power Electrical Equipments Ltd",
+      "new_sector_added": "Power Transmission & Distribution Equipment",
+      "portfolio_gap_filled": "Absent",
+      "rationale": "Power transmission and distribution equipment is a foundational sector for India's infrastructure growth, yet is absent from the portfolio, leaving a gap in core industrial exposure. Quality Power Electrical Equipments Ltd has demonstrated robust execution and sector tailwinds, making it a compelling choice to fill this gap and diversify infrastructure risk.",
+      "investment_rating": "Unknown"
+    },
+    {
+      "rank": 3,
+      "symbol": "BIOCON",
+      "name": "Biocon Ltd",
+      "new_sector_added": "Pharma APIs / CRDMO",
+      "portfolio_gap_filled": "Thin",
+      "rationale": "The Pharma APIs / CRDMO sector is represented by only one company, creating single-point risk in a high-growth, innovation-driven space. Biocon Ltd is a leading player with a differentiated pipeline in biosimilars and GLP-1 drugs, and is preferred over DCAL due to its scale, recent USFDA approvals, and broader market relevance.",
+      "investment_rating": "Unknown"
+    }
+  ],
+  "portfolio_assessment": "The portfolio demonstrates broad sectoral coverage but exhibits single-point risk in key growth areas such as Pharma APIs / CRDMO and lacks exposure to emerging sectors like e-waste recycling and power transmission equipment. Notably, several infrastructure and sustainability-driven sectors remain absent, representing diversification blind spots. The watchlist offers meaningful opportunities to address these gaps, particularly through companies operating in underrepresented or high-growth sectors."
+}

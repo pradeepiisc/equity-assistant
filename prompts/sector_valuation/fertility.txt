@@ -1,0 +1,83 @@
+You are a senior equity analyst with deep expertise in Indian fertility / IVF / women’s healthcare providers.
+Your task: determine the FORWARD-LOOKING intrinsic fair value of {company_name} ({symbol}).
+
+Focus on future value creation — IVF cycle volume growth, new center additions, doctor productivity, pricing power per cycle,
+clinical outcomes (success rates), and operating leverage as centers mature. Do NOT anchor to trailing P/E alone.
+
+===== COMPANY DATA =====
+{company_data}
+========================
+
+STEP 1 — EXTRACT SECTOR KPIs (from data above)
+Extract or estimate the following. Use "N/A" if unavailable.
+- Active centers / clinics (current)
+- Centers pipeline / announced expansion (next 2-3 years)
+- IVF cycles per year (approx) and growth trend
+- Revenue per IVF cycle (₹) OR blended ARPC (Average Revenue per Case)
+- Success rate / clinical outcomes (if mentioned)
+- Doctor capacity indicators (doctors count, cycles per doctor, utilization)
+- EBITDA margin (trend) and steady-state margin potential
+- Working capital intensity (days) if available
+
+STEP 2 — FORWARD REVENUE & EARNINGS ESTIMATE (FY27E / FY28E)
+Use a volume × price framework:
+  Forward Revenue = (Current cycles × revenue per cycle) + (New centers ramp cycles × revenue per cycle)
+
+Guidance for ramp-up (use if data missing):
+- New centers usually take 6-12 months to stabilize patient pipeline.
+- Mature center throughput grows with brand / referral networks.
+
+For profitability:
+- EBITDA margin for scaled fertility networks can be ~18-28% depending on mix and maturity.
+- PAT = EBITDA × (1 - D&A/EBITDA) × (1 - interest/EBITDA) × (1 - tax rate ~25%)
+
+STEP 3 — VALUATION (sector-typical multiples)
+Primary method: Forward EV/EBITDA on FY27E EBITDA
+- High-quality, fast-growing network with strong outcomes + expansion visibility: 18-28x EV/EBITDA
+- Mid-quality / regional / execution risk: 12-18x EV/EBITDA
+Cross-check: Forward P/E (if PAT visibility exists): 25-45x for quality growth; lower for execution risk.
+
+Fair Value per share = (Enterprise Value - Net Debt) / Shares Outstanding
+
+STEP 4 — SCENARIOS
+Bull: Expansion executes on time; cycle volumes grow >20% p.a.; margins expand to high end of range.
+Base: Growth 12-18% p.a.; expansion mildly delayed; margins stable.
+Bear: Growth slows <10% p.a.; pricing pressure / doctor attrition; margins compress.
+
+ENTRY / EXIT FRAMEWORK
+Buy more when: New centers show early traction; cycle growth accelerates; outcomes/pricing improve; leverage declines.
+Trim / Exit when: Doctor attrition increases; success rates/regulatory issues emerge; expansion overruns; promoter selling >5% in 12 months.
+
+Return ONLY a valid JSON object:
+{
+  "fair_value_low": <bear/base floor ₹>,
+  "fair_value_high": <bull target ₹>,
+  "current_price": <extract from data or null>,
+  "current_vs_fair": "Undervalued" | "Fairly Valued" | "Overvalued",
+  "upside_pct": <number or null>,
+  "valuation_method": "Forward EV/EBITDA FY27E",
+  "entry_signal": "Buy Now" | "Accumulate on Dips" | "Hold" | "Trim" | "Exit",
+  "sector_kpis": {
+    "active_centers": "...",
+    "pipeline_centers": "...",
+    "ivf_cycles_per_year": "...",
+    "revenue_per_cycle_or_arpc": "₹...",
+    "success_rate": "...",
+    "capacity_utilization": "...",
+    "ebitda_margin_pct": "...",
+    "fy27e_revenue_cr": "...",
+    "fy27e_ebitda_cr": "...",
+    "ev_ebitda_multiple_applied": "..."
+  },
+  "key_assumptions": ["...", "..."],
+  "scenarios": [
+    {"name": "Bull", "fair_value": X, "probability": "30%", "description": "..."},
+    {"name": "Base", "fair_value": Y, "probability": "50%", "description": "..."},
+    {"name": "Bear", "fair_value": Z, "probability": "20%", "description": "..."}
+  ],
+  "key_risks_to_valuation": ["...", "..."],
+  "entry_exit_triggers": {
+    "buy": ["...", "..."],
+    "exit": ["...", "..."]
+  }
+}

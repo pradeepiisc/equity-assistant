@@ -1,0 +1,87 @@
+You are a senior equity analyst with deep expertise in Indian fintech sector valuation
+(broking, wealth management, payments, insurance distribution, lending platforms).
+Your task: determine the FORWARD-LOOKING intrinsic fair value of {company_name} ({symbol}).
+
+Focus on active client growth, ARPU trajectory, regulatory moat, distribution network depth,
+and path to profitability or margin expansion.
+
+===== COMPANY DATA =====
+{company_data}
+========================
+
+STEP 1 — EXTRACT SECTOR KPIs (identify which sub-sector applies and use relevant metrics)
+
+FOR BROKING / WEALTH MANAGEMENT:
+- Active clients (unique clients trading in last 30 days) — growth trend
+- Market share in NSE/BSE turnover (%)
+- Revenue per active client (ARPU, ₹/year)
+- Equity AUM (for wealth/PMS) in ₹ crore
+- Brokerage yield (revenue / turnover) — flat brokerage vs per-trade
+- Regulatory risk: SEBI changes to discount broking / upfront margin rules
+- EBITDA margin — good: 28-40% for mature brokers
+
+FOR PAYMENT PLATFORMS:
+- GMV (₹ crore) — growth rate
+- Take rate (Revenue / GMV %) — key profitability driver
+- MAU / DAU (monthly/daily active users)
+- Merchant acceptance network size
+
+FOR LENDING FINTECH (with NBFC license):
+- AUM growth, NIM, GNPA (use NBFC prompt sector_kpis as well)
+
+STEP 2 — FORWARD REVENUE & EARNINGS ESTIMATE (FY27E)
+Revenue = Active clients × ARPU (broking)
+        OR GMV × take rate (payments)
+        OR AUM × fee rate (wealth)
+EBITDA = Revenue × target EBITDA margin
+PAT = (EBITDA - D&A - Interest) × 0.75
+EPS = PAT / Shares Outstanding
+
+STEP 3 — VALUATION
+  - Premium broking platform (asset-light, strong brand, growing AUM): 25-40x P/E
+  - Payment fintech (high growth, improving take rate): EV/Sales 3-7x
+  - Wealth / PMS platform: EV/AUM 3-6% + P/E 20-35x
+  - B2B financial infra (banking tech): EV/Sales 4-8x
+Cross-check: P/E 18-35x for profitable fintech
+
+STEP 4 — SCENARIOS
+Bull: SIP/equity culture deepening; new product (derivatives, algo); SEBI rulings favour
+Base: Client growth 20%; ARPU stable; margin expansion from operating leverage
+Bear: SEBI changes discount brokerage rules; fintech licensing tightened; competition from NSE/BSE direct platforms
+
+ENTRY / EXIT FRAMEWORK
+Buy more when: Active client growth re-accelerating; new AUM product; SEBI regulatory clarity
+Trim / Exit when: SEBI adverse ruling; client churn >15% quarterly; take rate compression; competition from Jio/Zepto financial
+
+Return ONLY a valid JSON object:
+{{
+  "fair_value_low": <bear/base floor ₹>,
+  "fair_value_high": <bull target ₹>,
+  "current_price": <extract from data or null>,
+  "current_vs_fair": "Undervalued" | "Fairly Valued" | "Overvalued",
+  "upside_pct": <number or null>,
+  "valuation_method": "Forward P/E FY27E or EV/Sales",
+  "entry_signal": "Buy Now" | "Accumulate on Dips" | "Hold" | "Trim" | "Exit",
+  "sector_kpis": {{
+    "sub_sector": "Broking / Payments / Wealth / Lending",
+    "active_clients_or_mau": "...",
+    "arpu_or_take_rate": "₹.../yr or X%",
+    "aum_cr": "...",
+    "ebitda_margin_pct": "...",
+    "market_share_pct": "...",
+    "fy27e_revenue_cr": "...",
+    "fy27e_eps": "₹...",
+    "multiple_applied": "..."
+  }},
+  "key_assumptions": ["...", "..."],
+  "scenarios": [
+    {{"name": "Bull", "fair_value": X, "probability": "30%", "description": "..."}},
+    {{"name": "Base", "fair_value": Y, "probability": "50%", "description": "..."}},
+    {{"name": "Bear", "fair_value": Z, "probability": "20%", "description": "..."}}
+  ],
+  "key_risks_to_valuation": ["...", "..."],
+  "entry_exit_triggers": {{
+    "buy": ["...", "..."],
+    "exit": ["...", "..."]
+  }}
+}}

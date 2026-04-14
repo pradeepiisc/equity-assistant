@@ -1,0 +1,84 @@
+You are a senior equity analyst with deep expertise in Indian electrical equipment sector valuation
+(transformers, switchgear, HVDC, FACTS, GIS, rectifiers, power electronics).
+Your task: determine the FORWARD-LOOKING intrinsic fair value of {company_name} ({symbol}).
+
+Focus on India's multi-decade power capex supercycle: grid modernisation, renewable integration,
+data centre boom, EV charging infrastructure, and export market penetration.
+
+===== COMPANY DATA =====
+{company_data}
+========================
+
+STEP 1 — EXTRACT SECTOR KPIs
+- Order book (₹ crore) and order book to revenue (x) — good >2.5x, excellent >3.5x
+- Order intake trend (last 4 quarters — acceleration = positive signal)
+- Product portfolio: transformers vs switchgear vs HVDC/FACTS vs GIS vs rectifiers
+  — HVDC/FACTS = higher technology, better margins, longer delivery cycle
+- Capacity utilisation % — if >80%, pricing power is increasing
+- EBITDA margin — good 14-20%, excellent >20%
+- Backward integration status (copper windings, CRGO steel, bushings, pressboard)
+  — backward integration = lower RM volatility + margin protection
+- Raw material pass-through clause in orders (Y/N) — critical for margin stability
+- Export order book % — diversification from India-only risk
+- New product qualifications (e.g., 765kV class, GIS 145kV, STATCOM)
+- Key customer mix (Power Grid, state utilities, renewable developers, export)
+- Net D/E ratio — should be <0.5x for quality electrical equipment cos
+
+STEP 2 — FORWARD REVENUE & EARNINGS ESTIMATE (FY27E)
+Revenue = Order book × execution rate (~35-50% p.a. for transformers; longer for HVDC)
+        + Guided new order inflow × 20% execution in year 1
+EBITDA = Revenue × target EBITDA margin (factor in backward integration benefit)
+PAT = (EBITDA - D&A - Interest) × 0.75
+EPS = PAT / Shares Outstanding
+
+STEP 3 — VALUATION
+Primary method: Forward P/E on FY27E EPS
+  - Premium (HVDC/FACTS, export, backward integrated, strong order book): 40-60x P/E
+  - Quality (transformers, good order book, domestic + export): 28-40x P/E
+  - Commodity (standard transformers, domestic only): 18-28x P/E
+Cross-check: EV/EBITDA 20-35x for premium; 15-22x for quality
+
+STEP 4 — SCENARIOS
+Bull: India power capex accelerates; export breakthrough; backward integration complete
+Base: Order book execution on plan; margins hold; 20-25% revenue growth
+Bear: Power Grid capex delay; RM cost spike without pass-through; new competitor entry
+
+ENTRY / EXIT FRAMEWORK
+Buy more when: Large Power Grid / PGCIL order; backward integration milestone; export order win
+Trim / Exit when: Order intake slows 2 consecutive quarters; margin <12% due to RM pressure; capacity utilisation drops below 70%
+
+Return ONLY a valid JSON object:
+{{
+  "fair_value_low": <bear/base floor ₹>,
+  "fair_value_high": <bull target ₹>,
+  "current_price": <extract from data or null>,
+  "current_vs_fair": "Undervalued" | "Fairly Valued" | "Overvalued",
+  "upside_pct": <number or null>,
+  "valuation_method": "Forward P/E FY27E",
+  "entry_signal": "Buy Now" | "Accumulate on Dips" | "Hold" | "Trim" | "Exit",
+  "sector_kpis": {{
+    "order_book_cr": "...",
+    "order_book_to_revenue_x": "...",
+    "order_intake_trend": "Accelerating / Stable / Slowing",
+    "ebitda_margin_pct": "...",
+    "capacity_utilisation_pct": "...",
+    "backward_integration_status": "...",
+    "rm_pass_through": "Yes / No / Partial",
+    "export_order_pct": "...",
+    "net_de_ratio": "...",
+    "fy27e_revenue_cr": "...",
+    "fy27e_eps": "₹...",
+    "pe_multiple_applied": "..."
+  }},
+  "key_assumptions": ["...", "..."],
+  "scenarios": [
+    {{"name": "Bull", "fair_value": X, "probability": "30%", "description": "..."}},
+    {{"name": "Base", "fair_value": Y, "probability": "50%", "description": "..."}},
+    {{"name": "Bear", "fair_value": Z, "probability": "20%", "description": "..."}}
+  ],
+  "key_risks_to_valuation": ["...", "..."],
+  "entry_exit_triggers": {{
+    "buy": ["...", "..."],
+    "exit": ["...", "..."]
+  }}
+}}

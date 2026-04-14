@@ -1,0 +1,18 @@
+{
+  "symbol": "BLS",
+  "name": "BLS International Services Ltd",
+  "exchange": "BSE",
+  "screener_url": "https://www.screener.in/company/BLS/",
+  "industry_tag": "",
+  "business_description": "BLS International Services Ltd provides outsourced visa application processing and related citizen services to governments and diplomatic missions worldwide. The company earns revenue primarily through service fees charged for processing visa, passport, and consular applications on behalf of these government clients.",
+  "key_products": [
+    "Visa application outsourcing services",
+    "Citizen and consular service outsourcing"
+  ],
+  "input_sensitivity": "Cost risks are mainly related to labor expenses, technology infrastructure, and compliance costs, as the company relies on a large workforce and secure IT systems to process applications. Revenue is directly driven by the volume of international travel and government outsourcing trends, with demand sensitive to geopolitical events, travel regulations, and government contract renewals.",
+  "output_industries": [
+    "Visa & Consular Services Outsourcing"
+  ],
+  "output_note": "Governments and diplomatic missions directly pay BLS International for managing and processing visa, passport, and citizen service applications on their behalf.",
+  "fetched_date": "2026-03-01T15:38:09.121853"
+}

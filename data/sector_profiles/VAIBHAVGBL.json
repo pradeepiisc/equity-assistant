@@ -1,0 +1,18 @@
+{
+  "symbol": "VAIBHAVGBL",
+  "name": "Vaibhav Global Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/VAIBHAVGBL/",
+  "industry_tag": "",
+  "business_description": "Vaibhav Global Ltd operates as an electronic retailer, selling jewelry, accessories, and lifestyle products primarily to consumers in the US and UK. The company generates revenue by directly selling these products through its proprietary TV shopping channels and e-commerce platforms. Its business model is based on sourcing, manufacturing, and retailing these goods to end customers.",
+  "key_products": [
+    "jewelry",
+    "fashion accessories"
+  ],
+  "input_sensitivity": "Cost risks: The company's margins are sensitive to fluctuations in the prices of precious metals and gemstones (raw materials for jewelry), labor costs, and logistics/freight expenses. Revenue/demand risks: Consumer discretionary spending in the US and UK retail markets directly impacts demand for Vaibhav Global's products, making it sensitive to macroeconomic conditions and consumer sentiment in these regions.",
+  "output_industries": [
+    "TV & E-Commerce Retail (Jewelry & Accessories)"
+  ],
+  "output_note": "Individual retail consumers in the US and UK pay Vaibhav Global directly for jewelry, accessories, and lifestyle products purchased via its TV shopping channels and online platforms.",
+  "fetched_date": "2026-03-01T15:37:51.583106"
+}

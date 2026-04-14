@@ -1,0 +1,18 @@
+{
+  "symbol": "BAJAJCON",
+  "name": "Bajaj Consumer Care Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/BAJAJCON/",
+  "industry_tag": "",
+  "business_description": "Bajaj Consumer Care Ltd manufactures and sells cosmetics, toiletries, and personal care products. The company generates revenue by selling branded products directly to consumers through retail channels in domestic and international markets.",
+  "key_products": [
+    "Bajaj Almond Drops Hair Oil",
+    "Bajaj Brahmi Amla Hair Oil"
+  ],
+  "input_sensitivity": "Cost risks include fluctuations in prices of vegetable oils (key raw material for hair oils), packaging materials, and labour costs, which directly impact margins. Revenue and demand are sensitive to consumer spending trends in personal care, competitive intensity in FMCG, and rural/urban retail market health.",
+  "output_industries": [
+    "Personal Care FMCG"
+  ],
+  "output_note": "Retailers and distributors pay Bajaj Consumer Care for branded hair oils and personal care products, which are then sold to end consumers.",
+  "fetched_date": "2026-03-01T15:42:15.764324"
+}

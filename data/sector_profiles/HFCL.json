@@ -1,0 +1,18 @@
+{
+  "symbol": "HFCL",
+  "name": "HFCL Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/HFCL/",
+  "industry_tag": "",
+  "business_description": "HFCL Ltd designs, manufactures, and supplies high-end telecom equipment, optical fiber, and optical fiber cables. The company also undertakes telecom infrastructure development and system integration projects, generating revenue from both product sales and turnkey project execution in the telecom sector.",
+  "key_products": [
+    "Optical Fiber Cables (OFC)",
+    "Telecom Equipment"
+  ],
+  "input_sensitivity": "Cost risks: Margins are sensitive to prices of raw materials such as silica and petrochemical derivatives (for fiber and cable manufacturing), as well as energy and labor costs. Revenue/demand risks: Demand is directly driven by telecom operators' network expansion and government telecom infrastructure projects, which are influenced by sectoral capex cycles and public broadband initiatives.",
+  "output_industries": [
+    "Telecom Equipment & Network Infrastructure"
+  ],
+  "output_note": "Telecom operators, internet service providers, and government agencies pay HFCL for optical fiber cables, telecom equipment, and turnkey telecom infrastructure development services.",
+  "fetched_date": "2026-03-01T15:41:37.125840"
+}

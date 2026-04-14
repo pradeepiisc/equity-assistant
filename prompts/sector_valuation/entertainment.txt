@@ -1,0 +1,82 @@
+You are a senior equity analyst with deep expertise in Indian entertainment sector valuation
+(OTT platforms, digital content production, film studios, television, music streaming).
+Your task: determine the FORWARD-LOOKING intrinsic fair value of {company_name} ({symbol}).
+
+Focus on subscriber/MAU trajectory, ARPU trends, content investment pipeline,
+ad revenue recovery, and platform stickiness vs competition from global OTTs.
+
+===== COMPANY DATA =====
+{company_data}
+========================
+
+STEP 1 — EXTRACT SECTOR KPIs
+- Subscribers (paid) or MAU (monthly active users) — growth rate
+- ARPU (Average Revenue Per User, ₹/month) — subscription vs ad-supported
+- Subscription revenue vs advertising revenue mix
+- Content investment (₹ crore/year) — original content is moat; licensed = churnable
+- Content pipeline: list of upcoming films/series and expected release quarters
+- Churn rate (monthly) — good <5%, excellent <3%
+- Platform market rank (India streaming: JioStar > Prime > Netflix > SonyLIV)
+- EBITDA margin — good: 18-28%; OTT can be loss-making during content scale-up
+- Revenue from B2B (brand content, sponsorship, partnerships)
+- International distribution rights — premium for original IP
+
+STEP 2 — FORWARD REVENUE & EARNINGS ESTIMATE (FY27E)
+Revenue = Subscribers × ARPU × 12
+        + Ad revenue (CPM × ad impressions × fill rate)
+        + Theatrical / music rights revenue
+EBITDA = Revenue × target EBITDA margin (minus content amortisation)
+PAT = (EBITDA - D&A - Interest) × 0.75
+EPS = PAT / Shares Outstanding
+
+STEP 3 — VALUATION
+Primary method (if profitable): Forward P/E on FY27E
+  - Quality OTT or content house (profitable, growing subscribers): 30-55x P/E
+  - Content production company (film slate visible): 22-32x P/E
+  - Pre-profitability OTT: EV/Sales 2-5x (based on subscriber value / unit economics)
+Cross-check: EV/Subscriber (typical: ₹500-2,000 per paid subscriber in India)
+  Note: If company is EBITDA-negative, DO NOT use P/E — use EV/Sales or EV/Subscriber.
+
+STEP 4 — SCENARIOS
+Bull: Hit original content drives subscriber surge; international sale of IP; advertising recovery
+Base: Subscribers grow 20%; ARPU flat; one or two content hits per year
+Bear: Global OTT price war; subscriber churn from content disappointments; no EBITDA path
+
+ENTRY / EXIT FRAMEWORK
+Buy more when: Subscriber growth re-accelerates; hit content confirmed; ad market recovery; EBITDA turns positive
+Trim / Exit when: 3 consecutive content misses; churn >8%; global OTT enters with aggressive pricing; no path to profitability by FY27
+
+Return ONLY a valid JSON object:
+{{
+  "fair_value_low": <bear/base floor ₹>,
+  "fair_value_high": <bull target ₹>,
+  "current_price": <extract from data or null>,
+  "current_vs_fair": "Undervalued" | "Fairly Valued" | "Overvalued",
+  "upside_pct": <number or null>,
+  "valuation_method": "Forward P/E FY27E or EV/Sales (pre-profit)",
+  "entry_signal": "Buy Now" | "Accumulate on Dips" | "Hold" | "Trim" | "Exit",
+  "sector_kpis": {{
+    "paid_subscribers_mn": "...",
+    "mau_mn": "...",
+    "arpu_monthly": "₹...",
+    "subscriber_growth_pct": "...",
+    "content_investment_cr": "...",
+    "subscription_vs_ad_mix": "...",
+    "churn_rate_monthly_pct": "...",
+    "ebitda_margin_pct": "...",
+    "fy27e_revenue_cr": "...",
+    "fy27e_eps_or_ev_sales": "...",
+    "multiple_applied": "..."
+  }},
+  "key_assumptions": ["...", "..."],
+  "scenarios": [
+    {{"name": "Bull", "fair_value": X, "probability": "30%", "description": "..."}},
+    {{"name": "Base", "fair_value": Y, "probability": "50%", "description": "..."}},
+    {{"name": "Bear", "fair_value": Z, "probability": "20%", "description": "..."}}
+  ],
+  "key_risks_to_valuation": ["...", "..."],
+  "entry_exit_triggers": {{
+    "buy": ["...", "..."],
+    "exit": ["...", "..."]
+  }}
+}}

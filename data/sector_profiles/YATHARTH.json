@@ -1,0 +1,18 @@
+{
+  "symbol": "YATHARTH",
+  "name": "Yatharth Hospital & Trauma Care Services Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/YATHARTH/",
+  "industry_tag": "",
+  "business_description": "Yatharth Hospital & Trauma Care Services Ltd operates multi-specialty hospitals in Noida and Greater Noida, providing inpatient and outpatient medical care, surgeries, and trauma services. The company generates revenue primarily from patient fees for medical treatments, diagnostics, and hospital stays.",
+  "key_products": [
+    "Inpatient medical care",
+    "Trauma and emergency services"
+  ],
+  "input_sensitivity": "Cost risks include labour (doctors, nurses, staff), medical supplies, pharmaceuticals, and energy costs, which directly impact hospital operating margins. Revenue is sensitive to regional healthcare demand, population health trends, and regulatory changes affecting hospital operations and reimbursement rates.",
+  "output_industries": [
+    "Hospital & Trauma Care Services"
+  ],
+  "output_note": "Individual patients and their families directly pay the company for hospital admissions, surgeries, diagnostics, and trauma care services.",
+  "fetched_date": "2026-03-01T15:37:21.073174"
+}

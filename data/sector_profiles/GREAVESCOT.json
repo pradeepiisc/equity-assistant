@@ -1,0 +1,19 @@
+{
+  "symbol": "GREAVESCOT",
+  "name": "Greaves Cotton Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/GREAVESCOT/",
+  "industry_tag": "",
+  "business_description": "Greaves Cotton Ltd manufactures engines and related applications, and trades in power tillers, engine spares, electric vehicles, and infrastructure equipment. The company generates revenue by selling these products directly to customers and through after-sales spares and services.",
+  "key_products": [
+    "diesel/petrol engines",
+    "electric vehicles"
+  ],
+  "input_sensitivity": "Cost risks: Margins are sensitive to fluctuations in raw material prices (especially metals), energy costs, and labour expenses. Revenue/demand risks: Demand is directly driven by trends in the agricultural machinery, small commercial vehicle, and infrastructure equipment markets, as well as adoption rates of electric vehicles in India.",
+  "output_industries": [
+    "Engines & Powertrain Systems",
+    "Electric Vehicles (2W/3W)"
+  ],
+  "output_note": "3-wheeler OEMs and construction equipment makers pay for Greaves engines; retail and fleet customers pay for Ampere-branded electric 2W/3W vehicles. Agricultural power tillers are a minor subset of the engine segment, not a standalone output sector.",
+  "fetched_date": "2026-03-01T15:39:23.017987"
+}

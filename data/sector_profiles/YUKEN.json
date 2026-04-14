@@ -1,0 +1,18 @@
+{
+  "symbol": "YUKEN",
+  "name": "Yuken India Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/YUKEN/",
+  "industry_tag": "",
+  "business_description": "Yuken India Ltd manufactures hydraulic equipment such as pumps and pressure control devices, generating revenue by selling these products to industrial customers. Its business model is based on direct sales of hydraulic components, both domestically and through exports to over 15 countries.",
+  "key_products": [
+    "vane pumps",
+    "piston pumps"
+  ],
+  "input_sensitivity": "Cost risks include fluctuations in prices of metals and other raw materials used in hydraulic equipment, as well as energy and labour costs. Revenue is sensitive to capital expenditure cycles and demand from industrial machinery manufacturers, as their investment in new equipment directly drives orders for hydraulic components.",
+  "output_industries": [
+    "Industrial Hydraulic Components & Systems"
+  ],
+  "output_note": "Industrial machinery manufacturers and OEMs pay Yuken India Ltd directly for hydraulic pumps and control equipment used in their production systems.",
+  "fetched_date": "2026-03-01T15:42:24.533894"
+}

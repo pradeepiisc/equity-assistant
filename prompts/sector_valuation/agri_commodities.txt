@@ -1,0 +1,85 @@
+You are a senior equity analyst with deep expertise in Indian agri-commodity sector valuation
+(corn, cashews, pulses, spices, oilseeds, sugar, rice, wheat trading and processing).
+Your task: determine the FORWARD-LOOKING intrinsic fair value of {company_name} ({symbol}).
+
+Focus on commodity spread, value-addition pipeline, storage capacity advantage,
+export policy risk, and move up the value chain.
+
+===== COMPANY DATA =====
+{company_data}
+========================
+
+STEP 1 — EXTRACT SECTOR KPIs
+- Primary commodity traded/processed (corn, cashew, spices, etc.)
+- Volume (MT/year) — growth
+- Procurement price (₹/MT or ₹/quintal) and selling price — spread
+- Processing/value-add margin (₹/MT) — processing > trading margin
+- Storage capacity (MT) and fill rate — competitive moat in fragmented market
+- Export revenue % and key markets
+  — Export = USD-denominated = INR depreciation tailwind
+- Government export/import policy sensitivity (the biggest risk for agri commodities)
+- Value-added product % (snacks, flour, flakes vs raw commodity)
+- EBITDA margin — trading: 3-6%; processing: 8-14%; branded: 15-22%
+- Working capital: inventory days (high for commodity cos — watch financing cost)
+- Crop season dependency (monsoon risk — H1/H2 seasonality)
+
+STEP 2 — FORWARD REVENUE & EARNINGS ESTIMATE (FY27E)
+Revenue = Volume × blended realisation per MT
+EBITDA = Revenue × target EBITDA margin
+        (OR Volume × EBITDA per MT if spread-driven business)
+PAT = (EBITDA - D&A - Interest) × 0.75
+EPS = PAT / Shares Outstanding
+Note: Commodity businesses are lumpy — use 3-year average EBITDA margin, not peak
+
+STEP 3 — VALUATION
+Primary method: Forward P/E on normalised FY27E EPS
+  - Branded/value-added agri products (predictable): 20-30x P/E
+  - Quality processor (consistent spread, storage moat): 12-18x P/E
+  - Commodity trader (thin spread, policy risk): 7-12x P/E
+Cross-check: EV/EBITDA 6-14x (use normalised EBITDA, not peak-cycle)
+
+STEP 4 — SCENARIOS
+Bull: Export policy opens (ban removed); crop failure elsewhere = India benefits; value-add launch
+Base: Volume grows 10-15%; spread stable; policy environment normal
+Bear: Government bans exports; bumper crop globally; spread compressed; WC stress
+
+ENTRY / EXIT FRAMEWORK
+Buy more when: Export policy eases; commodity prices rising with procurement locked in; value-add ramp
+Trim / Exit when: Government export ban announced; inventory write-down risk; WC cycle deteriorates
+
+Return ONLY a valid JSON object:
+{{
+  "fair_value_low": <bear/base floor ₹>,
+  "fair_value_high": <bull target ₹>,
+  "current_price": <extract from data or null>,
+  "current_vs_fair": "Undervalued" | "Fairly Valued" | "Overvalued",
+  "upside_pct": <number or null>,
+  "valuation_method": "Forward P/E FY27E (normalised)",
+  "entry_signal": "Buy Now" | "Accumulate on Dips" | "Hold" | "Trim" | "Exit",
+  "sector_kpis": {{
+    "primary_commodity": "...",
+    "volume_mt_year": "...",
+    "procurement_price_per_mt": "₹...",
+    "realisation_per_mt": "₹...",
+    "ebitda_margin_pct": "...",
+    "storage_capacity_mt": "...",
+    "export_revenue_pct": "...",
+    "value_added_pct": "...",
+    "inventory_days": "...",
+    "export_policy_risk": "Low / Medium / High",
+    "fy27e_revenue_cr": "...",
+    "fy27e_eps": "₹...",
+    "pe_multiple_applied": "..."
+  }},
+  "key_assumptions": ["...", "..."],
+  "scenarios": [
+    {{"name": "Bull", "fair_value": X, "probability": "30%", "description": "..."}},
+    {{"name": "Base", "fair_value": Y, "probability": "50%", "description": "..."}},
+    {{"name": "Bear", "fair_value": Z, "probability": "20%", "description": "..."}}
+  ],
+  "key_risks_to_valuation": ["...", "..."],
+  "entry_exit_triggers": {{
+    "buy": ["...", "..."],
+    "exit": ["...", "..."]
+  }}
+}}

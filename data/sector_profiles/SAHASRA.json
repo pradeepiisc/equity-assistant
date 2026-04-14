@@ -1,0 +1,18 @@
+{
+  "symbol": "SAHASRA-SM",
+  "name": "Sahasra Electronic Solutions Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/SAHASRA/",
+  "industry_tag": "",
+  "business_description": "Sahasra Electronic Solutions Ltd is an Electronic System Design and Manufacturing (ESDM) company. It generates revenue by designing, assembling, and manufacturing electronic systems and components for other businesses, typically on a contract or OEM basis.",
+  "key_products": [
+    "Electronic system design services",
+    "Electronic manufacturing services (EMS)"
+  ],
+  "input_sensitivity": "Cost risks include fluctuations in prices of electronic components, semiconductors, and raw materials, as well as labour and energy costs, which directly impact manufacturing margins. Revenue is sensitive to capital expenditure cycles and demand from OEMs and businesses seeking outsourced electronic design and manufacturing solutions.",
+  "output_industries": [
+    "Electronic Manufacturing Services"
+  ],
+  "output_note": "OEMs and other businesses directly pay Sahasra Electronic Solutions Ltd for contract electronic design and manufacturing services.",
+  "fetched_date": "2026-03-01T15:42:12.754946"
+}

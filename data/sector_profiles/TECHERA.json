@@ -1,0 +1,18 @@
+{
+  "symbol": "TECHERA-SM",
+  "name": "Techera Engineering India Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/TECHERA/",
+  "industry_tag": "",
+  "business_description": "Techera Engineering India Ltd designs, manufactures, and sells precision tooling and components used in aerospace and defense applications. The company generates revenue by supplying these engineered products directly to aerospace and defense sector clients, who require high-specification parts for their manufacturing and maintenance operations.",
+  "key_products": [
+    "precision tooling",
+    "engineered components for aerospace and defense"
+  ],
+  "input_sensitivity": "Cost risks include fluctuations in raw material prices (especially metals and alloys), labor costs, and energy expenses, all of which impact manufacturing margins. Revenue and demand are directly sensitive to capital expenditure and procurement cycles in the aerospace and defense sectors, which are influenced by government defense budgets and private aerospace investment.",
+  "output_industries": [
+    "Aerospace & Defense Precision Components"
+  ],
+  "output_note": "Aerospace and defense manufacturers and contractors pay Techera Engineering India Ltd for precision tooling and engineered components required in their production and maintenance processes.",
+  "fetched_date": "2026-03-01T15:38:12.257189"
+}

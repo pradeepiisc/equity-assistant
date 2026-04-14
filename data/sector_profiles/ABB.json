@@ -1,0 +1,18 @@
+{
+  "symbol": "ABB",
+  "name": "ABB India Ltd",
+  "exchange": "BSE",
+  "screener_url": "https://www.screener.in/company/ABB/",
+  "industry_tag": "",
+  "business_description": "ABB India Ltd designs, manufactures, and supplies a wide range of automation and power technology products and solutions. The company generates revenue by selling engineered equipment, systems, and related services for industrial automation, electrification, and power management to industrial and utility customers. Its business model is based on turnkey projects, product sales, and after-sales services.",
+  "key_products": [
+    "Industrial automation systems",
+    "Power transmission and distribution equipment"
+  ],
+  "input_sensitivity": "Cost risks: Margins are sensitive to prices of metals (copper, steel, aluminum), electronic components, and energy costs, as well as labor expenses. Revenue/demand risks: Demand is directly driven by capital expenditure cycles in industrial automation, power generation, and transmission sectors, which are influenced by industrial growth, infrastructure investment, and government policies on electrification.",
+  "output_industries": [
+    "Industrial Automation & Power Equipment"
+  ],
+  "output_note": "Industrial and utility companies directly pay ABB India for automation systems, power equipment, and related engineering services.",
+  "fetched_date": "2026-03-01T15:44:33.450651"
+}

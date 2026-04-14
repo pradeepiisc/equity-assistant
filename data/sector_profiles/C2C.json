@@ -1,0 +1,18 @@
+{
+  "symbol": "C2C-SM",
+  "name": "C2C Advanced Systems Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/C2C/",
+  "industry_tag": "",
+  "business_description": "C2C Advanced Systems Ltd designs, manufactures, and integrates advanced electronic systems specifically for defense applications. The company generates revenue by providing indigenously developed defense electronics solutions to organizations involved in India's defense sector, typically through contracts for custom hardware and integrated systems.",
+  "key_products": [
+    "defense electronic systems",
+    "integrated defense solutions"
+  ],
+  "input_sensitivity": "(1) Cost risks: Margins are sensitive to prices of electronic components, specialized raw materials, skilled engineering labor, and energy costs. (2) Revenue/demand risks: Demand is directly driven by the Indian government's defense procurement budgets and policies supporting domestic defense manufacturing.",
+  "output_industries": [
+    "Defence Electronics & Simulation"
+  ],
+  "output_note": "Indian defense organizations and government agencies pay C2C Advanced Systems Ltd for custom-designed and integrated defense electronic systems and solutions.",
+  "fetched_date": "2026-03-01T15:42:09.536445"
+}

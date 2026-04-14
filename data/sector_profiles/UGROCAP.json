@@ -1,0 +1,18 @@
+{
+  "symbol": "UGROCAP",
+  "name": "Ugro Capital Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/UGROCAP/",
+  "industry_tag": "",
+  "business_description": "Ugro Capital Ltd operates as a technology-driven lending platform, providing loans to small businesses. The company generates revenue primarily through interest income and fees from its customized loan products, leveraging data-centric processes to assess and manage credit risk.",
+  "key_products": [
+    "Small business loans",
+    "Customized loan solutions"
+  ],
+  "input_sensitivity": "Cost risks are primarily driven by interest rates, as the company borrows capital to lend; changes in borrowing costs directly affect margins. Revenue and demand are sensitive to the overall health of the small business sector and macroeconomic factors impacting SME credit demand, such as GDP growth and liquidity conditions.",
+  "output_industries": [
+    "SME Lending NBFC"
+  ],
+  "output_note": "Small and medium enterprises (SMEs) directly pay Ugro Capital for access to business loans and customized credit solutions.",
+  "fetched_date": "2026-03-01T15:45:09.158624"
+}

@@ -1,0 +1,18 @@
+{
+  "symbol": "MAHLOG",
+  "name": "Mahindra Logistics Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/MAHLOG/",
+  "industry_tag": "",
+  "business_description": "Mahindra Logistics Ltd provides integrated logistics and mobility solutions, generating revenue by managing and executing supply chain operations for its clients. The company earns through services such as transportation, warehousing, and value-added logistics solutions, charging customers for end-to-end logistics management and mobility services.",
+  "key_products": [
+    "Third-party logistics (3PL) services",
+    "Warehousing and distribution solutions"
+  ],
+  "input_sensitivity": "Cost risks: The company's margins are sensitive to fluctuations in fuel prices, labor costs, and transportation expenses. Revenue/demand risks: Demand is directly driven by the volume of goods movement and supply chain outsourcing trends among large enterprises, especially in sectors like automotive, e-commerce, and consumer goods.",
+  "output_industries": [
+    "Logistics & Supply Chain"
+  ],
+  "output_note": "Large enterprises and corporates directly pay Mahindra Logistics Ltd for third-party logistics, warehousing, and supply chain management services.",
+  "fetched_date": "2026-03-01T15:37:32.871328"
+}

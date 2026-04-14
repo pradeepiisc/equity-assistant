@@ -1,0 +1,17 @@
+{
+  "symbol": "ADCOUNTY",
+  "name": "ADCOUNTY",
+  "exchange": "BSE",
+  "screener_url": "",
+  "industry_tag": "",
+  "business_description": "ADCOUNTY appears to be engaged in advertising or marketing services, likely generating revenue by providing digital or traditional advertising solutions to clients. The company earns money through fees or commissions for managing campaigns, media placements, or related marketing services. Without further information, this is inferred from the company name.",
+  "key_products": [
+    "Advertising services"
+  ],
+  "input_sensitivity": "Cost risks include labour expenses and technology platform fees, which can affect margins. Revenue is sensitive to overall marketing budgets and business sentiment among client companies, particularly in periods of economic slowdown.",
+  "output_industries": [
+    "Advertising & Marketing Services"
+  ],
+  "output_note": "Businesses and organizations pay ADCOUNTY for advertising and marketing services, including campaign management and media placements.",
+  "fetched_date": "2026-03-01T15:42:21.398551"
+}

@@ -1,0 +1,18 @@
+{
+  "symbol": "RAYMONDLSL",
+  "name": "Raymond Lifestyle Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/RAYMONDLSL/",
+  "industry_tag": "",
+  "business_description": "Raymond Lifestyle Ltd designs, manufactures, and sells branded textile and apparel products, including formal, casual, and ethnic wear. The company generates revenue primarily through the direct sale of these fashion products under its own brands to retail customers and distribution partners.",
+  "key_products": [
+    "Branded textiles",
+    "Apparel (formal, casual, and ethnic wear)"
+  ],
+  "input_sensitivity": "Cost risks: Margins are sensitive to fluctuations in raw material prices (especially cotton and synthetic fibers), labour costs, and energy expenses related to textile manufacturing. Revenue/demand risks: Demand is directly driven by discretionary consumer spending on fashion and apparel, which is influenced by overall economic conditions, urban income growth, and seasonal trends.",
+  "output_industries": [
+    "Branded Apparel & Textiles"
+  ],
+  "output_note": "Retail customers and distribution partners pay Raymond Lifestyle Ltd directly for branded textiles and ready-to-wear apparel products.",
+  "fetched_date": "2026-03-01T15:44:59.507088"
+}

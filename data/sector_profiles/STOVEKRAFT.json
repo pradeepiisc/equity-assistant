@@ -1,0 +1,18 @@
+{
+  "symbol": "STOVEKRAFT",
+  "name": "Stove Kraft Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/STOVEKRAFT/",
+  "industry_tag": "",
+  "business_description": "Stove Kraft Ltd manufactures and sells kitchen appliances and cookware under its own brands (Pigeon, Gilma) and as an exclusive partner for BLACK + DECKER. The company generates revenue by selling these products directly to consumers through retail channels and distributors. It also offers household utilities such as LED bulbs and oxymeters.",
+  "key_products": [
+    "cookware",
+    "cooking appliances"
+  ],
+  "input_sensitivity": "Cost risks include fluctuations in prices of metals (steel, aluminum), plastics, and electronic components used in appliances, as well as labour and energy costs. Revenue is sensitive to consumer discretionary spending, retail demand for kitchen appliances, and competitive pricing in the home solutions market.",
+  "output_industries": [
+    "Kitchen Appliances & Cookware"
+  ],
+  "output_note": "Retail consumers and distributors pay Stove Kraft Ltd for branded kitchen appliances, cookware, and household utility products.",
+  "fetched_date": "2026-03-01T15:39:26.499711"
+}

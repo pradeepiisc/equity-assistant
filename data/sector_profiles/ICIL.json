@@ -1,0 +1,19 @@
+{
+  "symbol": "ICIL",
+  "name": "Indo Count Industries Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/ICIL/",
+  "industry_tag": "",
+  "business_description": "Indo Count Industries Ltd is a manufacturer and exporter specializing in home textiles, primarily bed sheets, bed linen, and quilts. The company generates revenue by producing these textile products at scale and selling them directly to international and domestic retailers, wholesalers, and brands in the home textiles market.",
+  "key_products": [
+    "Bed sheets",
+    "Bed linen",
+    "Quilts"
+  ],
+  "input_sensitivity": "(1) Cost risks: Margins are sensitive to fluctuations in cotton prices (key raw material), energy costs, labor expenses, and logistics/freight rates. (2) Revenue/demand risks: Demand is directly driven by the health of the global home textiles and retail sectors, especially in export markets such as the US and Europe, which are influenced by consumer spending on home furnishings.",
+  "output_industries": [
+    "Home Textiles Manufacturing & Export"
+  ],
+  "output_note": "Retailers, wholesalers, and brands in the home textiles sector directly pay Indo Count Industries for finished bed sheets, bed linen, and quilts.",
+  "fetched_date": "2026-03-01T15:43:05.125572"
+}

@@ -1,0 +1,18 @@
+{
+  "symbol": "OMINFRAL",
+  "name": "Om Infra Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/OMINFRAL/",
+  "industry_tag": "",
+  "business_description": "Om Infra Ltd designs, manufactures, and installs hydro mechanical equipment used in hydropower and irrigation projects. The company generates revenue by supplying these specialized engineering products and providing turnkey solutions for water connectivity infrastructure to government and private sector clients.",
+  "key_products": [
+    "Hydro mechanical equipment for hydropower projects",
+    "Turnkey water connectivity solutions for irrigation"
+  ],
+  "input_sensitivity": "Cost risks include fluctuations in steel and other raw material prices, labour costs, and energy expenses, as well as exposure to interest rates due to project financing. Revenue is highly sensitive to government infrastructure spending and the health of the hydropower and irrigation project pipeline, which are driven by public sector investment and water resource management priorities.",
+  "output_industries": [
+    "Hydropower & Irrigation Infrastructure EPC"
+  ],
+  "output_note": "Government agencies and private infrastructure developers pay Om Infra Ltd for hydro mechanical equipment and turnkey water connectivity solutions used in hydropower and irrigation projects.",
+  "fetched_date": "2026-03-01T15:44:54.972067"
+}

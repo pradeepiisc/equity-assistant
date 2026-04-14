@@ -1,0 +1,18 @@
+{
+  "symbol": "KILITCH",
+  "name": "Kilitch Drugs (India) Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/KILITCH/",
+  "industry_tag": "",
+  "business_description": "Kilitch Drugs (India) Ltd is engaged in the manufacturing and sale of pharmaceutical products. The company generates revenue by producing and supplying formulations such as injectables, tablets, and other dosage forms to pharmaceutical distributors, hospitals, and institutional buyers.",
+  "key_products": [
+    "Injectable formulations",
+    "Oral solid dosage forms (tablets, capsules)"
+  ],
+  "input_sensitivity": "Cost risks include fluctuations in prices of active pharmaceutical ingredients (APIs), excipients, packaging materials, energy, and labor costs, all of which directly impact manufacturing margins. Revenue is sensitive to government healthcare spending, regulatory approvals, and demand from hospitals and pharmaceutical distributors, especially in domestic and export markets.",
+  "output_industries": [
+    "Pharma Formulations Manufacturing"
+  ],
+  "output_note": "Pharmaceutical distributors, hospitals, and institutional buyers pay Kilitch Drugs (India) Ltd directly for finished pharmaceutical formulations such as injectables and tablets.",
+  "fetched_date": "2026-03-01T15:42:29.884475"
+}

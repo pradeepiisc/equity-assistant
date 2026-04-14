@@ -1,0 +1,18 @@
+{
+  "symbol": "NUVAMA",
+  "name": "Nuvama Wealth Management Ltd",
+  "exchange": "BSE",
+  "screener_url": "https://www.screener.in/company/NUVAMA/",
+  "industry_tag": "",
+  "business_description": "Nuvama Wealth Management Ltd provides financial services including equity broking, investment advisory, and merchant banking. The company earns revenue primarily through brokerage fees, advisory charges, and merchant banking commissions from facilitating trades, offering investment advice, and managing capital market transactions.",
+  "key_products": [
+    "Equity broking services",
+    "Investment advisory services"
+  ],
+  "input_sensitivity": "Cost risks are mainly related to employee compensation, technology infrastructure, and regulatory compliance costs, as there are no significant raw material or energy inputs. Revenue is sensitive to equity market volumes, investor sentiment, and overall capital market activity, which directly affect demand for broking and advisory services.",
+  "output_industries": [
+    "Equity Broking & Investment Advisory Services"
+  ],
+  "output_note": "Individual and institutional investors pay Nuvama Wealth Management Ltd for executing equity trades and providing investment advisory and merchant banking services.",
+  "fetched_date": "2026-03-01T15:44:29.299002"
+}

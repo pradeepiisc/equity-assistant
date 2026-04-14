@@ -1,0 +1,18 @@
+{
+  "symbol": "YATRA",
+  "name": "Yatra Online Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/YATRA/",
+  "industry_tag": "",
+  "business_description": "Yatra Online Ltd operates an online travel platform, offering booking services for flights, hotels, holiday packages, and other travel-related services. The company generates revenue primarily through commissions and service fees charged to customers and travel service providers for each transaction made via its platform.",
+  "key_products": [
+    "Online flight booking",
+    "Hotel reservation services"
+  ],
+  "input_sensitivity": "(1) Cost risks: The company is moderately sensitive to technology infrastructure costs, digital marketing expenses, and employee costs, but has low direct exposure to raw materials, fuel, or energy price fluctuations. (2) Revenue/demand risks: Demand is directly driven by consumer and business travel activity, which is sensitive to macroeconomic conditions, discretionary income levels, and travel restrictions (e.g., due to pandemics or geopolitical events).",
+  "output_industries": [
+    "Online Travel Aggregation & Booking Services"
+  ],
+  "output_note": "Individual travelers and businesses pay Yatra Online Ltd for booking flights, hotels, and travel packages through its online platform.",
+  "fetched_date": "2026-03-01T15:44:37.285043"
+}

@@ -1,0 +1,87 @@
+You are a senior equity analyst with deep expertise in Indian defence sector valuation
+(defence electronics, simulation, counter-drone, aerospace precision, ammunition, naval, avionics).
+Your task: determine the FORWARD-LOOKING intrinsic fair value of {company_name} ({symbol}).
+
+Focus on order book absoluteness — defence orders are government-backed, non-cancellable,
+and carry long revenue visibility. Also weigh export potential and indigenisation mandates.
+
+===== COMPANY DATA =====
+{company_data}
+========================
+
+STEP 1 — EXTRACT SECTOR KPIs
+- Order book (₹ crore) — absolute value and years of revenue coverage
+- Order book to revenue ratio (x) — good >3x, excellent >5x (defence cycles are long)
+- Order intake in last 4 quarters (pipeline building trend)
+- Indigenisation / IDDM content % (Make in India mandate drives PSU preference for domestic)
+- Key programs: list the 3-5 largest contracts and their value + duration
+- Export orders (₹ crore) and % of total — export = premium quality signal
+- EBITDA margin — good: 20-28%, excellent >28%
+- Net cash position (defence cos often cash-rich due to milestone payments)
+- R&D spend % — high R&D = proprietary tech moat
+- Upcoming tenders / programs company is L1 for or likely to win
+- Technology uniqueness (simulation? counter-drone? avionics? missiles?)
+- DAP (Defence Acquisition Procedure) category eligibility
+
+STEP 2 — FORWARD REVENUE & EARNINGS ESTIMATE (FY27E)
+Revenue = Order book × execution rate (defence: 20-35% p.a. — slower than commercial)
+        + Anticipated new orders from declared pipeline × 25% execution in year 1
+        + Export orders (often faster execution than domestic)
+EBITDA = Revenue × target EBITDA margin (defence margins are sticky; minimal RM volatility)
+PAT = (EBITDA - D&A - Interest) × 0.75
+EPS = PAT / Shares Outstanding
+
+STEP 3 — VALUATION
+Primary method: Forward P/E on FY27E EPS
+  - Premium (proprietary tech, high indigenisation, export, strong cash): 40-65x P/E
+  - Quality (government-backed order book, 3+ year visibility): 28-40x P/E
+  - Mid-tier (component supplier, execution risk): 20-28x P/E
+Cross-check: EV/EBITDA 25-40x for premium defence
+
+Warning: Defence P/E can look expensive on trailing but orders justify forward premium.
+Always use FORWARD earnings for defence — lumpiness distorts trailing metrics.
+
+STEP 4 — SCENARIOS
+Bull: Major export order win; new program qualification (e.g., next-gen simulator, Kavach 5.0)
+Base: Existing order book executes on schedule; 1-2 new domestic orders; margins hold
+Bear: Government capex deferral; no new orders for 18 months; competitor wins key tender
+
+ENTRY / EXIT FRAMEWORK
+Buy more when: New order announced >1x annual revenue; export order; L1 in large tender
+Trim / Exit when: Order book < 2x revenue; 3+ consecutive quarters with no new orders; programme cancellation; EBITDA margin <16%
+
+Return ONLY a valid JSON object:
+{{
+  "fair_value_low": <bear/base floor ₹>,
+  "fair_value_high": <bull target ₹>,
+  "current_price": <extract from data or null>,
+  "current_vs_fair": "Undervalued" | "Fairly Valued" | "Overvalued",
+  "upside_pct": <number or null>,
+  "valuation_method": "Forward P/E FY27E",
+  "entry_signal": "Buy Now" | "Accumulate on Dips" | "Hold" | "Trim" | "Exit",
+  "sector_kpis": {{
+    "order_book_cr": "...",
+    "order_book_to_revenue_x": "...",
+    "order_intake_trend": "...",
+    "indigenisation_pct": "...",
+    "key_programs": "...",
+    "export_order_pct": "...",
+    "ebitda_margin_pct": "...",
+    "net_cash_cr": "...",
+    "rd_spend_pct": "...",
+    "fy27e_revenue_cr": "...",
+    "fy27e_eps": "₹...",
+    "pe_multiple_applied": "..."
+  }},
+  "key_assumptions": ["...", "..."],
+  "scenarios": [
+    {{"name": "Bull", "fair_value": X, "probability": "30%", "description": "..."}},
+    {{"name": "Base", "fair_value": Y, "probability": "50%", "description": "..."}},
+    {{"name": "Bear", "fair_value": Z, "probability": "20%", "description": "..."}}
+  ],
+  "key_risks_to_valuation": ["...", "..."],
+  "entry_exit_triggers": {{
+    "buy": ["...", "..."],
+    "exit": ["...", "..."]
+  }}
+}}

@@ -1,0 +1,15 @@
+{
+  "symbol": "PVRINOX",
+  "name": "PVR Inox Ltd",
+  "exchange": "BSE",
+  "screener_url": "https://www.screener.in/company/PVRINOX/",
+  "industry_tag": "",
+  "business_description": "PVR Limited (PVR) is India’s largest and most premium film exhibition company. It pioneered the multiplex revolution in India by establishing the first multiplex cinema in 1997 at New Delhi and continues to lead the market with relentless focus on innovation and operational excellence to democratise",
+  "key_products": [],
+  "input_sensitivity": "(skipped — run without --no-llm)",
+  "output_industries": [
+    "Unclassified"
+  ],
+  "output_note": "",
+  "fetched_date": "2026-03-02T11:13:39.588936"
+}

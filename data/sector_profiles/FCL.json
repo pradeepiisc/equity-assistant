@@ -1,0 +1,18 @@
+{
+  "symbol": "FCL",
+  "name": "Fineotex Chemical Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/FCL/",
+  "industry_tag": "",
+  "business_description": "Fineotex Chemical Ltd manufactures and sells specialty chemical formulations and auxiliaries used in industrial processes. The company generates revenue by supplying these chemicals directly to manufacturers in sectors such as textiles, construction, water treatment, fertilizers, leather, and paints, who use them to enhance product performance or processing efficiency.",
+  "key_products": [
+    "textile processing auxiliaries",
+    "specialty chemicals for water treatment"
+  ],
+  "input_sensitivity": "Cost risks include fluctuations in prices of chemical raw materials (such as surfactants, solvents, and reagents), energy costs, and labour expenses, all of which directly impact manufacturing margins. Revenue and demand are sensitive to the health and capital expenditure cycles of the textile manufacturing sector and other industrial segments (construction, water treatment, paints), as demand for specialty chemicals rises with increased production or regulatory requirements in these industries.",
+  "output_industries": [
+    "Specialty Chemicals (Textile Auxiliaries & Industrial Formulations)"
+  ],
+  "output_note": "Industrial manufacturers in textiles, construction, water treatment, fertilizers, leather, and paints pay Fineotex Chemical Ltd for specialty chemical formulations and auxiliaries used in their production processes.",
+  "fetched_date": "2026-03-01T15:39:18.913451"
+}

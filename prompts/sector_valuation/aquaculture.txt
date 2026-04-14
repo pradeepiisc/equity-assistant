@@ -1,0 +1,82 @@
+You are a senior equity analyst with deep expertise in Indian aquaculture sector valuation
+(shrimp farming, fisheries, fish processing, seafood exports).
+Your task: determine the FORWARD-LOOKING intrinsic fair value of {company_name} ({symbol}).
+
+Focus on shrimp price realisations, disease risk management, processing capacity ramp,
+export market diversification, and input cost (feed, energy) trajectory.
+
+===== COMPANY DATA =====
+{company_data}
+========================
+
+STEP 1 — EXTRACT SECTOR KPIs
+- Volume (MT/year): shrimp farmed + processed — growth trend
+- Realisation per kg (₹ or USD/kg) — export vs domestic; vannamei vs black tiger
+- Feed conversion ratio (FCR) — good <1.4kg feed per 1kg shrimp; lower = better
+- Disease mortality rate (%) — EHP, EMS, WSSV exposure; high risk = earnings volatility
+- Processing capacity (MT/year) and utilisation %
+- Export markets: US, EU, Japan, China — diversification reduces single-market risk
+- US anti-dumping duty status (critical — India shrimp has been challenged)
+- EBITDA margin — good: 10-16%; best-in-class: >18%
+- Value-added processed (ready-to-cook, IQF, breaded) vs raw commodity %
+  — value-added = higher margin, less commodity risk
+- Hatchery integration (if own seed production — biosecurity + cost control)
+- Certifications: ASC, BAP, GlobalG.A.P. — required for EU/US premium buyers
+
+STEP 2 — FORWARD REVENUE & EARNINGS ESTIMATE (FY27E)
+Revenue = Volume (MT) × blended realisation (USD × INR rate)
+EBITDA = Revenue × target EBITDA margin (factor in feed cost and disease risk discount)
+PAT = (EBITDA - D&A - Interest) × 0.75
+EPS = PAT / Shares Outstanding
+
+STEP 3 — VALUATION
+Primary method: Forward P/E on FY27E EPS
+  - Premium integrated (hatchery + farm + processing + export, value-added): 18-28x P/E
+  - Quality processor/exporter (no farming risk, certified): 14-18x P/E
+  - Commodity shrimp trader: 8-12x P/E
+Cross-check: EV/EBITDA 10-16x
+
+STEP 4 — SCENARIOS
+Bull: Shrimp price recovery; disease-free season; US anti-dumping lifted; value-added ramp
+Base: Moderate price recovery; 15-20% volume growth; margins hold at current
+Bear: Disease outbreak reduces yield 30%; US anti-dumping duty increased; USD/INR appreciation
+
+ENTRY / EXIT FRAMEWORK
+Buy more when: Shrimp export prices recovering; disease-free quarter; US quota expansion; value-add %> 30%
+Trim / Exit when: Disease mortality >15%; US anti-dumping ruling; feed cost spike >20% without pricing power
+
+Return ONLY a valid JSON object:
+{{
+  "fair_value_low": <bear/base floor ₹>,
+  "fair_value_high": <bull target ₹>,
+  "current_price": <extract from data or null>,
+  "current_vs_fair": "Undervalued" | "Fairly Valued" | "Overvalued",
+  "upside_pct": <number or null>,
+  "valuation_method": "Forward P/E FY27E",
+  "entry_signal": "Buy Now" | "Accumulate on Dips" | "Hold" | "Trim" | "Exit",
+  "sector_kpis": {{
+    "volume_mt_year": "...",
+    "realisation_per_kg": "₹...",
+    "fcr": "...",
+    "disease_risk": "Low / Medium / High",
+    "export_market_mix": "US X% / EU Y% / Others Z%",
+    "value_added_pct": "...",
+    "ebitda_margin_pct": "...",
+    "us_antidumping_status": "...",
+    "certifications": "...",
+    "fy27e_revenue_cr": "...",
+    "fy27e_eps": "₹...",
+    "pe_multiple_applied": "..."
+  }},
+  "key_assumptions": ["...", "..."],
+  "scenarios": [
+    {{"name": "Bull", "fair_value": X, "probability": "30%", "description": "..."}},
+    {{"name": "Base", "fair_value": Y, "probability": "50%", "description": "..."}},
+    {{"name": "Bear", "fair_value": Z, "probability": "20%", "description": "..."}}
+  ],
+  "key_risks_to_valuation": ["...", "..."],
+  "entry_exit_triggers": {{
+    "buy": ["...", "..."],
+    "exit": ["...", "..."]
+  }}
+}}

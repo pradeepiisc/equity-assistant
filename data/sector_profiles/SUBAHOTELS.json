@@ -1,0 +1,18 @@
+{
+  "symbol": "SUBAHOTELS-SM",
+  "name": "Suba Hotels Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/SUBAHOTELS/",
+  "industry_tag": "",
+  "business_description": "Suba Hotels Ltd operates a chain of mid-market hotels across India, generating revenue primarily from room rentals, food and beverage services, and related hospitality offerings to guests. The company makes money by providing accommodation and associated services to business, leisure, and religious travelers, with a focus on tier 2 and 3 cities.",
+  "key_products": [
+    "Hotel room accommodation",
+    "Food and beverage services"
+  ],
+  "input_sensitivity": "Cost risks include labor costs, utility and energy expenses, property lease or maintenance costs, and interest rates affecting financing for hotel expansion. Revenue is directly sensitive to domestic travel demand, especially business, leisure, and religious tourism trends in tier 2 and 3 Indian cities.",
+  "output_industries": [
+    "Hotel Operations & Hospitality Services"
+  ],
+  "output_note": "Individual and corporate guests directly pay Suba Hotels Ltd for hotel room stays and hospitality services.",
+  "fetched_date": "2026-03-01T15:40:21.781169"
+}

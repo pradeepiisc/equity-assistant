@@ -1,0 +1,18 @@
+{
+  "symbol": "MEGATHERM-SM",
+  "name": "Megatherm Induction Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/MEGATHERM/",
+  "industry_tag": "",
+  "business_description": "Megatherm Induction Ltd manufactures and sells capital equipment, primarily induction heating and melting systems. The company generates revenue by designing, producing, and supplying these industrial machines to businesses that require metal heating and melting solutions for their manufacturing processes.",
+  "key_products": [
+    "Induction heating equipment",
+    "Induction melting furnaces"
+  ],
+  "input_sensitivity": "Cost risks include fluctuations in prices of metals, electronic components, and energy, as these are key inputs for manufacturing induction equipment; labour and interest rates also impact margins. Revenue is directly sensitive to capital expenditure cycles in the metals and foundry sectors, as demand for new or replacement induction equipment depends on these industries' investment activity.",
+  "output_industries": [
+    "Industrial Heating & Melting Equipment"
+  ],
+  "output_note": "Industrial manufacturers and foundries directly pay Megatherm Induction Ltd for induction heating and melting equipment used in their production processes.",
+  "fetched_date": "2026-03-01T15:40:03.948379"
+}

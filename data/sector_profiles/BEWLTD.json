@@ -1,0 +1,18 @@
+{
+  "symbol": "BEWLTD-SM",
+  "name": "BEW Engineering Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/BEWLTD/",
+  "industry_tag": "",
+  "business_description": "BEW Engineering Ltd designs and manufactures specialized filtration, mixing, and drying equipment. The company generates revenue by selling these engineered machines to industrial clients who require process equipment for manufacturing operations.",
+  "key_products": [
+    "filtration equipment",
+    "mixing and drying equipment"
+  ],
+  "input_sensitivity": "Cost risks include fluctuations in prices of metals and engineering components used in manufacturing, as well as labour and energy costs. Revenue is sensitive to capital expenditure cycles in process industries such as chemicals and pharmaceuticals, which directly drive demand for new filtration and drying equipment.",
+  "output_industries": [
+    "Process Equipment Manufacturing"
+  ],
+  "output_note": "Industrial manufacturers pay BEW Engineering Ltd directly for custom filtration, mixing, and drying equipment used in their production processes.",
+  "fetched_date": "2026-03-01T15:40:41.685180"
+}

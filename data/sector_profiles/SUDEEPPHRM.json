@@ -1,0 +1,18 @@
+{
+  "symbol": "SUDEEPPHRM",
+  "name": "Sudeep Pharma Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/SUDEEPPHRM/",
+  "industry_tag": "",
+  "business_description": "Sudeep Pharma Ltd manufactures pharmaceutical excipients, food-grade minerals, and specialty nutrition ingredients. The company generates revenue by producing and selling these chemical and mineral-based ingredients in bulk to pharmaceutical, food, and nutrition product manufacturers worldwide.",
+  "key_products": [
+    "pharmaceutical excipients",
+    "food-grade minerals"
+  ],
+  "input_sensitivity": "Cost risks: Margins are sensitive to prices of raw minerals, chemicals, energy, and logistics costs, as well as currency fluctuations due to exports. Revenue/demand risks: Demand is directly driven by the health of the global pharmaceutical manufacturing sector and, to a lesser extent, the food and nutrition ingredient industries.",
+  "output_industries": [
+    "Pharma Excipients & Nutrition Ingredients"
+  ],
+  "output_note": "Sudeep Pharma is paid directly by pharmaceutical, food, and nutrition product manufacturers for bulk supply of excipients, minerals, and specialty nutrition ingredients.",
+  "fetched_date": "2026-03-01T15:42:38.830260"
+}

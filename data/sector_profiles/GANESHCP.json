@@ -1,0 +1,17 @@
+{
+  "symbol": "GANESHCP",
+  "name": "Ganesh Consumer Products Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/GANESHCP/",
+  "industry_tag": "",
+  "business_description": "Ganesh Consumer Products Ltd is an FMCG company that manufactures and sells consumer goods. The company generates revenue by producing and distributing packaged consumer products to retail and wholesale buyers.",
+  "key_products": [
+    "packaged consumer goods"
+  ],
+  "input_sensitivity": "Cost risks include fluctuations in raw material prices, packaging materials, energy, and labor costs, which can impact margins. Revenue is sensitive to overall consumer spending trends and demand for FMCG products, particularly in the regions where the company operates.",
+  "output_industries": [
+    "Packaged FMCG Products"
+  ],
+  "output_note": "Distributors, wholesalers, and retailers pay Ganesh Consumer Products Ltd for packaged consumer goods.",
+  "fetched_date": "2026-03-01T15:39:56.659020"
+}

@@ -1,0 +1,18 @@
+{
+  "symbol": "HPL",
+  "name": "HPL Electric & Power Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/HPL/",
+  "industry_tag": "",
+  "business_description": "HPL Electric & Power Ltd manufactures and sells electrical equipment including metering solutions, modular switches, switchgears, LED lighting, and wires and cables. The company generates revenue by supplying these products to power utilities, government agencies, and retail/institutional customers both in India and internationally. Its business model is based on direct sales of electrical components and systems for infrastructure and commercial use.",
+  "key_products": [
+    "metering solutions",
+    "modular switches"
+  ],
+  "input_sensitivity": "Cost risks include fluctuations in prices of metals (such as copper and aluminum for wires and cables), electronic components, energy costs, and labor expenses, all of which directly impact manufacturing margins. Revenue and demand are sensitive to infrastructure and real estate development, government procurement cycles, and capital expenditure by power utilities, as well as broader trends in electrification and urbanization.",
+  "output_industries": [
+    "Electrical Equipment & Components"
+  ],
+  "output_note": "Power utilities, government agencies, and retail/institutional customers directly pay HPL Electric & Power Ltd for electrical equipment such as meters, switches, switchgears, LED lighting, and cables.",
+  "fetched_date": "2026-03-01T15:41:51.848579"
+}

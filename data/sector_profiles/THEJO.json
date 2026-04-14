@@ -1,0 +1,18 @@
+{
+  "symbol": "THEJO",
+  "name": "Thejo Engineering Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/THEJO/",
+  "industry_tag": "",
+  "business_description": "Thejo Engineering Ltd provides engineering solutions for bulk material handling, mineral processing, and corrosion protection. The company generates revenue by designing, manufacturing, installing, and servicing equipment and systems used in the movement and processing of bulk materials, as well as offering protective solutions for industrial infrastructure.",
+  "key_products": [
+    "Bulk material handling systems",
+    "Corrosion protection solutions"
+  ],
+  "input_sensitivity": "Cost risks include fluctuations in prices of engineering materials (such as steel, rubber, and polymers), labour costs, and energy expenses, which directly impact margins. Revenue and demand are sensitive to capital expenditure cycles and operational activity in core sectors like mining, power, steel, cement, ports, and fertilisers, as these industries drive demand for bulk handling and processing solutions.",
+  "output_industries": [
+    "Bulk Material Handling & Processing Equipment"
+  ],
+  "output_note": "Industrial companies in sectors such as mining, power, steel, cement, ports, and fertilisers pay Thejo Engineering Ltd directly for bulk material handling systems and corrosion protection solutions.",
+  "fetched_date": "2026-03-01T15:42:46.284650"
+}

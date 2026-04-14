@@ -1,0 +1,18 @@
+{
+  "symbol": "SGFIN",
+  "name": "SG Finserve Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/SGFIN/",
+  "industry_tag": "",
+  "business_description": "SG Finserve Ltd, formerly Moongipa Securities Ltd, generates revenue by providing financial services including investment activities, investment research, investment banking, and wealth management. The company earns fees and commissions from advisory, transaction facilitation, and asset management services for clients seeking investment solutions.",
+  "key_products": [
+    "Investment advisory and research",
+    "Investment banking and wealth management services"
+  ],
+  "input_sensitivity": "Cost risks are primarily driven by employee compensation and technology infrastructure, as these are core to delivering financial services; interest rate fluctuations can impact profitability and demand for investment products. Revenue is sensitive to capital market activity, investor sentiment, and overall economic growth, which directly affect demand for investment banking and wealth management services.",
+  "output_industries": [
+    "Investment Banking & Wealth Management Services"
+  ],
+  "output_note": "Clients, including individuals and institutions, pay SG Finserve Ltd fees and commissions for investment advisory, research, transaction facilitation, and wealth management services.",
+  "fetched_date": "2026-03-01T15:39:30.700482"
+}

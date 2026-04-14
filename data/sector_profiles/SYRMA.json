@@ -1,0 +1,18 @@
+{
+  "symbol": "SYRMA",
+  "name": "Syrma SGS Technology Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/SYRMA/",
+  "industry_tag": "",
+  "business_description": "Syrma SGS Technology Ltd is an engineering and design company specializing in electronics manufacturing services (EMS). It generates revenue by providing integrated design, engineering, and contract manufacturing solutions to original equipment manufacturers (OEMs), supporting them from product concept through to large-scale production.",
+  "key_products": [
+    "Electronics manufacturing services (EMS)",
+    "Product design and engineering solutions"
+  ],
+  "input_sensitivity": "Cost risks: Syrma SGS is sensitive to fluctuations in prices of electronic components, semiconductors, metals, and labor costs, as well as changes in energy and logistics expenses. Revenue/demand risks: Demand is directly driven by OEMs' capital expenditure and product launch cycles in electronics, which are influenced by global supply chain conditions and technology sector health.",
+  "output_industries": [
+    "Electronic Manufacturing Services"
+  ],
+  "output_note": "Original equipment manufacturers (OEMs) pay Syrma SGS for contract electronics manufacturing and related design/engineering services.",
+  "fetched_date": "2026-03-01T15:38:01.946774"
+}

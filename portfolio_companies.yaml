@@ -1,0 +1,934 @@
+# Portfolio Holdings Registry
+# Companies held in the portfolio but not on the watchlist.
+# Symbol = raw portfolio symbol (may include -SM/-BE suffixes for display)
+# screener_symbol = clean symbol used in Screener URL
+# screener_url = https://www.screener.in/company/{screener_symbol}/
+
+stocks:
+  - symbol: J&KBANK
+    screener_symbol: J&KBANK
+    name: Jammu & Kashmir Bank Ltd
+    exchange: NSE
+    sector: Banking - Regional
+    screener_url: https://www.screener.in/company/J&KBANK/
+
+  - symbol: AEROFLEX
+    screener_symbol: AEROFLEX
+    name: Aeroflex Industries Ltd
+    exchange: NSE
+    sector: Specialty Industrials - Flexible Hoses
+    screener_url: https://www.screener.in/company/AEROFLEX/
+
+  - symbol: YATHARTH
+    screener_symbol: YATHARTH
+    name: Yatharth Hospital and Trauma Care Services Ltd
+    exchange: NSE
+    sector: Healthcare - Hospitals
+    screener_url: https://www.screener.in/company/YATHARTH/
+
+  - symbol: QPOWER
+    name: Quality Power Electrical Equipments Ltd
+    exchange: NSE
+    sector: Heavy Electrical Equipments
+    screener_url: https://www.screener.in/company/QPOWER/
+    bse_code: "544367"
+    watch_reason: "High-conviction bet on India's power sector capex cycle"
+    peers:
+      - TARIL
+      - CGPOWER
+
+  - symbol: AVALON
+    screener_symbol: AVALON
+    name: Avalon Technologies Ltd
+    exchange: NSE
+    sector: Electronics Manufacturing Services
+    screener_url: https://www.screener.in/company/AVALON/
+
+  - symbol: MAHLOG
+    screener_symbol: MAHLOG
+    name: Mahindra Logistics Ltd
+    exchange: NSE
+    sector: Logistics & Supply Chain
+    screener_url: https://www.screener.in/company/MAHLOG/
+
+  - symbol: JAINREC
+    screener_symbol: JAINREC
+    name: Jain Resource Recycling Ltd
+    exchange: NSE
+    sector: Recycling - Non-Ferrous Metals
+    screener_url: https://www.screener.in/company/JAINREC/
+
+  - symbol: TANFACIND
+    screener_symbol: TANFACIND
+    name: Tanfac Industries Ltd
+    exchange: BSE
+    sector: Specialty Chemicals - Fluorine
+    screener_url: https://www.screener.in/company/TANFACIND/
+
+  - symbol: VAIBHAVGBL
+    screener_symbol: VAIBHAVGBL
+    name: Vaibhav Global Ltd
+    exchange: NSE
+    sector: Retail - Jewellery & Lifestyle
+    screener_url: https://www.screener.in/company/VAIBHAVGBL/
+
+  - symbol: SYRMA
+    screener_symbol: SYRMA
+    name: Syrma SGS Technology Ltd
+    exchange: NSE
+    sector: Electronics Manufacturing Services
+    screener_url: https://www.screener.in/company/SYRMA/
+
+  - symbol: TBI-SM
+    screener_symbol: TBI
+    name: TBI Corn Ltd
+    exchange: NSE
+    sector: Agri Processing
+    screener_url: https://www.screener.in/company/TBI/
+
+  - symbol: TECHERA-SM
+    screener_symbol: TECHERA
+    name: Techera Engineering Ltd
+    exchange: NSE
+    sector: Engineering
+    screener_url: https://www.screener.in/company/TECHERA/
+
+  - symbol: INFLAME
+    screener_symbol: '541083'
+    name: Inflame Appliances Ltd
+    exchange: BSE
+    sector: Consumer Durables - Gas Appliances
+    screener_url: https://www.screener.in/company/541083/consolidated/
+
+  - symbol: MBEL
+    screener_symbol: MBEL
+    name: M&B Engineering Ltd
+    exchange: NSE
+    sector: Engineering - Industrial Equipment
+    screener_url: https://www.screener.in/company/MBEL/
+
+  - symbol: INDOSMC
+    screener_symbol: 544681
+    name: INDOSMC
+    exchange: BSE
+    sector: Unknown
+    screener_url: https://www.screener.in/company/544681/
+
+  - symbol: ADVAIT
+    screener_symbol: ADVAIT
+    name: Advait Infrastructure Ltd
+    exchange: NSE
+    sector: Power Infrastructure
+    screener_url: https://www.screener.in/company/ADVAIT/
+
+  - symbol: SHREEREF
+    screener_symbol: 544458
+    name: Shree Refrigerations Ltd
+    exchange: BSE
+    sector: Refrigeration Equipment
+    screener_url: https://www.screener.in/company/544458/
+
+  - symbol: NORTHARC
+    screener_symbol: NORTHARC
+    name: Northern Arc Capital Ltd
+    exchange: NSE
+    sector: NBFC - Inclusive Finance
+    screener_url: https://www.screener.in/company/NORTHARC/
+
+  - symbol: QLL
+    screener_symbol: 544091
+    name: Qualitek Labs Ltd
+    exchange: BSE
+    sector: Pharma - Contract Labs
+    screener_url: https://www.screener.in/company/544091/
+
+  - symbol: PARTYCRUS-SM
+    screener_symbol: PARTYCRUS
+    name: Party Cruisers Ltd
+    exchange: NSE
+    sector: Events & Hospitality
+    screener_url: https://www.screener.in/company/PARTYCRUS/
+
+  - symbol: RADIOWALLA-SM
+    screener_symbol: RADIOWALLA
+    name: Radiowalla Network Ltd
+    exchange: NSE
+    sector: Media - Radio
+    screener_url: https://www.screener.in/company/RADIOWALLA/
+
+  - symbol: KRN
+    screener_symbol: KRN
+    name: KRN Heat Exchanger and Refrigeration Ltd
+    exchange: NSE
+    sector: Industrial Equipment - Heat Exchangers
+    screener_url: https://www.screener.in/company/KRN/
+
+  - symbol: DENTALKART-SM
+    screener_symbol: DENTALKART
+    name: Dentalkart Ltd
+    exchange: NSE
+    sector: Healthcare - Dental Products
+    screener_url: https://www.screener.in/company/DENTALKART/
+
+  - symbol: INFINIUM-SM
+    screener_symbol: INFINIUM
+    name: Infinium Pharmachem Ltd
+    exchange: NSE
+    sector: Pharmaceuticals
+    screener_url: https://www.screener.in/company/INFINIUM/
+
+  - symbol: PRATHAM-SM
+    screener_symbol: PRATHAM
+    name: Pratham EPC Projects Ltd
+    exchange: NSE
+    sector: EPC - Infrastructure
+    screener_url: https://www.screener.in/company/PRATHAM/
+
+  - symbol: PATELCHEM
+    screener_symbol: '544460'
+    name: Patel Chem Specialities Ltd
+    exchange: NSE
+    sector: Chemicals
+    screener_url: https://www.screener.in/company/544460/consolidated/
+
+  - symbol: HSCL
+    screener_symbol: HSCL
+    name: Himadri Speciality Chemical Ltd
+    exchange: NSE
+    sector: Specialty Chemicals - Carbon
+    screener_url: https://www.screener.in/company/HSCL/
+
+  - symbol: PVRINOX
+    screener_symbol: PVRINOX
+    name: PVR Inox Ltd
+    exchange: NSE
+    sector: Entertainment - Multiplex
+    screener_url: https://www.screener.in/company/PVRINOX/
+
+  - symbol: SGFIN
+    screener_symbol: SGFIN
+    name: SG Finserve Ltd
+    exchange: NSE
+    sector: Financial Services - NBFC
+    screener_url: https://www.screener.in/company/SGFIN/
+
+  - symbol: FCL
+    screener_symbol: FCL
+    name: Fineotex Chemical Ltd
+    exchange: NSE
+    sector: Specialty Chemicals - Textiles
+    screener_url: https://www.screener.in/company/FCL/
+
+  - symbol: APEX
+    screener_symbol: APEX
+    name: Apex Frozen Foods Ltd
+    exchange: NSE
+    sector: Food Processing - Seafood
+    screener_url: https://www.screener.in/company/APEX/
+
+  - symbol: GANESHCP
+    screener_symbol: GANESHCP
+    name: Ganesh Consumer Products Ltd
+    exchange: NSE
+    sector: Consumer Products - Personal Care
+    screener_url: https://www.screener.in/company/GANESHCP/
+
+  - symbol: DCAL
+    name: Dishman Carbogen Amcis Ltd
+    exchange: NSE
+    sector: Pharmaceuticals - CDMO
+    screener_url: https://www.screener.in/company/DCAL/
+    bse_code: "540701"
+    watch_reason: "CDMO turnaround play - monitoring management execution"
+    peers:
+      - DIVI
+      - HIKAL
+      - SUVEN
+  
+  - symbol: DUGLOBAL
+    name: DU Digital Global Ltd
+    exchange: NSE
+    sector: Visa Processing - Government Outsourcing & Consular Services
+    screener_url: https://www.screener.in/company/DUGLOBAL/
+    bse_code: ""  # NSE-SME listed; no BSE code
+    watch_reason: ""
+    peers:
+      - MSTCLTD
+      - CDSL
+
+  - symbol: GAUDIUMIVF
+    name: Gaudium IVF and Women Health Ltd
+    exchange: BSE
+    sector: Healthcare - IVF & Fertility
+    screener_url: https://www.screener.in/company/GAUDIUMIVF/
+    bse_code: "544709"
+    watch_reason: ""
+    peers:
+      - INDOSTAR
+
+  - symbol: VMARCIND-SM
+    screener_symbol: VMARCIND
+    name: V Marc India Ltd
+    exchange: NSE
+    sector: Consumer Electricals
+    screener_url: https://www.screener.in/company/VMARCIND/
+
+  - symbol: XPROINDIA
+    screener_symbol: XPROINDIA
+    name: Xpro India Ltd
+    exchange: NSE
+    sector: Specialty Films & Packaging
+    screener_url: https://www.screener.in/company/XPROINDIA/
+
+  - symbol: ACUTAAS
+    name: Acutaas Chemicals Ltd
+    exchange: NSE
+    sector: Specialty Chemicals
+    screener_url: https://www.screener.in/company/ACUTAAS/
+    bse_code: "543349"
+    watch_reason: ""
+    peers:
+      - ATGL
+      - TATACHEM
+
+  - symbol: BALAJITELE
+    name: Balaji Telefilms Ltd
+    exchange: NSE
+    sector: Media & Entertainment
+    screener_url: https://www.screener.in/company/BALAJITELE/
+    bse_code: "532382"
+    watch_reason: ""
+    peers:
+      - ZEEL
+      - SUNTV
+      - TIPSINDLTD
+  
+  - symbol: SHAILY
+    name: Shaily Engineering Plastics Ltd
+    exchange: NSE
+    sector: Industrial Plastics & Engineering
+    screener_url: https://www.screener.in/company/SHAILY/
+    bse_code: "501423"
+    watch_reason: ""
+    peers:
+      - NILKAMAL
+      - ASTRAL
+
+  - symbol: ZENTEC
+    name: Zen Technologies Ltd
+    exchange: NSE
+    sector: Defence Electronics - Simulation & Training
+    screener_url: https://www.screener.in/company/ZENTEC/
+    bse_code: "533339"
+    watch_reason: ""
+    peers:
+      - BEL
+      - MTAR
+      - PARAS
+
+  - symbol: MEGATHERM-SM
+    screener_symbol: MEGATHERM
+    name: Megatherm Induction Ltd
+    exchange: NSE
+    sector: Industrial Equipment - Induction Heating
+    screener_url: https://www.screener.in/company/MEGATHERM/
+
+  - symbol: FAZE3Q-BE
+    screener_symbol: FAZE3Q
+    name: Faze Three Ltd
+    exchange: BSE
+    sector: Textiles - Home Furnishing
+    screener_url: https://www.screener.in/company/FAZE3Q/
+
+  - symbol: EFFWA-SM
+    screener_symbol: EFFWA
+    name: Effwa Infra & Research Ltd
+    exchange: NSE
+    sector: Infrastructure - Water Treatment
+    screener_url: https://www.screener.in/company/EFFWA/
+
+  - symbol: APOLLOPIPE
+    screener_symbol: APOLLOPIPE
+    name: Apollo Pipes Ltd
+    exchange: NSE
+    sector: Pipes & Fittings
+    screener_url: https://www.screener.in/company/APOLLOPIPE/
+
+  - symbol: WPIL
+    screener_symbol: WPIL
+    name: WPIL Ltd
+    exchange: NSE
+    sector: Industrial Equipment - Pumps
+    screener_url: https://www.screener.in/company/WPIL/
+
+  - symbol: BLS
+    screener_symbol: BLS
+    name: BLS International Services Ltd
+    exchange: NSE
+    sector: Business Process Outsourcing - Visa Services
+    screener_url: https://www.screener.in/company/BLS/
+
+  - symbol: LAXMIINDIA
+    screener_symbol: LAXMIINDIA
+    name: Laxmi India Finance Ltd
+    exchange: NSE
+    sector: Financial Services - NBFC
+    screener_url: https://www.screener.in/company/LAXMIINDIA/
+
+  - symbol: ZTECH-SM
+    screener_symbol: ZTECH
+    name: Ztech India Ltd
+    exchange: NSE
+    sector: Entertainment - Theme Parks
+    screener_url: https://www.screener.in/company/ZTECH/
+
+  - symbol: ACLD
+    screener_symbol: 544213
+    name: ACLD
+    exchange: BSE
+    sector: Unknown
+    screener_url: https://www.screener.in/company/544213/
+
+  - symbol: SUBAHOTELS-SM
+    screener_symbol: SUBAHOTELS
+    name: Suba Hotels Ltd
+    exchange: NSE
+    sector: Hospitality - Hotels
+    screener_url: https://www.screener.in/company/SUBAHOTELS/
+
+  - symbol: BEWLTD-SM
+    screener_symbol: BEWLTD
+    name: BEW Engineering Ltd
+    exchange: NSE
+    sector: Engineering - Defence
+    screener_url: https://www.screener.in/company/BEWLTD/
+
+  - symbol: DHABRIYA
+    screener_symbol: DHABRIYA
+    name: Dhabriya Polywood Ltd
+    exchange: NSE
+    sector: Building Materials
+    screener_url: https://www.screener.in/company/DHABRIYA/
+
+  - symbol: GUJAPOLLO
+    screener_symbol: GUJAPOLLO
+    name: Gujarat Apollo Industries Ltd
+    exchange: NSE
+    sector: Industrial Machinery - Road Construction
+    screener_url: https://www.screener.in/company/GUJAPOLLO/
+
+  - symbol: SPMLINFRA
+    screener_symbol: SPMLINFRA
+    name: SPM Infrastructure Ltd
+    exchange: NSE
+    sector: Infrastructure
+    screener_url: https://www.screener.in/company/SPMLINFRA/
+
+  - symbol: BPLPHARMA
+    screener_symbol: BPLPHARMA
+    name: BPL Pharma Ltd
+    exchange: NSE
+    sector: Pharmaceuticals
+    screener_url: https://www.screener.in/company/BPLPHARMA/
+
+  - symbol: DEEPAKFERT
+    screener_symbol: DEEPAKFERT
+    name: Deepak Fertilisers and Petrochemicals Corporation Ltd
+    exchange: NSE
+    sector: Fertilisers & Chemicals
+    screener_url: https://www.screener.in/company/DEEPAKFERT/
+
+  - symbol: UNIECOM
+    screener_symbol: UNIECOM
+    name: Unicommerce E Solutions Ltd
+    exchange: NSE
+    sector: E-commerce SaaS
+    screener_url: https://www.screener.in/company/UNIECOM/consolidated/
+
+  - symbol: SANJIVIN
+    screener_symbol: SANJIVIN
+    name: Sanjivani Parentals Ltd
+    exchange: NSE
+    sector: Pharma - Parenterals
+    screener_url: https://www.screener.in/company/SANJIVIN/
+
+  - symbol: EIMCOELECO
+    screener_symbol: EIMCOELECO
+    name: Eimco Elecon (India) Ltd
+    exchange: NSE
+    sector: Industrial Equipment - Mining
+    screener_url: https://www.screener.in/company/EIMCOELECO/
+
+  - symbol: HCC
+    screener_symbol: HCC
+    name: Hindustan Construction Company Ltd
+    exchange: NSE
+    sector: Construction - Infrastructure
+    screener_url: https://www.screener.in/company/HCC/
+
+  - symbol: HFCL
+    screener_symbol: HFCL
+    name: HFCL Ltd
+    exchange: NSE
+    sector: Telecom Infrastructure
+    screener_url: https://www.screener.in/company/HFCL/
+
+  - symbol: SAMHI
+    screener_symbol: SAMHI
+    name: Samhi Hotels Ltd
+    exchange: NSE
+    sector: Hospitality - Hotels
+    screener_url: https://www.screener.in/company/SAMHI/
+
+  - symbol: QUADFUTURE
+    screener_symbol: QUADFUTURE
+    name: Quadrant Future Tek Ltd
+    exchange: NSE
+    sector: Railways - Electronic Safety Systems
+    screener_url: https://www.screener.in/company/QUADFUTURE/
+
+  - symbol: CARYSIL
+    screener_symbol: CARYSIL
+    name: Carysil Ltd
+    exchange: NSE
+    sector: Building Products - Kitchen Sinks
+    screener_url: https://www.screener.in/company/CARYSIL/
+
+  - symbol: WALCHANNAG
+    screener_symbol: WALCHANNAG
+    name: Walchandnagar Industries Ltd
+    exchange: NSE
+    sector: Heavy Engineering
+    screener_url: https://www.screener.in/company/WALCHANNAG/
+
+  - symbol: HPL
+    screener_symbol: HPL
+    name: HPL Electric & Power Ltd
+    exchange: NSE
+    sector: Electricals - Metering
+    screener_url: https://www.screener.in/company/HPL/
+
+  - symbol: UTKARSHBNK
+    screener_symbol: UTKARSHBNK
+    name: Utkarsh Small Finance Bank Ltd
+    exchange: NSE
+    sector: Banking - Small Finance
+    screener_url: https://www.screener.in/company/UTKARSHBNK/
+
+  - symbol: GREAVESCOT
+    screener_symbol: GREAVESCOT
+    name: Greaves Cotton Ltd
+    exchange: NSE
+    sector: Engines & Generators - EV
+    screener_url: https://www.screener.in/company/GREAVESCOT/
+
+  - symbol: JYOTISTRUC
+    screener_symbol: JYOTISTRUC
+    name: Jyoti Structures Ltd
+    exchange: NSE
+    sector: Power Transmission - EPC
+    screener_url: https://www.screener.in/company/JYOTISTRUC/
+
+  - symbol: C2C-SM
+    screener_symbol: C2C
+    name: C2C Advanced Systems Ltd
+    exchange: NSE
+    sector: Defence Electronics
+    screener_url: https://www.screener.in/company/C2C/
+
+  - symbol: SAHASRA-SM
+    screener_symbol: SAHASRA
+    name: Sahasra Electronics Solutions Ltd
+    exchange: NSE
+    sector: Electronics Manufacturing Services
+    screener_url: https://www.screener.in/company/SAHASRA/
+
+  - symbol: VIKRAN
+    screener_symbol: VIKRAN
+    name: Vikran Engineering Ltd
+    exchange: NSE
+    sector: Engineering - Forgings
+    screener_url: https://www.screener.in/company/VIKRAN/
+
+  - symbol: KILITCH
+    screener_symbol: KILITCH
+    name: Kilitch Drugs (India) Ltd
+    exchange: NSE
+    sector: Pharmaceuticals
+    screener_url: https://www.screener.in/company/KILITCH/
+
+  - symbol: COSMICCRF
+    screener_symbol: '543928'
+    name: Cosmic CRF Ltd
+    exchange: NSE
+    sector: Specialty Chemicals
+    screener_url: https://www.screener.in/company/543928/consolidated/
+
+  - symbol: DEEPINDS
+    screener_symbol: DEEPINDS
+    name: Deep Industries Ltd
+    exchange: NSE
+    sector: Oil & Gas Services
+    screener_url: https://www.screener.in/company/DEEPINDS/
+
+  - symbol: ADCOUNTY
+    screener_symbol: ADCOUNTY
+    name: AdCounty Media Ltd
+    exchange: NSE
+    sector: Digital Advertising
+    screener_url: https://www.screener.in/company/ADCOUNTY/
+
+  - symbol: BAJAJCON
+    screener_symbol: BAJAJCON
+    name: Bajaj Consumer Care Ltd
+    exchange: NSE
+    sector: FMCG - Personal Care
+    screener_url: https://www.screener.in/company/BAJAJCON/
+
+  - symbol: YUKEN
+    screener_symbol: YUKEN
+    name: Yuken India Ltd
+    exchange: NSE
+    sector: Industrial Equipment - Hydraulics
+    screener_url: https://www.screener.in/company/YUKEN/
+
+  - symbol: GODREJAGRO
+    screener_symbol: GODREJAGRO
+    name: Godrej Agrovet Ltd
+    exchange: NSE
+    sector: Agri - Animal Feed & Crop Protection
+    screener_url: https://www.screener.in/company/GODREJAGRO/
+
+  - symbol: THEJO
+    screener_symbol: THEJO
+    name: Thejo Engineering Ltd
+    exchange: NSE
+    sector: Industrial Equipment - Conveyor
+    screener_url: https://www.screener.in/company/THEJO/
+
+  - symbol: SUDEEPPHRM
+    screener_symbol: SUDEEPPHRM
+    name: Sudeep Pharma Ltd
+    exchange: NSE
+    sector: Pharmaceuticals - API
+    screener_url: https://www.screener.in/company/SUDEEPPHRM/
+
+  - symbol: GRAVITA
+    screener_symbol: GRAVITA
+    name: Gravita India Ltd
+    exchange: NSE
+    sector: Recycling - Lead & Aluminium
+    screener_url: https://www.screener.in/company/GRAVITA/
+
+  - symbol: IFBIND
+    screener_symbol: IFBIND
+    name: IFB Industries Ltd
+    exchange: NSE
+    sector: Consumer Durables - Home Appliances
+    screener_url: https://www.screener.in/company/IFBIND/
+
+  - symbol: ICIL
+    screener_symbol: ICIL
+    name: Indo Count Industries Ltd
+    exchange: NSE
+    sector: Textiles - Home Textiles
+    screener_url: https://www.screener.in/company/ICIL/
+
+  - symbol: VISHNUINFR-SM
+    screener_symbol: VISHNUINFR
+    name: Vishnusurya Projects and Infra Ltd
+    exchange: NSE
+    sector: Infrastructure - Civil
+    screener_url: https://www.screener.in/company/VISHNUINFR/
+
+  - symbol: SHREEOSFM-SM
+    screener_symbol: SHREEOSFM
+    name: Shree OSFM E-Mobility Ltd
+    exchange: NSE
+    sector: EV - E-Mobility Services
+    screener_url: https://www.screener.in/company/SHREEOSFM/
+
+  - symbol: YASHO
+    name: Yasho Industries Ltd
+    exchange: BSE
+    sector: Specialty Chemicals
+    screener_url: https://www.screener.in/company/YASHO/
+    bse_code: ""
+    watch_reason: "Specialty chemicals — rubber chemicals, agrochemicals, flavours. China+1 beneficiary."
+    peers:
+      - DEEPAKNTR
+      - AARTI
+      - ATUL
+
+  - symbol: WENDT
+    name: Wendt India Ltd
+    exchange: NSE
+    sector: Specialty Industrials - Superabrasives & Precision Components
+    screener_url: https://www.screener.in/company/WENDT/
+    bse_code: ""
+    watch_reason: "JV with Wendt GmbH — diamond/CBN grinding wheels, dressing tools, precision machined components. High ROCE, debt-free, bearings & auto exposure."
+    peers:
+      - GRINDWELL
+      - CARBORUNIV
+
+  - symbol: STOVEKRAFT
+    name: Stovekraft Ltd
+    exchange: NSE
+    sector: Consumer Durables - Kitchen Appliances
+    screener_url: https://www.screener.in/company/STOVEKRAFT/
+    bse_code: ""
+    watch_reason: "Kitchen appliances — pressure cookers, cookware, gas stoves, non-stick. Brands: Pigeon, Gilma, Black+Decker."
+    peers:
+      - HAWKINCOOK
+      - TTK
+      - BAJAJCON
+
+  - symbol: KMEW
+    name: Knowledge Marine & Engineering Works Ltd
+    exchange: NSE
+    sector: Marine Services - Dredging & Inland Waterways
+    screener_url: https://www.screener.in/company/KMEW/
+    bse_code: ""
+    watch_reason: "Dredging, inland waterway management, hydrographic surveys, fleet hire for IWAI & port trusts. JMVP/Sagarmala tailwind."
+    peers:
+      - SEIL
+      - SEAMEC
+
+  - symbol: NRAIL
+    name: N R Agarwal Industries Ltd
+    exchange: NSE
+    sector: Paper Recycling - Packaging
+    screener_url: https://www.screener.in/company/NRAIL/
+    bse_code: ""
+    watch_reason: "Wastepaper-based paper & board manufacturer — kraft, duplex, newsprint. E-commerce packaging play."
+    peers:
+      - TPAPER
+      - TNPL
+      - JKPAPER
+
+  - symbol: CAPACITE
+    name: Capacite Infraprojects Ltd
+    exchange: NSE
+    sector: Construction - EPC
+    screener_url: https://www.screener.in/company/CAPACITE/
+    bse_code: ""
+    watch_reason: "EPC contractor — housing, high-rise, urban infra. Order book visibility."
+    peers:
+      - AHLUCONT
+      - PSP
+      - KNRCON
+
+  - symbol: BETA
+    name: Beta Drugs Ltd
+    exchange: NSE
+    sector: Pharmaceuticals - Oncology
+    screener_url: https://www.screener.in/company/BETA/
+    bse_code: ""
+    watch_reason: "Oncology drug manufacturer — domestic + export markets. Portfolio holding."
+    peers:
+      - NATCO
+      - SUVEN
+      - DRREDDY
+
+  - symbol: AYMSYNTEX
+    screener_symbol: AYMSYNTEX
+    name: AYM Syntex Ltd
+    exchange: NSE
+    sector: Textiles - Synthetic Yarn
+    screener_url: https://www.screener.in/company/AYMSYNTEX/
+
+  - symbol: SURYODAY
+    screener_symbol: SURYODAY
+    name: Suryoday Small Finance Bank Ltd
+    exchange: NSE
+    sector: Banking - Small Finance
+    screener_url: https://www.screener.in/company/SURYODAY/
+
+  - symbol: SONAMAC-SM
+    screener_symbol: SONAMAC
+    name: Sona Machinery Ltd
+    exchange: NSE
+    sector: Food Processing Machinery
+    screener_url: https://www.screener.in/company/SONAMAC/
+
+  - symbol: BCONCEPTS
+    screener_symbol: BCONCEPTS
+    name: Brand Concepts Ltd
+    exchange: NSE
+    sector: Fashion & Accessories
+    screener_url: https://www.screener.in/company/BCONCEPTS/
+
+  - symbol: TATVA
+    screener_symbol: TATVA
+    name: Tatva Chintan Pharma Chem Ltd
+    exchange: NSE
+    sector: Specialty Chemicals - Green Chemistry
+    screener_url: https://www.screener.in/company/TATVA/
+
+  - symbol: CHTR
+    screener_symbol: '544546'
+    name: Chatterbox Technologies Ltd
+    exchange: NSE
+    sector: Technology
+    screener_url: https://www.screener.in/company/544546/
+
+  - symbol: BALUFORGE
+    screener_symbol: BALUFORGE
+    name: Balu Forge Industries Ltd
+    exchange: NSE
+    sector: Forgings - Auto & Industrial
+    screener_url: https://www.screener.in/company/BALUFORGE/
+
+  - symbol: EMMIL-SM
+    screener_symbol: EMMIL
+    name: Energy-Mission Machineries Ltd
+    exchange: NSE
+    sector: Industrial Machinery
+    screener_url: https://www.screener.in/company/EMMIL/
+
+  - symbol: EMKAY
+    screener_symbol: EMKAY
+    name: Emkay Global Financial Services Ltd
+    exchange: NSE
+    sector: Financial Services - Broking
+    screener_url: https://www.screener.in/company/EMKAY/
+
+  - symbol: THOMASCOTT
+    screener_symbol: THOMASCOTT
+    name: Thomas Scott (India) Ltd
+    exchange: NSE
+    sector: Textiles - Apparel
+    screener_url: https://www.screener.in/company/THOMASCOTT/
+
+  - symbol: ATULAUTO
+    screener_symbol: ATULAUTO
+    name: Atul Auto Ltd
+    exchange: NSE
+    sector: Automobiles - Three Wheelers
+    screener_url: https://www.screener.in/company/ATULAUTO/
+
+  - symbol: ASMTEC
+    screener_symbol: '526433'
+    name: ASM Technologies Ltd
+    exchange: NSE
+    sector: Engineering Services - Technology
+    screener_url: https://www.screener.in/company/526433/
+
+  - symbol: SIYARAM
+    screener_symbol: SIYARAM
+    name: Siyaram Silk Mills Ltd
+    exchange: BSE
+    sector: Textiles - Blended Fabrics
+    screener_url: https://www.screener.in/company/SIYARAM/
+
+  - symbol: LOTUSDEV
+    screener_symbol: LOTUSDEV
+    name: Lotus Developers Ltd
+    exchange: NSE
+    sector: Real Estate
+    screener_url: https://www.screener.in/company/LOTUSDEV/
+
+  - symbol: NUVAMA
+    screener_symbol: NUVAMA
+    name: Nuvama Wealth Management Ltd
+    exchange: NSE
+    sector: Financial Services - Wealth Management
+    screener_url: https://www.screener.in/company/NUVAMA/
+
+  - symbol: ABB
+    screener_symbol: ABB
+    name: ABB India Ltd
+    exchange: NSE
+    sector: Heavy Electricals - Industrial Automation
+    screener_url: https://www.screener.in/company/ABB/
+
+  - symbol: DBREALTY
+    screener_symbol: DBREALTY
+    name: D B Realty Ltd
+    exchange: NSE
+    sector: Real Estate
+    screener_url: https://www.screener.in/company/DBREALTY/
+
+  - symbol: KIRLFER
+    screener_symbol: KIRLFER
+    name: Kirloskar Ferrous Industries Ltd
+    exchange: NSE
+    sector: Iron & Steel - Castings
+    screener_url: https://www.screener.in/company/KIRLFER/
+
+  - symbol: ZAGGLE
+    screener_symbol: ZAGGLE
+    name: Zaggle Prepaid Ocean Services Ltd
+    exchange: NSE
+    sector: Fintech - Prepaid Cards
+    screener_url: https://www.screener.in/company/ZAGGLE/
+
+  - symbol: AFFORDABLE
+    screener_symbol: AFFORDABLE
+    name: Affordable Robotic & Automation Ltd
+    exchange: NSE
+    sector: Automation & Robotics
+    screener_url: https://www.screener.in/company/AFFORDABLE/
+
+  - symbol: SIYSIL
+    screener_symbol: SIYSIL
+    name: Siyaram Silk Mills Ltd
+    exchange: NSE
+    sector: Textiles
+    screener_url: https://www.screener.in/company/SIYSIL/
+
+  - symbol: OMINFRAL
+    screener_symbol: OMINFRAL
+    name: OM Infra Ltd
+    exchange: NSE
+    sector: Infrastructure - Water & Power
+    screener_url: https://www.screener.in/company/OMINFRAL/
+
+  - symbol: AURIONPRO
+    screener_symbol: AURIONPRO
+    name: Aurionpro Solutions Ltd
+    exchange: NSE
+    sector: IT - Banking Technology
+    screener_url: https://www.screener.in/company/AURIONPRO/
+
+  - symbol: FABTECH
+    screener_symbol: FABTECH
+    name: Fabtech Technologies Cleanrooms Ltd
+    exchange: NSE
+    sector: Engineering - Cleanrooms
+    screener_url: https://www.screener.in/company/FABTECH/
+
+  - symbol: RAYMONDLSL
+    screener_symbol: RAYMONDLSL
+    name: Raymond Lifestyle Ltd
+    exchange: NSE
+    sector: Textiles - Premium Apparel
+    screener_url: https://www.screener.in/company/RAYMONDLSL/
+
+  - symbol: TEXELIN
+    screener_symbol: TEXELIN
+    name: Texel Industries Ltd
+    exchange: BSE
+    sector: Textiles - Technical Fabrics
+    screener_url: https://www.screener.in/company/TEXELIN/
+
+  - symbol: HIRECT
+    screener_symbol: HIRECT
+    name: Hindustan Rectifiers Ltd
+    exchange: NSE
+    sector: Power Electronics - Rectifiers
+    screener_url: https://www.screener.in/company/HIRECT/
+
+  - symbol: NEWJAISA-SM
+    screener_symbol: NEWJAISA
+    name: Newjaisa Technologies Ltd
+    exchange: NSE
+    sector: Technology - Refurbished Electronics
+    screener_url: https://www.screener.in/company/NEWJAISA/
+
+  - symbol: MANINDS
+    screener_symbol: MANINDS
+    name: Man Industries (India) Ltd
+    exchange: NSE
+    sector: Steel Tubes & Pipes
+    screener_url: https://www.screener.in/company/MANINDS/

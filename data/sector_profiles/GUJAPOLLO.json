@@ -1,0 +1,18 @@
+{
+  "symbol": "GUJAPOLLO",
+  "name": "Gujarat Apollo Industries Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/GUJAPOLLO/",
+  "industry_tag": "",
+  "business_description": "Gujarat Apollo Industries Ltd designs, manufactures, and sells machinery used for mining, road construction, and road maintenance. The company generates revenue by selling these capital equipment products to infrastructure contractors and government agencies involved in road building and mining projects.",
+  "key_products": [
+    "Mining machinery",
+    "Road construction and maintenance machinery"
+  ],
+  "input_sensitivity": "Cost risks include fluctuations in steel and other metal prices (key raw materials), energy costs, and labor expenses, all of which directly impact manufacturing margins. Revenue is highly sensitive to government infrastructure spending, road construction project awards, and overall activity in the mining and road-building sectors.",
+  "output_industries": [
+    "Mining & Road Construction Equipment"
+  ],
+  "output_note": "Infrastructure contractors and government agencies directly purchase mining and road construction machinery from Gujarat Apollo Industries Ltd for use in their projects.",
+  "fetched_date": "2026-03-01T15:40:50.684338"
+}

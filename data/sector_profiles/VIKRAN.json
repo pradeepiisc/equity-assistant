@@ -1,0 +1,18 @@
+{
+  "symbol": "VIKRAN",
+  "name": "Vikran Engineering Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/VIKRAN/",
+  "industry_tag": "",
+  "business_description": "Vikran Engineering Ltd is an Engineering, Procurement, and Construction (EPC) company. It generates revenue by providing turnkey EPC services, which include designing, sourcing materials, and constructing infrastructure or industrial projects for clients. The company earns fees and contract payments for delivering completed projects.",
+  "key_products": [
+    "EPC contracting services",
+    "Project management and execution"
+  ],
+  "input_sensitivity": "Cost risks include fluctuations in raw material prices (steel, cement, etc.), labour costs, fuel and energy expenses, and interest rates affecting project financing. Revenue and demand are directly driven by the health of infrastructure and industrial capex cycles, as new project awards depend on government and private sector investment in construction and development.",
+  "output_industries": [
+    "EPC Contracting & Project Services"
+  ],
+  "output_note": "Clients such as government agencies, industrial firms, and private developers directly pay Vikran Engineering Ltd for turnkey EPC contracting and project execution services.",
+  "fetched_date": "2026-03-01T15:42:49.662737"
+}

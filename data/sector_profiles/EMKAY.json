@@ -1,0 +1,18 @@
+{
+  "symbol": "EMKAY",
+  "name": "Emkay Global Financial Services Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/EMKAY/",
+  "industry_tag": "",
+  "business_description": "Emkay Global Financial Services Ltd provides capital market services, primarily earning revenue through brokerage fees, commissions, and advisory charges. The company facilitates trading and investment in equities, derivatives, and other financial instruments for its clients. Its revenue model is based on transaction volumes and value-added financial advisory services.",
+  "key_products": [
+    "Equity and derivatives brokerage",
+    "Investment advisory services"
+  ],
+  "input_sensitivity": "Cost risks are mainly related to employee compensation and technology infrastructure, as these drive operational expenses. Revenue and demand are highly sensitive to capital market activity levels, investor sentiment, and regulatory changes affecting trading volumes and investment flows.",
+  "output_industries": [
+    "Capital Market Brokerage & Advisory Services"
+  ],
+  "output_note": "Individual and institutional investors directly pay Emkay Global Financial Services Ltd for executing trades and providing investment advisory services.",
+  "fetched_date": "2026-03-01T15:43:59.757984"
+}

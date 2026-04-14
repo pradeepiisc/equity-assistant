@@ -1,0 +1,84 @@
+You are a senior equity analyst with deep expertise in Indian power and energy sector valuation
+(renewable energy generation, thermal, hydro, hybrid, power distribution, green hydrogen).
+Your task: determine the FORWARD-LOOKING intrinsic fair value of {company_name} ({symbol}).
+
+Focus on capacity under construction, PPA rates locked in, project pipeline quality,
+ISTS waiver benefits, and the India 500GW renewable target by 2030 tailwind.
+
+===== COMPANY DATA =====
+{company_data}
+========================
+
+STEP 1 — EXTRACT SECTOR KPIs
+- Installed capacity (MW) by source (solar / wind / hybrid / thermal)
+- Capacity under construction / pipeline (MW) and COD (commissioning date)
+- PLF / CUF (Plant Load Factor / Capacity Utilisation Factor):
+  Solar: good >22%; Wind: good >30%; Thermal: good >70%
+- PPA (Power Purchase Agreement): average rate (₹/kWh), duration (years), counterparty credit
+  — State DISCOMs = credit risk; SECI/NTPC/central = strong; C&I = premium
+- Debt per MW (₹ crore/MW) — solar: <₹3.5Cr/MW; wind: <₹5Cr/MW
+- EBITDA per MW (₹ crore) — proxy for project economics
+- DSCR (Debt Service Coverage Ratio) — good >1.3x
+- Greenfield vs brownfield mix
+- Merchant power %: PPAs protect revenue; merchant = price risk
+- Capex guidance for FY26/FY27 (₹ crore) and project pipeline
+- Green hydrogen / pumped hydro ambitions (valuation optionality)
+
+STEP 2 — FORWARD REVENUE & EARNINGS ESTIMATE (FY27E)
+Revenue = Operational MW × CUF × 8760 hours × PPA rate
+        + New MW commissioned (partial year) × expected CUF × PPA rate
+EBITDA = Revenue × target EBITDA margin (renewable: 85-90%)
+PAT = (EBITDA - D&A - Interest) × 0.75
+Note: D&A is high for renewables (25-year asset life; front-loaded depreciation)
+EPS = PAT / Shares Outstanding
+
+STEP 3 — VALUATION
+Primary method: EV/EBITDA on FY27E
+  - Quality renewable with PPAs + growth pipeline: 12-18x EV/EBITDA
+  - Regulated utility (CERC/SERC regulated): 10-14x EV/EBITDA
+Cross-check: P/BV 1.5-3.5x; Dividend yield (mature: 3-5%)
+Also: DCF using WACC 9-11% (levered projects), terminal value at perpetuity growth 3%
+
+STEP 4 — SCENARIOS
+Bull: New large PPA win at ₹3.5+/kWh; capacity commissioned 6 months ahead; DISCOM payment improves
+Base: Pipeline commissions on schedule; CUF tracks historical; debt refinancing at lower rate
+Bear: Irradiation shortfall; DISCOM payment delays; debt cost rises; new capacity delayed
+
+ENTRY / EXIT FRAMEWORK
+Buy more when: New large PPA award; capacity ahead of schedule; tariff order improving
+Trim / Exit when: DISCOM payment >6 months overdue; debt/MW exceeds ₹5Cr; PPA tariff disputes
+
+Return ONLY a valid JSON object:
+{{
+  "fair_value_low": <bear/base floor ₹>,
+  "fair_value_high": <bull target ₹>,
+  "current_price": <extract from data or null>,
+  "current_vs_fair": "Undervalued" | "Fairly Valued" | "Overvalued",
+  "upside_pct": <number or null>,
+  "valuation_method": "Forward EV/EBITDA FY27E",
+  "entry_signal": "Buy Now" | "Accumulate on Dips" | "Hold" | "Trim" | "Exit",
+  "sector_kpis": {{
+    "installed_mw": "...",
+    "pipeline_mw": "...",
+    "avg_cuf_pct": "...",
+    "avg_ppa_rate_per_kwh": "₹...",
+    "debt_per_mw_cr": "...",
+    "ebitda_per_mw_cr": "...",
+    "dscr": "...",
+    "merchant_power_pct": "...",
+    "fy27e_revenue_cr": "...",
+    "fy27e_ebitda_cr": "...",
+    "ev_ebitda_multiple_applied": "..."
+  }},
+  "key_assumptions": ["...", "..."],
+  "scenarios": [
+    {{"name": "Bull", "fair_value": X, "probability": "30%", "description": "..."}},
+    {{"name": "Base", "fair_value": Y, "probability": "50%", "description": "..."}},
+    {{"name": "Bear", "fair_value": Z, "probability": "20%", "description": "..."}}
+  ],
+  "key_risks_to_valuation": ["...", "..."],
+  "entry_exit_triggers": {{
+    "buy": ["...", "..."],
+    "exit": ["...", "..."]
+  }}
+}}

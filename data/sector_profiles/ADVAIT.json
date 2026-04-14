@@ -1,0 +1,18 @@
+{
+  "symbol": "ADVAIT",
+  "name": "Advait Energy Transitions Limited",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/ADVAIT/",
+  "industry_tag": "",
+  "business_description": "Advait Energy Transitions Limited manufactures and supplies specialized equipment and materials for power transmission, substations, and telecommunication infrastructure, earning revenue primarily from product sales and turnkey EPC project execution. The company also undertakes renewable energy integration projects, including Green Hydrogen and Solar Power, generating income from engineering, procurement, and construction services.",
+  "key_products": [
+    "OPGW Cables",
+    "Stringing Tools"
+  ],
+  "input_sensitivity": "Cost risks include fluctuations in metal prices (for wires and cables), energy costs, and labor expenses, which directly impact manufacturing margins; interest rates affect project financing. Revenue is sensitive to capital expenditure cycles in power transmission and telecom infrastructure, as well as government and utility investments in renewable energy projects.",
+  "output_industries": [
+    "Power Transmission & Substation EPC"
+  ],
+  "output_note": "Utility companies, power transmission operators, and telecom infrastructure firms pay Advait for specialized equipment (like OPGW cables, stringing tools) and turnkey EPC project execution services.",
+  "fetched_date": "2026-03-01T15:38:05.250635"
+}

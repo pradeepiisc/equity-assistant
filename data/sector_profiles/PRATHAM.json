@@ -1,0 +1,15 @@
+{
+  "symbol": "PRATHAM-SM",
+  "name": "Pratham EPC Projects Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/PRATHAM/",
+  "industry_tag": "",
+  "business_description": "Incorporated in 2014, Pratham EPC Projects Ltd in the business of Pipeline Construction of Oil & Gas and Water Engineering Procurement Construction [1]",
+  "key_products": [],
+  "input_sensitivity": "(skipped — run without --no-llm)",
+  "output_industries": [
+    "Unclassified"
+  ],
+  "output_note": "",
+  "fetched_date": "2026-03-02T11:13:50.067101"
+}

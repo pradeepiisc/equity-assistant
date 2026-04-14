@@ -1,0 +1,18 @@
+{
+  "symbol": "AVALON",
+  "name": "Avalon Technologies Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/AVALON/",
+  "industry_tag": "",
+  "business_description": "Avalon Technologies Ltd is a fully integrated Electronic Manufacturing Services (EMS) company that designs, manufactures, and assembles high-value, precision-engineered electronic products. The company generates revenue by providing end-to-end box-build solutions, including sourcing components, assembling, testing, and delivering finished electronic products to its clients on a contract basis.",
+  "key_products": [
+    "Box-build electronic assemblies",
+    "Precision-engineered electronic products"
+  ],
+  "input_sensitivity": "Cost risks include fluctuations in prices of electronic components and raw materials, labor costs, energy expenses, and interest rates, all of which can impact manufacturing margins. Revenue is directly sensitive to the capital expenditure cycles and demand from OEMs and companies outsourcing electronic manufacturing, especially in sectors requiring high-value, precision-engineered products.",
+  "output_industries": [
+    "Electronic Manufacturing Services"
+  ],
+  "output_note": "OEMs and companies in need of outsourced electronic manufacturing pay Avalon Technologies for contract-based design, assembly, and delivery of finished electronic products and assemblies.",
+  "fetched_date": "2026-03-01T15:37:28.802147"
+}

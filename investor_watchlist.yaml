@@ -1,0 +1,47 @@
+# Investor Watchlist
+# =====================
+# Add FII, DII, mutual fund, or anchor investors you want to track.
+# The shareholding_fetcher will alert you when any of these appear,
+# increase, or decrease their stake in a watchlist company.
+#
+# How to add: just append names as they appear in BSE quarterly filings.
+# Partial matches are used (e.g. "Mirae" matches "Mirae Asset Great Consumer Fund")
+
+tracked_investors:
+
+  fiis:
+    - "Massachusetts Institute Of Technology"
+    - "Malabar India Fund Limited"
+
+  diis:
+    - "Bengal Finance And Investment Pvt Ltd"
+    - "Suryavanshi Commotrade Private Limited"
+    - "Dar'S Business Finance Pvt Ltd"
+    - "Sanshi Fund-I"
+    - "Param Capital"
+
+  anchor_public:
+    - "Rakesh Jhunjhunwala"
+    - "Radhakishan Damani"
+    - "Dolly Khanna"
+    - "Vijay Kedia"
+    - "Ashish Kacholia"
+    - "Porinju Veliyath"
+    - "Mukul Mahavir Agrawal"
+    - "Kedia Securities Private Limited"
+    - "Bengal Finance And Investment Pvt Ltd"
+    - "Suryavanshi Commotrade Private Limited"
+    - "Dar'S Business Finance Pvt Ltd"
+    - "Sanshi Fund-I"
+    - "Param Capital"
+    - "Madhuri Madhusudan Kela"
+    - "Ajay Kumar Aggarwal"
+    - "Vanaja Sundar Iyer"
+
+# Alert thresholds
+alerts:
+  # Alert if a tracked investor enters or exits (crosses 0 threshold)
+  notify_on_entry: true
+  notify_on_exit: true
+  # Alert if stake changes by more than this % in a single quarter
+  stake_change_threshold_pct: 0.01

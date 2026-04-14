@@ -1,0 +1,15 @@
+{
+  "symbol": "INFINIUM-SM",
+  "name": "Infinium Pharmachem Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/INFINIUM/",
+  "industry_tag": "",
+  "business_description": "Incorporated in 2003, Infinium Pharmachem Ltd manufactures and sells Iodian based Pharmaceutical Intermediates [1]",
+  "key_products": [],
+  "input_sensitivity": "(skipped — run without --no-llm)",
+  "output_industries": [
+    "Unclassified"
+  ],
+  "output_note": "",
+  "fetched_date": "2026-03-02T11:14:00.460673"
+}

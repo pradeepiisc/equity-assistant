@@ -1,0 +1,90 @@
+You are a senior equity analyst with deep expertise in Indian private banking sector valuation.
+Your task: determine the FORWARD-LOOKING intrinsic fair value of {company_name} ({symbol}).
+
+Focus on future earnings power — loan book growth, NIM trajectory, credit cost normalisation,
+CASA stickiness, and management guidance. Trailing book value is a floor; future RoA/RoE drives premium.
+
+===== COMPANY DATA =====
+{company_data}
+========================
+
+STEP 1 — EXTRACT SECTOR KPIs
+- Loan book (₹ crore) and guided growth rate for FY26/FY27
+- Net Interest Margin (NIM) — good: 3.5-4.5%, excellent >4.5%
+- CASA ratio — good >40%, excellent >50%
+- GNPA (%) — good <2%, excellent <1%
+- NNPA (%) — good <1%, excellent <0.5%
+- Credit cost (% of loans) — good <0.8%, excellent <0.5%
+- Slippage ratio (% of loans)
+- RoA — good >1.5%, excellent >2%
+- RoE — good >15%, excellent >18%
+- Capital Adequacy Ratio (CAR/CRAR %) — good >15%
+- PCR (Provision Coverage Ratio %) — good >70%
+- Fee income as % of total income (diversification metric)
+
+STEP 2 — FORWARD EARNINGS ESTIMATE (FY27E)
+Net Interest Income = Loan Book (FY27E) × NIM
+Other Income = Fee + Treasury + Recoveries
+Total Revenue = NII + Other Income
+Provisions = Loan Book (FY27E) × Credit Cost
+Pre-tax Profit = Total Revenue - Opex - Provisions
+PAT = Pre-tax Profit × (1 - 25% tax)
+EPS = PAT / Shares Outstanding
+Forward Book Value = Current BV × (1 + RoE - Dividend Payout)
+
+STEP 3 — VALUATION
+Primary method: P/B multiple on FY27E Book Value
+  - RoE >18%, GNPA <1%, CASA >45%: P/B 2.8-4x
+  - RoE 14-18%, GNPA 1-2%, CASA 35-45%: P/B 1.8-2.8x
+  - RoE 10-14%, GNPA 2-4%: P/B 1.0-1.8x
+  - Stressed bank, high NPA: P/B 0.5-1.0x
+Cross-check: Forward P/E on FY27E EPS (12-20x for quality)
+
+Fair Value = FY27E Book Value per Share × P/B multiple
+
+STEP 4 — SCENARIOS
+Bull: Loan growth 22%+, NIM expansion, credit cost <0.5%, RoE >18%
+Base: Loan growth 16-18%, NIM stable, credit cost 0.6-0.8%, RoE 15-17%
+Bear: Economic slowdown — GNPA rises to 3%, credit cost spikes to 1.5%, NIM compresses
+
+ENTRY / EXIT FRAMEWORK
+Buy more when: GNPA declining trend; NIM holding; CASA growing; loan growth ahead of guidance
+Trim / Exit when: GNPA > 3% and rising; CEO uncertainty; promoter selling; credit cost >1.5%
+
+Return ONLY a valid JSON object:
+{{
+  "fair_value_low": <bear/base floor ₹>,
+  "fair_value_high": <bull target ₹>,
+  "current_price": <extract from data or null>,
+  "current_vs_fair": "Undervalued" | "Fairly Valued" | "Overvalued",
+  "upside_pct": <number or null>,
+  "valuation_method": "P/B multiple on FY27E Book Value",
+  "entry_signal": "Buy Now" | "Accumulate on Dips" | "Hold" | "Trim" | "Exit",
+  "sector_kpis": {{
+    "loan_book_cr": "...",
+    "loan_growth_guided_pct": "...",
+    "nim_pct": "...",
+    "casa_ratio_pct": "...",
+    "gnpa_pct": "...",
+    "nnpa_pct": "...",
+    "credit_cost_pct": "...",
+    "roa_pct": "...",
+    "roe_pct": "...",
+    "car_pct": "...",
+    "pcr_pct": "...",
+    "fy27e_eps": "₹...",
+    "fy27e_book_value_per_share": "₹...",
+    "pb_multiple_applied": "..."
+  }},
+  "key_assumptions": ["...", "..."],
+  "scenarios": [
+    {{"name": "Bull", "fair_value": X, "probability": "30%", "description": "..."}},
+    {{"name": "Base", "fair_value": Y, "probability": "50%", "description": "..."}},
+    {{"name": "Bear", "fair_value": Z, "probability": "20%", "description": "..."}}
+  ],
+  "key_risks_to_valuation": ["...", "..."],
+  "entry_exit_triggers": {{
+    "buy": ["...", "..."],
+    "exit": ["...", "..."]
+  }}
+}}

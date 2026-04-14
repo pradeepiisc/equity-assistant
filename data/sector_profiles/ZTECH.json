@@ -1,0 +1,18 @@
+{
+  "symbol": "ZTECH-SM",
+  "name": "Z-Tech (India) Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/ZTECH/",
+  "industry_tag": "",
+  "business_description": "Z-Tech (India) Ltd designs, develops, and operates theme-based city parks, manages industrial wastewater, and provides specialized geotechnical solutions. The company generates revenue by offering turnkey project execution, ongoing operations, and technical services to municipalities and industrial clients.",
+  "key_products": [
+    "Theme-based city park development and operations",
+    "Industrial wastewater management solutions"
+  ],
+  "input_sensitivity": "Cost risks include construction materials, specialized engineering equipment, labor, and energy costs, all of which directly impact project margins. Revenue is sensitive to government and municipal infrastructure spending, as well as industrial capital expenditure cycles, since demand for parks and wastewater solutions depends on public and industrial investment activity.",
+  "output_industries": [
+    "Urban Infrastructure Development & Operations"
+  ],
+  "output_note": "Municipalities and industrial clients pay Z-Tech (India) Ltd directly for the design, construction, and operation of city parks and industrial wastewater management projects.",
+  "fetched_date": "2026-03-01T15:40:35.088152"
+}

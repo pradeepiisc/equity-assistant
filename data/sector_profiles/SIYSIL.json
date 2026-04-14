@@ -1,0 +1,18 @@
+{
+  "symbol": "SIYSIL",
+  "name": "Siyaram Silk Mills Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/SIYSIL/",
+  "industry_tag": "",
+  "business_description": "Siyaram Silk Mills Ltd manufactures and sells fabrics and readymade garments, primarily focused on men's wear. The company generates revenue by selling these textile products both domestically and through exports to various countries. Its business model is based on producing textiles and apparel and selling them to retailers, distributors, and export clients.",
+  "key_products": [
+    "fabrics",
+    "readymade garments (men's wear)"
+  ],
+  "input_sensitivity": "Cost risks: Highly sensitive to fluctuations in raw material prices (cotton, polyester, silk), energy costs, labour expenses, and interest rates. Revenue/demand risks: Demand is directly driven by discretionary consumer spending on apparel, seasonality in fashion cycles, and the overall health of the retail and apparel sector, both in India and key export markets.",
+  "output_industries": [
+    "Textile Fabrics & Apparel Manufacturing"
+  ],
+  "output_note": "Retailers, distributors, and export clients pay Siyaram Silk Mills Ltd directly for fabrics and men's readymade garments.",
+  "fetched_date": "2026-03-01T15:43:26.153463"
+}

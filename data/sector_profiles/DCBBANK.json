@@ -1,0 +1,18 @@
+{
+  "symbol": "DCBBANK",
+  "name": "DCB Bank Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/DCBBANK/",
+  "industry_tag": "",
+  "business_description": "DCB Bank Ltd is a private sector bank that provides banking and financial services, including accepting deposits and offering loans to individuals and businesses. The bank earns revenue primarily through interest income from loans and fees from various banking services. Its business model is based on lending, deposit mobilization, and fee-based services.",
+  "key_products": [
+    "Retail and SME loans",
+    "Deposits (savings, current, term)"
+  ],
+  "input_sensitivity": "Cost risks are mainly driven by interest rates (cost of funds), regulatory compliance costs, and wage expenses. Revenue and demand are sensitive to macroeconomic factors such as credit growth, consumer/business confidence, and overall banking sector health, which directly affect loan demand and deposit mobilization.",
+  "output_industries": [
+    "Retail & SME Banking Services"
+  ],
+  "output_note": "Individuals and small-to-medium businesses directly pay DCB Bank for loans, deposit accounts, and related banking services.",
+  "fetched_date": "2026-03-01T15:39:49.783939"
+}

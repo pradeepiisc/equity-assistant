@@ -1,0 +1,87 @@
+You are a senior equity analyst with deep expertise in Indian pharmaceutical sector valuation.
+Your task: determine the FORWARD-LOOKING intrinsic fair value of {company_name} ({symbol}).
+
+Focus on pipeline optionality — ANDA approvals pending, complex/specialty product launches,
+US generics pricing recovery, biosimilar readiness, and USFDA inspection status.
+
+===== COMPANY DATA =====
+{company_data}
+========================
+
+STEP 1 — EXTRACT SECTOR KPIs
+- US generic revenue (₹ crore or USD million) and % of total revenue
+- ANDA pipeline: number pending approvals + expected approval timeline
+- Complex/specialty ANDA count (injectables, controlled substances, patches, inhalers)
+  — complex = pricing power, less competition, 3-5 year moat post-launch
+- USFDA inspection status (clean / OAI / EIR pending / import alert)
+- Domestic formulations revenue (₹ crore) — brand strength, chronic therapy %
+- Active DMF filings (API business indicator)
+- R&D spend (% of revenue) — good: 7-12%; signals pipeline seriousness
+- EBITDA margin — good: 20-26%, excellent >26%
+- Net cash / Debt position
+- Biosimilar portfolio (if applicable) — which molecules, approval status
+- GLP-1 / specialty molecule exposure (high premium if applicable)
+- Capex plan for FY26/FY27 (greenfield vs brownfield)
+
+STEP 2 — FORWARD REVENUE & EARNINGS ESTIMATE (FY27E)
+US revenue = Current US base × (1 + price erosion -4% to -8%) + New ANDA launches × market share × market size
+India revenue = Current × guided growth rate (typically 8-12% for branded)
+API/export = Guided growth
+Total Revenue = Sum of segments
+EBITDA = Total Revenue × target margin
+PAT = (EBITDA - D&A - Interest) × 0.75
+EPS = PAT / Shares Outstanding
+
+STEP 3 — VALUATION
+Primary method: Forward P/E on FY27E EPS
+  - Premium (complex generics, specialty, biosimilar in US): 28-40x P/E
+  - Quality branded (strong India franchise, clean USFDA): 22-30x P/E
+  - Generic API/domestic: 15-22x P/E
+  - Stressed (import alert, high debt): 10-15x P/E
+Cross-check: EV/EBITDA 14-22x for quality
+
+STEP 4 — SCENARIOS
+Bull: 3+ complex ANDA approvals; US price recovery; biosimilar launch in EU/US
+Base: 1-2 ANDA approvals on schedule; India grows 10%; margins stable
+Bear: USFDA warning letter; US price erosion accelerates to -12%; key patent cliff
+
+ENTRY / EXIT FRAMEWORK
+Buy more when: Complex ANDA approved; USFDA inspection passes with EIR; biosimilar USFDA nod
+Trim / Exit when: Import alert issued; US revenue declining >15% YoY; R&D pipeline drying up; promoter selling
+
+Return ONLY a valid JSON object:
+{{
+  "fair_value_low": <bear/base floor ₹>,
+  "fair_value_high": <bull target ₹>,
+  "current_price": <extract from data or null>,
+  "current_vs_fair": "Undervalued" | "Fairly Valued" | "Overvalued",
+  "upside_pct": <number or null>,
+  "valuation_method": "Forward P/E FY27E",
+  "entry_signal": "Buy Now" | "Accumulate on Dips" | "Hold" | "Trim" | "Exit",
+  "sector_kpis": {{
+    "us_revenue_cr": "...",
+    "us_revenue_pct": "...",
+    "anda_pending_count": "...",
+    "complex_anda_count": "...",
+    "usfda_status": "Clean / OAI / Import Alert / EIR Pending",
+    "india_revenue_cr": "...",
+    "ebitda_margin_pct": "...",
+    "rd_spend_pct_revenue": "...",
+    "net_cash_debt_cr": "...",
+    "biosimilar_pipeline": "...",
+    "fy27e_revenue_cr": "...",
+    "fy27e_eps": "₹...",
+    "pe_multiple_applied": "..."
+  }},
+  "key_assumptions": ["...", "..."],
+  "scenarios": [
+    {{"name": "Bull", "fair_value": X, "probability": "30%", "description": "..."}},
+    {{"name": "Base", "fair_value": Y, "probability": "50%", "description": "..."}},
+    {{"name": "Bear", "fair_value": Z, "probability": "20%", "description": "..."}}
+  ],
+  "key_risks_to_valuation": ["...", "..."],
+  "entry_exit_triggers": {{
+    "buy": ["...", "..."],
+    "exit": ["...", "..."]
+  }}
+}}

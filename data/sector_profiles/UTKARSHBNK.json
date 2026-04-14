@@ -1,0 +1,18 @@
+{
+  "symbol": "UTKARSHBNK",
+  "name": "Utkarsh Small Finance Bank Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/UTKARSHBNK/",
+  "industry_tag": "",
+  "business_description": "Utkarsh Small Finance Bank Ltd provides banking and financial services, primarily earning revenue through interest income from loans and advances, as well as fees from deposit accounts and other financial products. The bank focuses on lending to individuals and small businesses, while also accepting deposits from retail and institutional customers.",
+  "key_products": [
+    "Retail loans",
+    "Deposit accounts"
+  ],
+  "input_sensitivity": "Cost risks: The bank's margins are sensitive to changes in interest rates (cost of funds), regulatory requirements, and credit costs (loan defaults). Revenue/demand risks: Demand for loans and deposits is directly driven by macroeconomic conditions affecting retail and small business borrowers, including GDP growth, employment, and liquidity in the financial system.",
+  "output_industries": [
+    "Retail & MSME Banking Services"
+  ],
+  "output_note": "Individuals and small businesses directly pay Utkarsh Small Finance Bank for loans, deposit accounts, and related banking services.",
+  "fetched_date": "2026-03-01T15:41:55.419233"
+}

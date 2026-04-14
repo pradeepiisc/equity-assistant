@@ -1,0 +1,3041 @@
+{
+  "last_run": "2026-04-13",
+  "companies": {
+    "NAMOEWASTE": {
+      "transcripts": {
+        "count": 5,
+        "latest_mtime": 1772796773.4
+      },
+      "ppt": {
+        "count": 3,
+        "latest_mtime": 1772796778.2
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772356321.6
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776086637.5
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772967811.1
+      }
+    },
+    "KINGFA": {
+      "transcripts": {
+        "count": 4,
+        "latest_mtime": 1772356461.0
+      },
+      "ppt": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772356464.7
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1775992977.9
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772967836.9
+      }
+    },
+    "EIEL": {
+      "transcripts": {
+        "count": 6,
+        "latest_mtime": 1773339788.0
+      },
+      "ppt": {
+        "count": 6,
+        "latest_mtime": 1776001171.1
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1773369501.3
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776086655.0
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1773370336.3
+      }
+    },
+    "PERMAGNET": {
+      "transcripts": {
+        "count": 7,
+        "latest_mtime": 1772963395.0
+      },
+      "ppt": {
+        "count": 5,
+        "latest_mtime": 1772963440.3
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772356510.3
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1775992981.2
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772967870.2
+      }
+    },
+    "BANDHANBNK": {
+      "transcripts": {
+        "count": 27,
+        "latest_mtime": 1776001222.2
+      },
+      "ppt": {
+        "count": 19,
+        "latest_mtime": 1776001247.4
+      },
+      "financials": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776086667.9
+      },
+      "insights": {
+        "count": 0,
+        "latest_mtime": 0
+      }
+    },
+    "SHALPAINTS": {
+      "transcripts": {
+        "count": 8,
+        "latest_mtime": 1772963467.9
+      },
+      "ppt": {
+        "count": 18,
+        "latest_mtime": 1776001257.0
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772356572.2
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776086681.0
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772967895.0
+      }
+    },
+    "SHALBY": {
+      "transcripts": {
+        "count": 31,
+        "latest_mtime": 1776001302.6
+      },
+      "ppt": {
+        "count": 35,
+        "latest_mtime": 1776001348.8
+      },
+      "financials": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776086693.3
+      },
+      "insights": {
+        "count": 0,
+        "latest_mtime": 0
+      }
+    },
+    "MANAPPURAM": {
+      "transcripts": {
+        "count": 17,
+        "latest_mtime": 1776001358.3
+      },
+      "ppt": {
+        "count": 16,
+        "latest_mtime": 1776001378.9
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772356766.0
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1775992987.9
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772967991.4
+      }
+    },
+    "BIOCON": {
+      "transcripts": {
+        "count": 47,
+        "latest_mtime": 1772970673.5
+      },
+      "ppt": {
+        "count": 39,
+        "latest_mtime": 1772971045.5
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772356912.5
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776086707.3
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772968081.7
+      }
+    },
+    "SUNLITE": {
+      "transcripts": {
+        "count": 3,
+        "latest_mtime": 1772356980.2
+      },
+      "ppt": {
+        "count": 2,
+        "latest_mtime": 1772797054.1
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772356989.4
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776086720.6
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772968114.2
+      }
+    },
+    "GEOJITFSL": {
+      "transcripts": {
+        "count": 21,
+        "latest_mtime": 1772971121.0
+      },
+      "ppt": {
+        "count": 36,
+        "latest_mtime": 1776001418.9
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772357083.5
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776086732.4
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772968138.6
+      }
+    },
+    "VISHNU": {
+      "transcripts": {
+        "count": 16,
+        "latest_mtime": 1776001440.9
+      },
+      "ppt": {
+        "count": 15,
+        "latest_mtime": 1776001455.4
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772357164.0
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776086746.1
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772968162.6
+      }
+    },
+    "AEQUS": {
+      "transcripts": {
+        "count": 3,
+        "latest_mtime": 1772357215.0
+      },
+      "ppt": {
+        "count": 2,
+        "latest_mtime": 1772797131.6
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772357224.3
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776086757.8
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772968178.0
+      }
+    },
+    "SDBL": {
+      "transcripts": {
+        "count": 17,
+        "latest_mtime": 1776001483.5
+      },
+      "ppt": {
+        "count": 26,
+        "latest_mtime": 1776088140.1
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772357289.7
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776086770.3
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772968200.8
+      }
+    },
+    "TARIL": {
+      "transcripts": {
+        "count": 13,
+        "latest_mtime": 1776001685.9
+      },
+      "ppt": {
+        "count": 37,
+        "latest_mtime": 1776001732.0
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772357363.2
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1775992999.7
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772968227.0
+      }
+    },
+    "CYIENTDLM": {
+      "transcripts": {
+        "count": 13,
+        "latest_mtime": 1776001747.7
+      },
+      "ppt": {
+        "count": 11,
+        "latest_mtime": 1776001760.3
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772357448.7
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776086785.1
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772982168.6
+      }
+    },
+    "KAYNES": {
+      "transcripts": {
+        "count": 16,
+        "latest_mtime": 1776088177.6
+      },
+      "ppt": {
+        "count": 16,
+        "latest_mtime": 1776088195.0
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772357526.6
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776086798.8
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772982196.2
+      }
+    },
+    "543619": {
+      "transcripts": {
+        "count": 5,
+        "latest_mtime": 1772797259.2
+      },
+      "ppt": {
+        "count": 4,
+        "latest_mtime": 1772797265.6
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772357629.1
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776086813.1
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772982219.4
+      }
+    },
+    "ROSSTECH": {
+      "transcripts": {
+        "count": 3,
+        "latest_mtime": 1773339827.1
+      },
+      "ppt": {
+        "count": 4,
+        "latest_mtime": 1773339832.8
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1773369433.5
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776086824.9
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1773370361.1
+      }
+    },
+    "AKUMS": {
+      "transcripts": {
+        "count": 7,
+        "latest_mtime": 1773387977.3
+      },
+      "ppt": {
+        "count": 7,
+        "latest_mtime": 1773387993.1
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1773388012.7
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1775993007.9
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1773388065.2
+      }
+    },
+    "SHEEL": {
+      "transcripts": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "ppt": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "financials": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1775993031.4
+      },
+      "insights": {
+        "count": 0,
+        "latest_mtime": 0
+      }
+    },
+    "J&KBANK": {
+      "transcripts": {
+        "count": 16,
+        "latest_mtime": 1776001888.6
+      },
+      "ppt": {
+        "count": 19,
+        "latest_mtime": 1776001908.5
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772385466.8
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776086839.1
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772982514.4
+      }
+    },
+    "AEROFLEX": {
+      "transcripts": {
+        "count": 10,
+        "latest_mtime": 1776001923.6
+      },
+      "ppt": {
+        "count": 10,
+        "latest_mtime": 1776001931.3
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772385466.5
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1775993034.9
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772982535.3
+      }
+    },
+    "YATHARTH": {
+      "transcripts": {
+        "count": 11,
+        "latest_mtime": 1776001947.0
+      },
+      "ppt": {
+        "count": 11,
+        "latest_mtime": 1776001957.3
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772385466.4
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776086851.8
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772982559.8
+      }
+    },
+    "QPOWER": {
+      "transcripts": {
+        "count": 8,
+        "latest_mtime": 1772962764.7
+      },
+      "ppt": {
+        "count": 5,
+        "latest_mtime": 1772962790.2
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772356243.4
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1775993038.4
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772967755.1
+      }
+    },
+    "AVALON": {
+      "transcripts": {
+        "count": 12,
+        "latest_mtime": 1776001993.7
+      },
+      "ppt": {
+        "count": 13,
+        "latest_mtime": 1776002013.6
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772385466.6
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776086864.9
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772982584.2
+      }
+    },
+    "MAHLOG": {
+      "transcripts": {
+        "count": 34,
+        "latest_mtime": 1776002068.5
+      },
+      "ppt": {
+        "count": 34,
+        "latest_mtime": 1776002108.9
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772385466.7
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776086879.1
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772982605.3
+      }
+    },
+    "JAINREC": {
+      "transcripts": {
+        "count": 2,
+        "latest_mtime": 1772797723.2
+      },
+      "ppt": {
+        "count": 2,
+        "latest_mtime": 1772797726.3
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772385466.8
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776086890.4
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772982622.1
+      }
+    },
+    "TANFACIND": {
+      "transcripts": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "ppt": {
+        "count": 1,
+        "latest_mtime": 1772797756.2
+      },
+      "financials": {
+        "count": 3,
+        "latest_mtime": 1773659884.7
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1775999331.9
+      },
+      "insights": {
+        "count": 4,
+        "latest_mtime": 1773659888.5
+      }
+    },
+    "VAIBHAVGBL": {
+      "transcripts": {
+        "count": 34,
+        "latest_mtime": 1776088318.8
+      },
+      "ppt": {
+        "count": 34,
+        "latest_mtime": 1776002240.6
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772385467.0
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776086903.9
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772982663.8
+      }
+    },
+    "SYRMA": {
+      "transcripts": {
+        "count": 14,
+        "latest_mtime": 1776002259.7
+      },
+      "ppt": {
+        "count": 13,
+        "latest_mtime": 1776002270.8
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772385467.2
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776086916.2
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772982687.0
+      }
+    },
+    "TBI-SM": {
+      "transcripts": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "ppt": {
+        "count": 1,
+        "latest_mtime": 1772797865.2
+      },
+      "financials": {
+        "count": 3,
+        "latest_mtime": 1773659914.3
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776086929.9
+      },
+      "insights": {
+        "count": 4,
+        "latest_mtime": 1773659918.0
+      }
+    },
+    "TECHERA-SM": {
+      "transcripts": {
+        "count": 4,
+        "latest_mtime": 1772797907.0
+      },
+      "ppt": {
+        "count": 1,
+        "latest_mtime": 1772797908.4
+      },
+      "financials": {
+        "count": 2,
+        "latest_mtime": 1772797911.7
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1775993122.4
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772982721.9
+      }
+    },
+    "INFLAME": {
+      "transcripts": {
+        "count": 1,
+        "latest_mtime": 1773666752.9
+      },
+      "ppt": {
+        "count": 6,
+        "latest_mtime": 1773666761.0
+      },
+      "financials": {
+        "count": 2,
+        "latest_mtime": 1773666821.1
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776086942.9
+      },
+      "insights": {
+        "count": 2,
+        "latest_mtime": 1773666824.8
+      }
+    },
+    "MBEL": {
+      "transcripts": {
+        "count": 3,
+        "latest_mtime": 1772797970.5
+      },
+      "ppt": {
+        "count": 3,
+        "latest_mtime": 1772797974.5
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772385467.6
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776086955.2
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772982746.3
+      }
+    },
+    "INDOSMC": {
+      "transcripts": {
+        "count": 1,
+        "latest_mtime": 1772981854.9
+      },
+      "ppt": {
+        "count": 1,
+        "latest_mtime": 1772981868.9
+      },
+      "financials": {
+        "count": 2,
+        "latest_mtime": 1773658987.2
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776086967.4
+      },
+      "insights": {
+        "count": 4,
+        "latest_mtime": 1773658990.9
+      }
+    },
+    "ADVAIT": {
+      "transcripts": {
+        "count": 3,
+        "latest_mtime": 1772798030.0
+      },
+      "ppt": {
+        "count": 12,
+        "latest_mtime": 1772982059.4
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772385467.2
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776086981.5
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772982779.5
+      }
+    },
+    "SHREEREF": {
+      "transcripts": {
+        "count": 1,
+        "latest_mtime": 1772982062.5
+      },
+      "ppt": {
+        "count": 1,
+        "latest_mtime": 1772982076.7
+      },
+      "financials": {
+        "count": 2,
+        "latest_mtime": 1773659562.8
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776086993.2
+      },
+      "insights": {
+        "count": 4,
+        "latest_mtime": 1773659566.5
+      }
+    },
+    "NORTHARC": {
+      "transcripts": {
+        "count": 6,
+        "latest_mtime": 1772982080.8
+      },
+      "ppt": {
+        "count": 6,
+        "latest_mtime": 1772982098.1
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772390916.8
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1775993132.6
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772982822.2
+      }
+    },
+    "QLL": {
+      "transcripts": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "ppt": {
+        "count": 1,
+        "latest_mtime": 1772982109.1
+      },
+      "financials": {
+        "count": 2,
+        "latest_mtime": 1773659427.6
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087007.7
+      },
+      "insights": {
+        "count": 4,
+        "latest_mtime": 1773659431.4
+      }
+    },
+    "PARTYCRUS-SM": {
+      "transcripts": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "ppt": {
+        "count": 2,
+        "latest_mtime": 1772798156.4
+      },
+      "financials": {
+        "count": 3,
+        "latest_mtime": 1773659213.5
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087021.4
+      },
+      "insights": {
+        "count": 4,
+        "latest_mtime": 1773659217.3
+      }
+    },
+    "RADIOWALLA-SM": {
+      "transcripts": {
+        "count": 4,
+        "latest_mtime": 1772798196.1
+      },
+      "ppt": {
+        "count": 3,
+        "latest_mtime": 1772798206.0
+      },
+      "financials": {
+        "count": 2,
+        "latest_mtime": 1772798209.2
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087034.9
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772982871.1
+      }
+    },
+    "KRN": {
+      "transcripts": {
+        "count": 6,
+        "latest_mtime": 1772982113.4
+      },
+      "ppt": {
+        "count": 6,
+        "latest_mtime": 1772982148.9
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772798256.0
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087050.9
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772982900.2
+      }
+    },
+    "DENTALKART-SM": {
+      "transcripts": {
+        "count": 5,
+        "latest_mtime": 1772982154.5
+      },
+      "ppt": {
+        "count": 7,
+        "latest_mtime": 1772982341.7
+      },
+      "financials": {
+        "count": 2,
+        "latest_mtime": 1772798310.4
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1775993141.1
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772982929.1
+      }
+    },
+    "INFINIUM-SM": {
+      "transcripts": {
+        "count": 2,
+        "latest_mtime": 1772798346.6
+      },
+      "ppt": {
+        "count": 3,
+        "latest_mtime": 1772798350.5
+      },
+      "financials": {
+        "count": 2,
+        "latest_mtime": 1772798353.7
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087065.7
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772982955.6
+      }
+    },
+    "PRATHAM-SM": {
+      "transcripts": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "ppt": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "financials": {
+        "count": 3,
+        "latest_mtime": 1773659402.0
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1775993144.5
+      },
+      "insights": {
+        "count": 2,
+        "latest_mtime": 1773659405.8
+      }
+    },
+    "PATELCHEM": {
+      "transcripts": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "ppt": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "financials": {
+        "count": 2,
+        "latest_mtime": 1773666921.3
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087079.3
+      },
+      "insights": {
+        "count": 2,
+        "latest_mtime": 1773666925.0
+      }
+    },
+    "HSCL": {
+      "transcripts": {
+        "count": 10,
+        "latest_mtime": 1772982376.7
+      },
+      "ppt": {
+        "count": 41,
+        "latest_mtime": 1772982715.4
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772430239.4
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1775993147.9
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772982991.0
+      }
+    },
+    "PVRINOX": {
+      "transcripts": {
+        "count": 32,
+        "latest_mtime": 1772982800.0
+      },
+      "ppt": {
+        "count": 29,
+        "latest_mtime": 1772983046.1
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772430224.0
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087092.6
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772983018.3
+      }
+    },
+    "SGFIN": {
+      "transcripts": {
+        "count": 6,
+        "latest_mtime": 1772983051.4
+      },
+      "ppt": {
+        "count": 11,
+        "latest_mtime": 1772983105.2
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772798589.3
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1775993151.2
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772983047.2
+      }
+    },
+    "FCL": {
+      "transcripts": {
+        "count": 31,
+        "latest_mtime": 1772983199.8
+      },
+      "ppt": {
+        "count": 54,
+        "latest_mtime": 1776002434.1
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772798633.5
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1775999552.9
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772983088.5
+      }
+    },
+    "APEX": {
+      "transcripts": {
+        "count": 36,
+        "latest_mtime": 1772985365.8
+      },
+      "ppt": {
+        "count": 34,
+        "latest_mtime": 1776002444.0
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772798733.9
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087104.4
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772983110.9
+      }
+    },
+    "GANESHCP": {
+      "transcripts": {
+        "count": 2,
+        "latest_mtime": 1772798793.9
+      },
+      "ppt": {
+        "count": 3,
+        "latest_mtime": 1772798798.8
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772798853.9
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1775999582.9
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1773151301.8
+      }
+    },
+    "DCAL": {
+      "transcripts": {
+        "count": 31,
+        "latest_mtime": 1772962869.3
+      },
+      "ppt": {
+        "count": 35,
+        "latest_mtime": 1772963364.5
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772796507.8
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087118.0
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772967786.7
+      }
+    },
+    "GAUDIUMIVF": {
+      "transcripts": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "ppt": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "financials": {
+        "count": 2,
+        "latest_mtime": 1773658877.0
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087128.0
+      },
+      "insights": {
+        "count": 2,
+        "latest_mtime": 1773658881.0
+      }
+    },
+    "VMARCIND-SM": {
+      "transcripts": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "ppt": {
+        "count": 4,
+        "latest_mtime": 1772798893.4
+      },
+      "financials": {
+        "count": 2,
+        "latest_mtime": 1773660129.8
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1775999639.9
+      },
+      "insights": {
+        "count": 4,
+        "latest_mtime": 1773660133.6
+      }
+    },
+    "XPROINDIA": {
+      "transcripts": {
+        "count": 4,
+        "latest_mtime": 1772798983.5
+      },
+      "ppt": {
+        "count": 5,
+        "latest_mtime": 1772985636.8
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772798992.4
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087142.2
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772983256.3
+      }
+    },
+    "ACUTAAS": {
+      "transcripts": {
+        "count": 20,
+        "latest_mtime": 1772964681.6
+      },
+      "ppt": {
+        "count": 18,
+        "latest_mtime": 1776002504.3
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772356633.5
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087154.1
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772967926.4
+      }
+    },
+    "SHAILY": {
+      "transcripts": {
+        "count": 27,
+        "latest_mtime": 1772968255.1
+      },
+      "ppt": {
+        "count": 23,
+        "latest_mtime": 1776002519.4
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772356842.1
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087167.2
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772968030.2
+      }
+    },
+    "MEGATHERM-SM": {
+      "transcripts": {
+        "count": 3,
+        "latest_mtime": 1772799026.7
+      },
+      "ppt": {
+        "count": 5,
+        "latest_mtime": 1772985673.5
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772799087.7
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087180.8
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772983285.7
+      }
+    },
+    "FAZE3Q-BE": {
+      "transcripts": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "ppt": {
+        "count": 17,
+        "latest_mtime": 1772985781.3
+      },
+      "financials": {
+        "count": 2,
+        "latest_mtime": 1773658833.3
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087193.9
+      },
+      "insights": {
+        "count": 4,
+        "latest_mtime": 1773658837.1
+      }
+    },
+    "EFFWA-SM": {
+      "transcripts": {
+        "count": 2,
+        "latest_mtime": 1772799154.4
+      },
+      "ppt": {
+        "count": 3,
+        "latest_mtime": 1772799159.7
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772799214.6
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087205.4
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772983316.8
+      }
+    },
+    "APOLLOPIPE": {
+      "transcripts": {
+        "count": 21,
+        "latest_mtime": 1776002561.5
+      },
+      "ppt": {
+        "count": 26,
+        "latest_mtime": 1776002584.4
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772799258.2
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087218.6
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772983339.4
+      }
+    },
+    "WPIL": {
+      "transcripts": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "ppt": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "financials": {
+        "count": 2,
+        "latest_mtime": 1773660233.9
+      },
+      "shareholding": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "insights": {
+        "count": 2,
+        "latest_mtime": 1773660241.5
+      }
+    },
+    "BLS": {
+      "transcripts": {
+        "count": 20,
+        "latest_mtime": 1776002599.7
+      },
+      "ppt": {
+        "count": 25,
+        "latest_mtime": 1776002605.0
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772385467.3
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087243.4
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772983369.9
+      }
+    },
+    "LAXMIINDIA": {
+      "transcripts": {
+        "count": 3,
+        "latest_mtime": 1772799437.0
+      },
+      "ppt": {
+        "count": 3,
+        "latest_mtime": 1772799442.8
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772799497.7
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087256.6
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772983395.0
+      }
+    },
+    "ZTECH-SM": {
+      "transcripts": {
+        "count": 7,
+        "latest_mtime": 1773009438.9
+      },
+      "ppt": {
+        "count": 8,
+        "latest_mtime": 1776002620.8
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772799543.1
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087267.8
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772983422.9
+      }
+    },
+    "ACLD": {
+      "transcripts": {
+        "count": 2,
+        "latest_mtime": 1773010738.9
+      },
+      "ppt": {
+        "count": 2,
+        "latest_mtime": 1773657379.6
+      },
+      "financials": {
+        "count": 2,
+        "latest_mtime": 1773657394.5
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087280.3
+      },
+      "insights": {
+        "count": 2,
+        "latest_mtime": 1773657398.3
+      }
+    },
+    "SUBAHOTELS-SM": {
+      "transcripts": {
+        "count": 1,
+        "latest_mtime": 1772799797.8
+      },
+      "ppt": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772799801.0
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1775999849.3
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772983428.7
+      }
+    },
+    "BEWLTD-SM": {
+      "transcripts": {
+        "count": 4,
+        "latest_mtime": 1772799840.6
+      },
+      "ppt": {
+        "count": 7,
+        "latest_mtime": 1776002650.4
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772799906.4
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087291.9
+      },
+      "insights": {
+        "count": 1,
+        "latest_mtime": 1772810771.5
+      }
+    },
+    "DHABRIYA": {
+      "transcripts": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "ppt": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1773658440.0
+      },
+      "shareholding": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "insights": {
+        "count": 2,
+        "latest_mtime": 1773658447.6
+      }
+    },
+    "GUJAPOLLO": {
+      "transcripts": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "ppt": {
+        "count": 1,
+        "latest_mtime": 1773658892.4
+      },
+      "financials": {
+        "count": 2,
+        "latest_mtime": 1773658907.4
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087314.3
+      },
+      "insights": {
+        "count": 2,
+        "latest_mtime": 1773658911.2
+      }
+    },
+    "SPMLINFRA": {
+      "transcripts": {
+        "count": 8,
+        "latest_mtime": 1776002674.8
+      },
+      "ppt": {
+        "count": 11,
+        "latest_mtime": 1776002698.8
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772804503.9
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1775999904.9
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772983451.7
+      }
+    },
+    "BPLPHARMA": {
+      "transcripts": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "ppt": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "financials": {
+        "count": 2,
+        "latest_mtime": 1773657954.5
+      },
+      "shareholding": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "insights": {
+        "count": 2,
+        "latest_mtime": 1773657962.3
+      }
+    },
+    "DEEPAKFERT": {
+      "transcripts": {
+        "count": 27,
+        "latest_mtime": 1776002740.0
+      },
+      "ppt": {
+        "count": 35,
+        "latest_mtime": 1776002813.4
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772804654.2
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087339.6
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772983488.7
+      }
+    },
+    "UNIECOM": {
+      "transcripts": {
+        "count": 7,
+        "latest_mtime": 1776002825.3
+      },
+      "ppt": {
+        "count": 7,
+        "latest_mtime": 1776002829.6
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772804700.1
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087351.3
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772983511.2
+      }
+    },
+    "SANJIVIN": {
+      "transcripts": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "ppt": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "financials": {
+        "count": 2,
+        "latest_mtime": 1773659529.9
+      },
+      "shareholding": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "insights": {
+        "count": 2,
+        "latest_mtime": 1773659537.6
+      }
+    },
+    "EIMCOELECO": {
+      "transcripts": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "ppt": {
+        "count": 1,
+        "latest_mtime": 1772804841.9
+      },
+      "financials": {
+        "count": 2,
+        "latest_mtime": 1773658477.9
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1775999972.0
+      },
+      "insights": {
+        "count": 4,
+        "latest_mtime": 1773658481.7
+      }
+    },
+    "HCC": {
+      "transcripts": {
+        "count": 14,
+        "latest_mtime": 1773025153.6
+      },
+      "ppt": {
+        "count": 37,
+        "latest_mtime": 1773025352.6
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772804898.7
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1775990891.9
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772983537.0
+      }
+    },
+    "HFCL": {
+      "transcripts": {
+        "count": 28,
+        "latest_mtime": 1773025429.6
+      },
+      "ppt": {
+        "count": 34,
+        "latest_mtime": 1776002869.8
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772804943.9
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087373.9
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772983570.1
+      }
+    },
+    "SAMHI": {
+      "transcripts": {
+        "count": 12,
+        "latest_mtime": 1773034481.1
+      },
+      "ppt": {
+        "count": 18,
+        "latest_mtime": 1776002891.0
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772804993.0
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087385.1
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772983594.6
+      }
+    },
+    "QUADFUTURE": {
+      "transcripts": {
+        "count": 1,
+        "latest_mtime": 1772805021.1
+      },
+      "ppt": {
+        "count": 2,
+        "latest_mtime": 1772805023.7
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772805078.6
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087397.0
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772983610.4
+      }
+    },
+    "CARYSIL": {
+      "transcripts": {
+        "count": 23,
+        "latest_mtime": 1773037812.9
+      },
+      "ppt": {
+        "count": 38,
+        "latest_mtime": 1776002917.0
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772805120.7
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776000029.2
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772983634.8
+      }
+    },
+    "WALCHANNAG": {
+      "transcripts": {
+        "count": 3,
+        "latest_mtime": 1772805154.5
+      },
+      "ppt": {
+        "count": 3,
+        "latest_mtime": 1772805158.2
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772805213.1
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087409.2
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772983654.2
+      }
+    },
+    "HPL": {
+      "transcripts": {
+        "count": 39,
+        "latest_mtime": 1776002933.0
+      },
+      "ppt": {
+        "count": 37,
+        "latest_mtime": 1776002949.5
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772805256.0
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776000054.9
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772983687.8
+      }
+    },
+    "UTKARSHBNK": {
+      "transcripts": {
+        "count": 11,
+        "latest_mtime": 1773051452.5
+      },
+      "ppt": {
+        "count": 11,
+        "latest_mtime": 1773052269.4
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772805348.9
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087421.2
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772983715.7
+      }
+    },
+    "GREAVESCOT": {
+      "transcripts": {
+        "count": 23,
+        "latest_mtime": 1773052746.9
+      },
+      "ppt": {
+        "count": 37,
+        "latest_mtime": 1776002988.3
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772805407.7
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087433.6
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772983734.9
+      }
+    },
+    "JYOTISTRUC": {
+      "transcripts": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "ppt": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "financials": {
+        "count": 2,
+        "latest_mtime": 1773659184.8
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776000097.2
+      },
+      "insights": {
+        "count": 2,
+        "latest_mtime": 1773659188.6
+      }
+    },
+    "C2C-SM": {
+      "transcripts": {
+        "count": 1,
+        "latest_mtime": 1772805469.0
+      },
+      "ppt": {
+        "count": 1,
+        "latest_mtime": 1772805470.6
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772805525.4
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087453.6
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772983745.9
+      }
+    },
+    "SAHASRA-SM": {
+      "transcripts": {
+        "count": 3,
+        "latest_mtime": 1772805557.9
+      },
+      "ppt": {
+        "count": 3,
+        "latest_mtime": 1772805561.7
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772805564.9
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087475.0
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772983765.1
+      }
+    },
+    "VIKRAN": {
+      "transcripts": {
+        "count": 1,
+        "latest_mtime": 1772805592.3
+      },
+      "ppt": {
+        "count": 2,
+        "latest_mtime": 1772805594.8
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772805649.7
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087487.1
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772983776.6
+      }
+    },
+    "KILITCH": {
+      "transcripts": {
+        "count": 2,
+        "latest_mtime": 1772805683.7
+      },
+      "ppt": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772805686.9
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776000207.3
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772983791.6
+      }
+    },
+    "COSMICCRF": {
+      "transcripts": {
+        "count": 3,
+        "latest_mtime": 1773666446.0
+      },
+      "ppt": {
+        "count": 5,
+        "latest_mtime": 1773666459.2
+      },
+      "financials": {
+        "count": 2,
+        "latest_mtime": 1773666467.0
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087498.9
+      },
+      "insights": {
+        "count": 2,
+        "latest_mtime": 1773666470.8
+      }
+    },
+    "DEEPINDS": {
+      "transcripts": {
+        "count": 16,
+        "latest_mtime": 1776003049.8
+      },
+      "ppt": {
+        "count": 19,
+        "latest_mtime": 1776003069.3
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772805838.7
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087511.7
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772983810.0
+      }
+    },
+    "ADCOUNTY": {
+      "transcripts": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "ppt": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "financials": {
+        "count": 2,
+        "latest_mtime": 1773657508.3
+      },
+      "shareholding": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "insights": {
+        "count": 2,
+        "latest_mtime": 1773657515.9
+      }
+    },
+    "YUKEN": {
+      "transcripts": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "ppt": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "financials": {
+        "count": 2,
+        "latest_mtime": 1773660271.5
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776000403.3
+      },
+      "insights": {
+        "count": 2,
+        "latest_mtime": 1773660275.3
+      }
+    },
+    "THEJO": {
+      "transcripts": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "ppt": {
+        "count": 4,
+        "latest_mtime": 1772806108.1
+      },
+      "financials": {
+        "count": 2,
+        "latest_mtime": 1773660049.5
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087534.6
+      },
+      "insights": {
+        "count": 4,
+        "latest_mtime": 1773660053.3
+      }
+    },
+    "SUDEEPPHRM": {
+      "transcripts": {
+        "count": 2,
+        "latest_mtime": 1772806140.1
+      },
+      "ppt": {
+        "count": 2,
+        "latest_mtime": 1772806142.9
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772806146.0
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776000557.8
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772984292.0
+      }
+    },
+    "GRAVITA": {
+      "transcripts": {
+        "count": 16,
+        "latest_mtime": 1776003287.4
+      },
+      "ppt": {
+        "count": 30,
+        "latest_mtime": 1776003325.2
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772806191.2
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087547.7
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772985198.1
+      }
+    },
+    "IFBIND": {
+      "transcripts": {
+        "count": 15,
+        "latest_mtime": 1776003346.6
+      },
+      "ppt": {
+        "count": 34,
+        "latest_mtime": 1776003387.7
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772806238.5
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087562.4
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772985218.9
+      }
+    },
+    "ICIL": {
+      "transcripts": {
+        "count": 40,
+        "latest_mtime": 1776003484.0
+      },
+      "ppt": {
+        "count": 43,
+        "latest_mtime": 1776003536.6
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772806285.5
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087574.4
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772985240.4
+      }
+    },
+    "VISHNUINFR-SM": {
+      "transcripts": {
+        "count": 1,
+        "latest_mtime": 1772806317.3
+      },
+      "ppt": {
+        "count": 4,
+        "latest_mtime": 1772806323.1
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772806326.2
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087586.7
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772985262.1
+      }
+    },
+    "SHREEOSFM-SM": {
+      "transcripts": {
+        "count": 3,
+        "latest_mtime": 1772806361.7
+      },
+      "ppt": {
+        "count": 3,
+        "latest_mtime": 1772806366.9
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772806421.7
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087600.6
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772985286.7
+      }
+    },
+    "YASHO": {
+      "transcripts": {
+        "count": 18,
+        "latest_mtime": 1776003579.0
+      },
+      "ppt": {
+        "count": 23,
+        "latest_mtime": 1776003603.5
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772371944.9
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087615.1
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772982241.5
+      }
+    },
+    "WENDT": {
+      "transcripts": {
+        "count": 3,
+        "latest_mtime": 1772616292.0
+      },
+      "ppt": {
+        "count": 3,
+        "latest_mtime": 1772797318.3
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772616288.2
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087629.3
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772982279.2
+      }
+    },
+    "STOVEKRAFT": {
+      "transcripts": {
+        "count": 17,
+        "latest_mtime": 1776003637.3
+      },
+      "ppt": {
+        "count": 20,
+        "latest_mtime": 1776003662.4
+      },
+      "financials": {
+        "count": 2,
+        "latest_mtime": 1772545250.5
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776000695.7
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772982306.2
+      }
+    },
+    "KMEW": {
+      "transcripts": {
+        "count": 9,
+        "latest_mtime": 1776003673.4
+      },
+      "ppt": {
+        "count": 9,
+        "latest_mtime": 1776003680.6
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772544395.7
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087641.3
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772982433.1
+      }
+    },
+    "NRAIL": {
+      "transcripts": {
+        "count": 3,
+        "latest_mtime": 1772543608.2
+      },
+      "ppt": {
+        "count": 3,
+        "latest_mtime": 1772797412.3
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772543600.0
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087652.9
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772982441.9
+      }
+    },
+    "CAPACITE": {
+      "transcripts": {
+        "count": 30,
+        "latest_mtime": 1775998195.1
+      },
+      "ppt": {
+        "count": 34,
+        "latest_mtime": 1775998249.9
+      },
+      "financials": {
+        "count": 2,
+        "latest_mtime": 1772541654.3
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1775990893.7
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772982471.0
+      }
+    },
+    "BETA": {
+      "transcripts": {
+        "count": 12,
+        "latest_mtime": 1776003751.3
+      },
+      "ppt": {
+        "count": 10,
+        "latest_mtime": 1776088989.3
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772540064.0
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776000780.4
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772982494.6
+      }
+    },
+    "AYMSYNTEX": {
+      "transcripts": {
+        "count": 22,
+        "latest_mtime": 1776003822.4
+      },
+      "ppt": {
+        "count": 1,
+        "latest_mtime": 1772806467.1
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772806470.3
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087670.5
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772985314.6
+      }
+    },
+    "SURYODAY": {
+      "transcripts": {
+        "count": 10,
+        "latest_mtime": 1776003837.2
+      },
+      "ppt": {
+        "count": 18,
+        "latest_mtime": 1776003858.1
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772806565.3
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087684.5
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772985338.9
+      }
+    },
+    "SONAMAC-SM": {
+      "transcripts": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "ppt": {
+        "count": 1,
+        "latest_mtime": 1772806594.3
+      },
+      "financials": {
+        "count": 2,
+        "latest_mtime": 1773659806.4
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087699.1
+      },
+      "insights": {
+        "count": 4,
+        "latest_mtime": 1773659810.2
+      }
+    },
+    "BCONCEPTS": {
+      "transcripts": {
+        "count": 15,
+        "latest_mtime": 1776003890.4
+      },
+      "ppt": {
+        "count": 20,
+        "latest_mtime": 1776003957.4
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772806690.8
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776000834.3
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772985375.9
+      }
+    },
+    "TATVA": {
+      "transcripts": {
+        "count": 19,
+        "latest_mtime": 1776003990.2
+      },
+      "ppt": {
+        "count": 17,
+        "latest_mtime": 1776004006.5
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772806734.3
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087715.6
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772985395.2
+      }
+    },
+    "CHTR": {
+      "transcripts": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "ppt": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "financials": {
+        "count": 2,
+        "latest_mtime": 1773666547.3
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087732.6
+      },
+      "insights": {
+        "count": 2,
+        "latest_mtime": 1773666551.1
+      }
+    },
+    "BALUFORGE": {
+      "transcripts": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "ppt": {
+        "count": 12,
+        "latest_mtime": 1776004027.4
+      },
+      "financials": {
+        "count": 2,
+        "latest_mtime": 1773657847.7
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1773657845.5
+      },
+      "insights": {
+        "count": 4,
+        "latest_mtime": 1773657851.5
+      }
+    },
+    "EMMIL-SM": {
+      "transcripts": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "ppt": {
+        "count": 1,
+        "latest_mtime": 1772806963.4
+      },
+      "financials": {
+        "count": 2,
+        "latest_mtime": 1773658806.8
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087747.6
+      },
+      "insights": {
+        "count": 4,
+        "latest_mtime": 1773658810.7
+      }
+    },
+    "EMKAY": {
+      "transcripts": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "ppt": {
+        "count": 22,
+        "latest_mtime": 1776004063.5
+      },
+      "financials": {
+        "count": 2,
+        "latest_mtime": 1773658512.1
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087759.5
+      },
+      "insights": {
+        "count": 4,
+        "latest_mtime": 1773658515.9
+      }
+    },
+    "THOMASCOTT": {
+      "transcripts": {
+        "count": 2,
+        "latest_mtime": 1772807039.3
+      },
+      "ppt": {
+        "count": 4,
+        "latest_mtime": 1772807045.1
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772807100.0
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087772.7
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772985461.2
+      }
+    },
+    "ATULAUTO": {
+      "transcripts": {
+        "count": 5,
+        "latest_mtime": 1776004080.6
+      },
+      "ppt": {
+        "count": 5,
+        "latest_mtime": 1776004082.1
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772807145.9
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087785.9
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772985480.5
+      }
+    },
+    "ASMTEC": {
+      "transcripts": {
+        "count": 1,
+        "latest_mtime": 1773664120.4
+      },
+      "ppt": {
+        "count": 11,
+        "latest_mtime": 1776004093.6
+      },
+      "financials": {
+        "count": 2,
+        "latest_mtime": 1773664139.4
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776000923.1
+      },
+      "insights": {
+        "count": 2,
+        "latest_mtime": 1773664143.2
+      }
+    },
+    "SIYARAM": {
+      "transcripts": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "ppt": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "financials": {
+        "count": 2,
+        "latest_mtime": 1773659722.1
+      },
+      "shareholding": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "insights": {
+        "count": 2,
+        "latest_mtime": 1773659729.8
+      }
+    },
+    "LOTUSDEV": {
+      "transcripts": {
+        "count": 3,
+        "latest_mtime": 1772808006.9
+      },
+      "ppt": {
+        "count": 3,
+        "latest_mtime": 1772808010.8
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772808013.9
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087812.8
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772985496.7
+      }
+    },
+    "NUVAMA": {
+      "transcripts": {
+        "count": 10,
+        "latest_mtime": 1776004121.3
+      },
+      "ppt": {
+        "count": 17,
+        "latest_mtime": 1776004137.8
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772808056.0
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087827.1
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772985517.1
+      }
+    },
+    "ABB": {
+      "transcripts": {
+        "count": 32,
+        "latest_mtime": 1776089107.7
+      },
+      "ppt": {
+        "count": 19,
+        "latest_mtime": 1776004199.6
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772808120.2
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087842.7
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772985537.2
+      }
+    },
+    "DBREALTY": {
+      "transcripts": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "ppt": {
+        "count": 4,
+        "latest_mtime": 1772808177.5
+      },
+      "financials": {
+        "count": 2,
+        "latest_mtime": 1773658062.7
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087857.3
+      },
+      "insights": {
+        "count": 4,
+        "latest_mtime": 1773658066.4
+      }
+    },
+    "KIRLFER": {
+      "transcripts": {
+        "count": 6,
+        "latest_mtime": 1776004220.5
+      },
+      "ppt": {
+        "count": 6,
+        "latest_mtime": 1776004223.1
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772808225.6
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087874.6
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772985588.2
+      }
+    },
+    "ZAGGLE": {
+      "transcripts": {
+        "count": 12,
+        "latest_mtime": 1776004240.9
+      },
+      "ppt": {
+        "count": 11,
+        "latest_mtime": 1776004251.2
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772808269.4
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087889.3
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772985613.4
+      }
+    },
+    "AFFORDABLE": {
+      "transcripts": {
+        "count": 2,
+        "latest_mtime": 1772808302.4
+      },
+      "ppt": {
+        "count": 8,
+        "latest_mtime": 1776004265.6
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772808310.8
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776001024.5
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772985632.3
+      }
+    },
+    "SIYSIL": {
+      "transcripts": {
+        "count": 13,
+        "latest_mtime": 1776004283.8
+      },
+      "ppt": {
+        "count": 18,
+        "latest_mtime": 1776004307.7
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772808352.3
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087903.9
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772985655.5
+      }
+    },
+    "OMINFRAL": {
+      "transcripts": {
+        "count": 11,
+        "latest_mtime": 1776004324.8
+      },
+      "ppt": {
+        "count": 35,
+        "latest_mtime": 1776089155.1
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772808438.0
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776001051.1
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772985674.3
+      }
+    },
+    "AURIONPRO": {
+      "transcripts": {
+        "count": 15,
+        "latest_mtime": 1776004394.6
+      },
+      "ppt": {
+        "count": 39,
+        "latest_mtime": 1776089167.3
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772808478.3
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087921.0
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772985696.8
+      }
+    },
+    "FABTECH": {
+      "transcripts": {
+        "count": 2,
+        "latest_mtime": 1772808508.8
+      },
+      "ppt": {
+        "count": 2,
+        "latest_mtime": 1772808511.3
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772808514.4
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087937.0
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772985716.7
+      }
+    },
+    "RAYMONDLSL": {
+      "transcripts": {
+        "count": 6,
+        "latest_mtime": 1776004470.8
+      },
+      "ppt": {
+        "count": 9,
+        "latest_mtime": 1776004481.0
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772808556.9
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087951.9
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772985741.5
+      }
+    },
+    "TEXELIN": {
+      "transcripts": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "ppt": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "financials": {
+        "count": 2,
+        "latest_mtime": 1773660017.1
+      },
+      "shareholding": {
+        "count": 0,
+        "latest_mtime": 0
+      },
+      "insights": {
+        "count": 2,
+        "latest_mtime": 1773660024.8
+      }
+    },
+    "HIRECT": {
+      "transcripts": {
+        "count": 4,
+        "latest_mtime": 1772808701.7
+      },
+      "ppt": {
+        "count": 5,
+        "latest_mtime": 1776004495.5
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772808709.9
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776001113.6
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772985772.2
+      }
+    },
+    "NEWJAISA-SM": {
+      "transcripts": {
+        "count": 6,
+        "latest_mtime": 1776004508.8
+      },
+      "ppt": {
+        "count": 7,
+        "latest_mtime": 1776004515.4
+      },
+      "financials": {
+        "count": 1,
+        "latest_mtime": 1772808809.8
+      },
+      "shareholding": {
+        "count": 1,
+        "latest_mtime": 1776087978.3
+      },
+      "insights": {
+        "count": 3,
+        "latest_mtime": 1772985792.3
+      }
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "symbol": "TANFACIND",
+  "name": "Tanfac Industries Ltd",
+  "exchange": "BSE",
+  "screener_url": "https://www.screener.in/company/TANFACIND/",
+  "industry_tag": "",
+  "business_description": "Incorporated in 1972, Tanfac Industries Ltd is amongst the leading producers of Hydrofluoric Acid and its derivatives.",
+  "key_products": [],
+  "input_sensitivity": "(skipped — run without --no-llm)",
+  "output_industries": [
+    "Unclassified"
+  ],
+  "output_note": "",
+  "fetched_date": "2026-03-02T12:25:58.875118"
+}

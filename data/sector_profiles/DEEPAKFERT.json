@@ -1,0 +1,19 @@
+{
+  "symbol": "DEEPAKFERT",
+  "name": "Deepak Fertilisers & Petrochemicals Corp Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/DEEPAKFERT/",
+  "industry_tag": "",
+  "business_description": "Deepak Fertilisers & Petrochemicals Corp Ltd manufactures and sells fertilizers and industrial chemicals. The company generates revenue by producing and supplying products such as ammonia, nitric acid, and specialty fertilizers to agricultural and industrial customers. It also offers agri services and mining chemicals, with a small presence in real estate.",
+  "key_products": [
+    "Fertilizers (urea, ammonium nitrate)",
+    "Industrial chemicals (ammonia, nitric acid)"
+  ],
+  "input_sensitivity": "Cost risks include volatility in prices of natural gas and other chemical feedstocks, energy costs, and regulatory changes affecting raw material imports. Revenue is sensitive to agricultural sector demand (monsoon, crop patterns, government subsidies) and industrial activity in sectors using chemicals for manufacturing and mining.",
+  "output_industries": [
+    "Fertilizer & Crop Nutrition",
+    "Mining Explosives / Technical Ammonium Nitrate"
+  ],
+  "output_note": "Farmers and agri-distributors pay for specialty fertilizers; mining and quarrying companies pay for Technical Ammonium Nitrate (TAN) used as a blasting agent. Ammonia and nitric acid are largely internal feedstocks for these two output streams.",
+  "fetched_date": "2026-03-01T15:40:54.176209"
+}

@@ -1,0 +1,18 @@
+{
+  "symbol": "DCAL",
+  "name": "Dishman Carbogen Amcis Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/DCAL/",
+  "industry_tag": "",
+  "business_description": "Dishman Carbogen Amcis Ltd provides contract research and manufacturing services (CRAMS) to pharmaceutical and specialty chemical companies. It generates revenue by developing, manufacturing, and supplying specialty chemicals, vitamins, and disinfectants on a contract basis for global clients.",
+  "key_products": [
+    "Contract Research & Manufacturing Services (CRAMS)",
+    "Specialty chemicals (including vitamins and disinfectants)"
+  ],
+  "input_sensitivity": "Cost risks include fluctuations in raw material prices (chemical intermediates), energy costs, and labor expenses, which directly impact manufacturing margins. Revenue is sensitive to global pharmaceutical and specialty chemical sector R&D and production outsourcing trends, as well as regulatory and demand cycles in these industries.",
+  "output_industries": [
+    "Pharma APIs / CRDMO"
+  ],
+  "output_note": "Global pharmaceutical and specialty chemical companies directly pay Dishman Carbogen Amcis Ltd for contract research, development, and manufacturing of APIs, specialty chemicals, and related molecules.",
+  "fetched_date": "2026-03-01T15:44:03.558281"
+}

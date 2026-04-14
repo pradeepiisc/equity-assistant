@@ -1,0 +1,18 @@
+{
+  "symbol": "JAINREC",
+  "name": "Jain Resource Recycling Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/JAINREC/",
+  "industry_tag": "",
+  "business_description": "Jain Resource Recycling Ltd recycles non-ferrous metal scrap and manufactures lead, copper, and aluminium alloys, generating revenue from the sale of these processed metals. The company also earns income by trading non-ferrous metals and commodities. Its lead ingots are certified by the London Metal Exchange, supporting international sales.",
+  "key_products": [
+    "Lead ingots",
+    "Copper and aluminium alloys"
+  ],
+  "input_sensitivity": "Cost risks include fluctuations in scrap metal prices, energy costs, and labour expenses, which directly impact production margins. Revenue is sensitive to global and domestic demand for non-ferrous metals, particularly from manufacturing and infrastructure sectors, as well as commodity price volatility.",
+  "output_industries": [
+    "Non-Ferrous Metal Recycling & Alloy Manufacturing"
+  ],
+  "output_note": "Industrial buyers and commodity traders pay Jain Resource Recycling Ltd for processed lead ingots and non-ferrous metal alloys.",
+  "fetched_date": "2026-03-01T15:37:40.016948"
+}

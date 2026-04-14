@@ -1,0 +1,18 @@
+{
+  "symbol": "SIYARAM",
+  "name": "SIYARAM",
+  "exchange": "BSE",
+  "screener_url": "",
+  "industry_tag": "",
+  "business_description": "Siyaram manufactures and sells textiles and garments, primarily focusing on fabrics and ready-made apparel. The company generates revenue by producing and distributing these products to wholesalers, retailers, and branded outlets.",
+  "key_products": [
+    "textile fabrics",
+    "ready-made garments"
+  ],
+  "input_sensitivity": "Cost risks: Margins are sensitive to fluctuations in raw material prices (cotton, polyester, viscose), energy costs, and labor expenses. Revenue/demand risks: Demand is directly influenced by consumer discretionary spending on apparel and textiles, as well as fashion and retail sector trends.",
+  "output_industries": [
+    "Textile Fabrics & Apparel"
+  ],
+  "output_note": "Wholesalers, retailers, and branded outlets pay Siyaram for textile fabrics and ready-made garments.",
+  "fetched_date": "2026-03-01T15:43:53.963270"
+}

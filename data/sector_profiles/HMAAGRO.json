@@ -1,0 +1,18 @@
+{
+  "symbol": "HMAAGRO",
+  "name": "HMA Agro Industries Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/HMAAGRO/",
+  "industry_tag": "",
+  "business_description": "HMA Agro Industries Ltd processes and exports frozen buffalo meat, as well as other processed and frozen agro products such as fruits, vegetables, and cereals. The company generates revenue primarily by selling these processed food products to domestic and international buyers.",
+  "key_products": [
+    "Frozen buffalo meat",
+    "Processed/frozen fruits, vegetables, and cereals"
+  ],
+  "input_sensitivity": "Cost risks: Margins are sensitive to raw buffalo meat procurement prices, energy and fuel costs for processing and cold storage, and labor expenses. Revenue/demand risks: Export demand is highly dependent on international market conditions, trade regulations, and consumer preferences for buffalo meat and processed foods, especially in key importing countries.",
+  "output_industries": [
+    "Processed Meat & Agro Products Export"
+  ],
+  "output_note": "International food importers, wholesalers, and distributors directly pay HMA Agro Industries for bulk shipments of frozen buffalo meat and other processed agro products.",
+  "fetched_date": "2026-03-01T15:43:14.130256"
+}

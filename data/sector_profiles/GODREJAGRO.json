@@ -1,0 +1,20 @@
+{
+  "symbol": "GODREJAGRO",
+  "name": "Godrej Agrovet Ltd",
+  "exchange": "BSE",
+  "screener_url": "https://www.screener.in/company/GODREJAGRO/",
+  "industry_tag": "",
+  "business_description": "Godrej Agrovet Ltd is a diversified agri-business company that develops, manufactures, and sells animal feed, crop protection products, processed foods, dairy products, and oil palm products. The company generates revenue by selling these products directly to farmers, food processors, and other agribusinesses across India.",
+  "key_products": [
+    "Animal feed",
+    "Crop protection chemicals"
+  ],
+  "input_sensitivity": "(1) Cost risks: Margins are sensitive to fluctuations in raw material prices (such as soybean, maize, and palm fruit), energy costs, and labour expenses. (2) Revenue/demand risks: Demand is directly driven by the health of the Indian agriculture and livestock sectors, which are influenced by monsoon patterns, farm incomes, and rural consumption trends.",
+  "output_industries": [
+    "Animal Feed & Nutrition",
+    "Crop Protection Chemicals",
+    "Dairy Processing & Branded Foods"
+  ],
+  "output_note": "Godrej Agrovet is paid directly by farmers, food processors, and agribusinesses for animal feed, crop protection chemicals, dairy products, and processed foods.",
+  "fetched_date": "2026-03-01T15:43:51.579965"
+}

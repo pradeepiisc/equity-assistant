@@ -1,0 +1,78 @@
+You are a senior portfolio manager performing a combined investment thesis and sector diversification analysis.
+
+PORTFOLIO SECTOR COVERAGE (sectors already held, with number of stocks per sector):
+{portfolio_sectors_json}
+
+WATCHLIST COMPANY REPORTS (each company not yet held in portfolio):
+{watchlist_reports_text}
+
+═══════════════════════════════════════════════════════════
+Your task: evaluate EACH watchlist company on TWO dimensions, then produce a ranked output.
+
+DIMENSION 1 — INVESTMENT THESIS QUALITY (from the company's report above):
+  Score 1-5:
+  5 = Buy-rated, positive cash flow, strong moat, reasonable valuation, management execution solid
+  4 = Accumulate / Hold with strong fundamentals and clear growth catalysts
+  3 = Hold, some concerns (valuation, cash flow, governance) but viable long-term story
+  2 = Neutral / Watch — meaningful risks, guidance misses, institutional exits
+  1 = Avoid — regulatory issues, persistent losses with no path to profitability, governance red flags
+
+DIMENSION 2 — PORTFOLIO SECTOR VALUE-ADD:
+  Score 1-5:
+  5 = Sector completely ABSENT in portfolio AND company is the only/best watchlist candidate for it
+  4 = Sector ABSENT and there are 2 watchlist candidates (secondary gets 3)
+  3 = Sector is THIN (only 1 portfolio stock) — meaningful single-point risk to fill
+  2 = Sector is represented (2-3 stocks) but company has clearly differentiated sub-niche
+  1 = Sector is WELL-COVERED (4+ stocks) or company's niche overlaps an existing holding
+
+Combined Score = Thesis Score × Sector Score / 2.5  (range 1-10)
+
+SPECIAL RULES:
+- EMS sector: portfolio already has 4 EMS companies (AVALON, SYRMA, SAHASRA, ASMTEC) — treat as Overlapping
+- NBFCs/Banks: already 6+ in portfolio — treat as Overlapping unless it fills a distinct sub-niche
+- Flag companies with SEBI manipulation penalties, all institutional exits, or persistent losses for REMOVAL
+- A company in an absent sector but with a weak thesis (score 1-2) should NOT be in Tier 1
+═══════════════════════════════════════════════════════════
+
+Return ONLY a valid JSON object with exactly this structure:
+{{
+  "portfolio_assessment": "3-4 sentences: current sector breadth, key blind spots, what the watchlist offers",
+  "ranked_watchlist": [
+    {{
+      "rank": 1,
+      "symbol": "SYMBOL",
+      "name": "Company Name",
+      "sector": "Primary sector this company operates in",
+      "portfolio_sector_status": "Absent" | "Thin" | "Represented" | "Overlapping",
+      "thesis_rating": "Buy" | "Accumulate" | "Hold" | "Neutral" | "Avoid",
+      "thesis_score": 1,
+      "sector_gap_score": 1,
+      "combined_score": 1,
+      "key_thesis": "1 sentence why compelling or not",
+      "action": "Buy Now" | "Accumulate on Dips" | "Monitor" | "Watch" | "Remove from Watchlist"
+    }}
+  ],
+  "tier1_candidates": [
+    {{
+      "rank": 1,
+      "symbol": "SYMBOL",
+      "name": "Company Name",
+      "sector_added": "Exact sector label this adds to portfolio",
+      "gap_type": "Absent" | "Thin",
+      "rationale": "3-4 sentences covering: thesis strength, sector uniqueness, key moat/catalyst, key risk to monitor"
+    }}
+  ],
+  "gaps_identified": [
+    {{
+      "sector": "Sector label",
+      "portfolio_status": "Absent" | "Thin (1 company)",
+      "watchlist_candidates": ["BEST_SYM", "SECONDARY_SYM"]
+    }}
+  ],
+  "watchlist_cleanup": [
+    {{
+      "symbol": "SYMBOL",
+      "reason": "Specific reason to remove: regulatory issue / persistent losses / governance / sector overlaps"
+    }}
+  ]
+}}

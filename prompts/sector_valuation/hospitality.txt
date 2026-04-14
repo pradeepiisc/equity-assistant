@@ -1,0 +1,83 @@
+You are a senior equity analyst with deep expertise in Indian hospitality and hotel sector valuation.
+Your task: determine the FORWARD-LOOKING intrinsic fair value of {company_name} ({symbol}).
+
+Focus on RevPAR growth, room pipeline, asset-light management fee model,
+India domestic leisure + MICE (meetings, incentives, conferences) recovery, and international tourist arrivals.
+
+===== COMPANY DATA =====
+{company_data}
+========================
+
+STEP 1 — EXTRACT SECTOR KPIs
+- Operational rooms / keys (current)
+- Room pipeline (under construction / signed) — next 2-3 years
+- ARR (Average Room Rate, ₹/night) — trend; premium: >₹7,000; mid-scale: ₹3,000-7,000
+- Occupancy rate (%) — good >68%, excellent >78%
+- RevPAR (Revenue Per Available Room) = ARR × Occupancy — THE key metric
+- Revenue split: rooms vs F&B vs events/MICE vs ancillary
+- EBITDA per room per year (₹ lakhs) — good >₹8L, excellent >₹12L
+- EBITDA margin — good: 28-35%; excellent >38%
+- Asset-light management contract % (rooms under management vs owned)
+  — management fee model = high margin, capital-light
+- New markets / destinations entered
+- International brand franchise fee (if applicable)
+- Capex for room additions vs renovation
+
+STEP 2 — FORWARD REVENUE & EARNINGS ESTIMATE (FY27E)
+Revenue = Operational rooms × ARR × Occupancy × 365
+        + New rooms (partial-year: 50% in year 1) × expected RevPAR
+        + F&B, banquets, management fees
+EBITDA = Revenue × target EBITDA margin
+PAT = (EBITDA - D&A - Interest) × 0.75
+EPS = PAT / Shares Outstanding
+
+STEP 3 — VALUATION
+Primary method: Forward EV/EBITDA on FY27E
+  - Premium chain (5-star + luxury, management-led): 20-30x EV/EBITDA
+  - Quality mid-scale chain (good RevPAR growth, asset-light tilt): 15-22x EV/EBITDA
+  - Budget / economy chain (volume play): 10-15x EV/EBITDA
+Cross-check: EV/Room (₹1-3.5 crore/key for premium; ₹0.4-1 crore/key for budget)
+
+STEP 4 — SCENARIOS
+Bull: International tourist recovery; RevPAR up 15%+; new premium destinations open
+Base: RevPAR grows 8-10%; room additions on schedule; margins improve 150bps
+Bear: Domestic economic slowdown; travel pullback; new supply in key markets
+
+ENTRY / EXIT FRAMEWORK
+Buy more when: New resort/destination opening; occupancy consistently >80%; RevPAR surprise
+Trim / Exit when: RevPAR <5% growth for 2 qtrs; new oversupply in key city; EBITDA margin <25%
+
+Return ONLY a valid JSON object:
+{{
+  "fair_value_low": <bear/base floor ₹>,
+  "fair_value_high": <bull target ₹>,
+  "current_price": <extract from data or null>,
+  "current_vs_fair": "Undervalued" | "Fairly Valued" | "Overvalued",
+  "upside_pct": <number or null>,
+  "valuation_method": "Forward EV/EBITDA FY27E",
+  "entry_signal": "Buy Now" | "Accumulate on Dips" | "Hold" | "Trim" | "Exit",
+  "sector_kpis": {{
+    "operational_rooms": "...",
+    "pipeline_rooms": "...",
+    "arr_per_night": "₹...",
+    "occupancy_pct": "...",
+    "revpar": "₹...",
+    "ebitda_per_room_lakh": "...",
+    "ebitda_margin_pct": "...",
+    "asset_light_mgmt_pct": "...",
+    "fy27e_revenue_cr": "...",
+    "fy27e_ebitda_cr": "...",
+    "ev_ebitda_multiple_applied": "..."
+  }},
+  "key_assumptions": ["...", "..."],
+  "scenarios": [
+    {{"name": "Bull", "fair_value": X, "probability": "30%", "description": "..."}},
+    {{"name": "Base", "fair_value": Y, "probability": "50%", "description": "..."}},
+    {{"name": "Bear", "fair_value": Z, "probability": "20%", "description": "..."}}
+  ],
+  "key_risks_to_valuation": ["...", "..."],
+  "entry_exit_triggers": {{
+    "buy": ["...", "..."],
+    "exit": ["...", "..."]
+  }}
+}}

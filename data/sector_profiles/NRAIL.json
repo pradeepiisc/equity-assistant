@@ -1,0 +1,18 @@
+{
+  "symbol": "NRAIL",
+  "name": "N R Agarwal Industries Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/NRAIL/",
+  "industry_tag": "",
+  "business_description": "N R Agarwal Industries Ltd manufactures recycled paper and duplex boards, specifically grey back and white back varieties. The company generates revenue by selling these paper products to packaging and printing businesses, who use them for making cartons, boxes, and other packaging materials.",
+  "key_products": [
+    "Recycled paper",
+    "Grey back & white back duplex boards"
+  ],
+  "input_sensitivity": "Cost risks include fluctuations in waste paper prices (the main raw material), energy costs, and labour expenses, all of which directly impact margins. Revenue is sensitive to demand from the packaging and printing sectors, which is closely tied to FMCG, consumer goods, and industrial production volumes.",
+  "output_industries": [
+    "Paper & Packaging Materials"
+  ],
+  "output_note": "Packaging converters and printing companies directly pay N R Agarwal Industries Ltd for recycled paper and duplex boards used in manufacturing cartons and packaging solutions.",
+  "fetched_date": "2026-03-01T15:39:40.332003"
+}

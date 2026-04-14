@@ -1,0 +1,18 @@
+{
+  "symbol": "SAMHI",
+  "name": "Samhi Hotels Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/SAMHI/",
+  "industry_tag": "",
+  "business_description": "Samhi Hotels Ltd owns and operates branded hotels in India, generating revenue primarily from room bookings, food and beverage sales, and other hospitality services. The company partners with global hotel brands like Marriott, IHG, and Hyatt under long-term management agreements, earning income from hotel operations and asset management.",
+  "key_products": [
+    "Hotel room accommodation",
+    "Food and beverage services"
+  ],
+  "input_sensitivity": "Cost risks include labour expenses, energy costs, property maintenance, and interest rates affecting margins due to asset-heavy operations. Revenue is sensitive to macro factors such as tourism trends, business travel demand, and overall economic activity in India, which directly impact hotel occupancy and rates.",
+  "output_industries": [
+    "Branded Hotel Ownership & Operations"
+  ],
+  "output_note": "Guests and corporate clients directly pay Samhi Hotels for hotel room stays, food, and hospitality services at its branded properties.",
+  "fetched_date": "2026-03-01T15:40:06.979385"
+}

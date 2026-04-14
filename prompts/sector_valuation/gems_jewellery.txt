@@ -1,0 +1,82 @@
+You are a senior equity analyst with deep expertise in Indian gems and jewellery sector valuation
+(lab-grown diamonds, natural diamonds, coloured gemstones, diamond jewellery — not gold/silver).
+Your task: determine the FORWARD-LOOKING intrinsic fair value of {company_name} ({symbol}).
+
+Focus on polished diamond realisation trends, lab-grown diamond (LGD) market share,
+export demand recovery, unique gemstone sourcing, and margin per carat.
+
+===== COMPANY DATA =====
+{company_data}
+========================
+
+STEP 1 — EXTRACT SECTOR KPIs
+- Revenue per carat (natural vs lab-grown — LGD prices falling; natural stable or rising)
+- Volume (carats per year) — growth trend
+- LGD % of revenue vs natural diamonds — LGD has lower margin but growing volume
+- Export revenue % (US, UAE, HK, Europe) and market access
+- Working capital: inventory days (gems = high inventory WC; good <90 days)
+- Polished spread: (polished realisation - rough cost) per carat
+- Sight holder status (De Beers / ALROSA) — rough supply security
+- Manufacturing: India surat cutting (cost advantage) vs international
+- Brand value (if any branded jewellery retail)
+- EBITDA margin — good: 8-14% for B2B; retail can reach 20%+
+- Debt (gems cos typically carry WC debt for inventory — watch D/E)
+- Export quota / certification (KP compliant, SCS-007 for LGD)
+
+STEP 2 — FORWARD REVENUE & EARNINGS ESTIMATE (FY27E)
+Revenue = Volume × realisation per carat (factor LGD price erosion -15% to -25% p.a.;
+          natural diamonds more stable; coloured gemstones niche = stable/rising)
+EBITDA = Revenue × target EBITDA margin
+PAT = (EBITDA - D&A - Interest) × 0.75
+EPS = PAT / Shares Outstanding
+
+STEP 3 — VALUATION
+Primary method: Forward P/E on FY27E EPS
+  - Natural diamond specialist (sight holder, unique gems): 18-28x P/E
+  - LGD manufacturer + B2B (growing volume, margin pressure): 12-20x P/E
+  - Branded gemstone jewellery retail: 22-35x P/E
+Cross-check: EV/EBITDA 10-18x
+
+STEP 4 — SCENARIOS
+Bull: LGD price stabilises + volume surge; branded retail revenue doubles; US demand recovery
+Base: LGD volume grows 20% offsetting price decline; natural diamond stable; margin holds
+Bear: LGD price collapse -40%; US consumer slowdown; inventory write-down
+
+ENTRY / EXIT FRAMEWORK
+Buy more when: US jewellery demand recovery; LGD volume inflection; branded retail store additions
+Trim / Exit when: LGD prices fall >30% without volume offset; inventory days >120; export markets slowing
+
+Return ONLY a valid JSON object:
+{{
+  "fair_value_low": <bear/base floor ₹>,
+  "fair_value_high": <bull target ₹>,
+  "current_price": <extract from data or null>,
+  "current_vs_fair": "Undervalued" | "Fairly Valued" | "Overvalued",
+  "upside_pct": <number or null>,
+  "valuation_method": "Forward P/E FY27E",
+  "entry_signal": "Buy Now" | "Accumulate on Dips" | "Hold" | "Trim" | "Exit",
+  "sector_kpis": {{
+    "revenue_per_carat": "₹/$ ...",
+    "lgd_vs_natural_mix_pct": "...",
+    "volume_carats": "...",
+    "export_revenue_pct": "...",
+    "polished_spread_per_carat": "₹...",
+    "inventory_days": "...",
+    "ebitda_margin_pct": "...",
+    "debt_equity_ratio": "...",
+    "fy27e_revenue_cr": "...",
+    "fy27e_eps": "₹...",
+    "pe_multiple_applied": "..."
+  }},
+  "key_assumptions": ["...", "..."],
+  "scenarios": [
+    {{"name": "Bull", "fair_value": X, "probability": "30%", "description": "..."}},
+    {{"name": "Base", "fair_value": Y, "probability": "50%", "description": "..."}},
+    {{"name": "Bear", "fair_value": Z, "probability": "20%", "description": "..."}}
+  ],
+  "key_risks_to_valuation": ["...", "..."],
+  "entry_exit_triggers": {{
+    "buy": ["...", "..."],
+    "exit": ["...", "..."]
+  }}
+}}

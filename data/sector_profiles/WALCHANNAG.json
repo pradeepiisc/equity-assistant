@@ -1,0 +1,18 @@
+{
+  "symbol": "WALCHANNAG",
+  "name": "Walchandnagar Industries Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/WALCHANNAG/",
+  "industry_tag": "",
+  "business_description": "Walchandnagar Industries Ltd manufactures heavy engineering equipment and operates foundry and machine shop facilities. The company generates revenue by designing, fabricating, and supplying precision-engineered industrial components and machinery to clients in sectors requiring large-scale, custom-built equipment.",
+  "key_products": [
+    "Heavy engineering equipment",
+    "Foundry castings and machined components"
+  ],
+  "input_sensitivity": "Cost risks include fluctuations in steel and other metal prices, energy costs, skilled labour expenses, and interest rates impacting working capital. Revenue is sensitive to capital expenditure cycles in industries requiring heavy machinery, such as infrastructure, power, and process industries, with demand driven by new project launches and industrial upgrades.",
+  "output_industries": [
+    "Heavy Engineering Equipment & Industrial Machinery"
+  ],
+  "output_note": "Industrial companies and project contractors pay Walchandnagar Industries directly for custom heavy engineering equipment, foundry castings, and machined components.",
+  "fetched_date": "2026-03-01T15:41:40.204713"
+}

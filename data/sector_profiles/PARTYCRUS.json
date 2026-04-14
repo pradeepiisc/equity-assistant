@@ -1,0 +1,15 @@
+{
+  "symbol": "PARTYCRUS-SM",
+  "name": "Party Cruisers Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/PARTYCRUS/",
+  "industry_tag": "",
+  "business_description": "Incorporated in 1994, Party Cruisers Ltd is in  the business of Event Planning & Management [1]",
+  "key_products": [],
+  "input_sensitivity": "(skipped — run without --no-llm)",
+  "output_industries": [
+    "Unclassified"
+  ],
+  "output_note": "",
+  "fetched_date": "2026-03-02T11:13:44.975817"
+}

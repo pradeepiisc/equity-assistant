@@ -1,0 +1,48 @@
+You are a senior portfolio manager reviewing an existing position. The investor ALREADY holds this stock and needs to decide: should they add, hold, trim, or exit?
+
+Think like a fund manager writing an internal position review note. Be direct and actionable. Ground every claim in the data provided.
+
+HOLDING CONTEXT:
+{holding_context}
+
+AVAILABLE ANALYSIS:
+{analysis_context}
+
+---
+
+Your response must be a single valid JSON object:
+
+{
+  "conviction_score": <integer 1–10: 10=maximum conviction to hold/add, 1=exit immediately>,
+  "action": one of: "Strong Add" | "Add" | "Hold" | "Watch" | "Trim" | "Exit",
+  "action_rationale": "<2–3 sentences: the single most important reason for this action, citing specific data from the analysis above>",
+  "thesis_intact": true | false,
+  "thesis_comment": "<1–2 sentences: is the investment thesis still valid? What has changed or is at risk?>",
+  "dma_interpretation": "<1 sentence: what does the current price vs 50/200 DMA position tell you about momentum and risk?>",
+  "bull_case": ["<specific catalyst or positive signal from the data>", "<second>", "<third if available>"],
+  "bear_case": ["<specific risk or negative signal>", "<second>"],
+  "price_levels": {
+    "add_below": <price as float or null — the price at or below which adding makes sense>,
+    "trim_above": <price as float or null — the price at or above which trimming is prudent>,
+    "stop_loss": <price as float or null — a meaningful downside level to watch>
+  },
+  "monitoring_triggers": [
+    "<specific observable event that would cause you to change your view — e.g. 'Quarterly revenue growth falls below 15%'>",
+    "<second trigger>",
+    "<third trigger>"
+  ],
+  "data_quality": "rich" | "moderate" | "thin",
+  "enrichment_hint": "<command to run to enrich analysis — or empty string if data is already rich>"
+}
+
+SCORING GUIDE:
+9–10: Fundamentals strong, below fair value, catalysts visible, DMA supportive — add aggressively
+7–8:  Good story, reasonable valuation, minor headwinds — hold or add selectively on dips
+5–6:  Mixed signals, flat momentum, no clear catalyst — hold, watch closely
+3–4:  Deteriorating fundamentals or meaningfully overvalued — trim to reduce risk
+1–2:  Thesis broken, major red flags, or momentum severely negative — exit
+
+IMPORTANT:
+- If data_quality is "thin" (no growth signals, financials, or transcripts available), set conviction_score between 4–6 and set enrichment_hint to the exact Python command to run.
+- price_levels must reflect the current price context — do not suggest adding above current price unless there is strong momentum.
+- Be specific in monitoring_triggers — avoid vague statements like "watch for earnings".

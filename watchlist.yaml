@@ -1,0 +1,199 @@
+stocks:
+- symbol: NAMOEWASTE
+  name: Namo e-Waste Management Ltd
+  exchange: NSE
+  sector: Environmental Services - E-Waste
+  screener_url: https://www.screener.in/company/NAMOEWASTE/
+  bse_code: ''
+  watch_reason: ''
+  peers: []
+- symbol: KINGFA
+  name: KING FA Science and Technology (India) Ltd
+  exchange: NSE
+  sector: Specialty Chemicals - Plastics & Polymers
+  screener_url: https://www.screener.in/company/KINGFA/
+  bse_code: '524019'
+  watch_reason: ''
+  peers:
+  - POLYMED
+- symbol: EIEL
+  name: Enviro Infra Engineering Ltd
+  exchange: NSE
+  sector: Water recycling and Renewable Solar EPC
+  screener_url: https://www.screener.in/company/EIEL/
+  bse_code: '544290'
+  watch_reason: ''
+  peers:
+  - Va Tech Wabag
+- symbol: PERMAGNET
+  name: Permanent Magnets Ltd
+  exchange: NSE
+  sector: Industrial Manufacturing - Magnets
+  screener_url: https://www.screener.in/company/PERMAGNET/
+  bse_code: '504132'
+  watch_reason: ''
+  peers: []
+- symbol: BANDHANBNK
+  name: BANDHAN BANK
+  exchange: NSE
+  sector: Banking - Small Finance
+  screener_url: https://www.screener.in/company/BANDHANBNK/
+  bse_code: '541153'
+  watch_reason: ''
+  peers: []
+- symbol: SHALPAINTS
+  name: Shalimar Paints Ltd
+  exchange: NSE
+  sector: Paints & Coatings
+  screener_url: https://www.screener.in/company/SHALPAINTS/
+  bse_code: '509874'
+  watch_reason: ''
+  peers:
+  - INDIGOPNTS
+- symbol: SHALBY
+  name: Shalby Ltd
+  exchange: NSE
+  sector: Paints & Coatings
+  screener_url: https://www.screener.in/company/SHALBY/
+  bse_code: '540797'
+  watch_reason: ''
+  peers:
+  - YATHARTH
+- symbol: MANAPPURAM
+  name: Manappuram Finance Ltd
+  exchange: NSE
+  sector: NBFC - Gold Loans
+  screener_url: https://www.screener.in/company/MANAPPURAM/
+  bse_code: '531213'
+  watch_reason: ''
+  peers:
+  - MUTHOOTFIN
+  - IIFL
+- symbol: BIOCON
+  name: Biocon Ltd
+  exchange: NSE
+  sector: Pharmaceuticals - Biotechnology
+  screener_url: https://www.screener.in/company/BIOCON/
+  bse_code: '532523'
+  watch_reason: ''
+  peers:
+  - DRREDDY
+- symbol: SUNLITE
+  name: Sunlite Recycling Industries Ltd
+  exchange: NSE
+  sector: Recycling & Environmental Services
+  screener_url: https://www.screener.in/company/SUNLITE/
+  bse_code: ''
+  watch_reason: ''
+  peers: []
+- symbol: GEOJITFSL
+  name: Geojit Financial Services Ltd
+  exchange: NSE
+  sector: Financial Services - Broking
+  screener_url: https://www.screener.in/company/GEOJITFSL/
+  bse_code: '532285'
+  watch_reason: ''
+  peers:
+  - ANGELONE
+  - MOTILALOFS
+- symbol: VISHNU
+  name: Vishnu Chemicals Ltd
+  exchange: NSE
+  sector: Specialty Chemicals - Chromium
+  screener_url: https://www.screener.in/company/VISHNU/
+  bse_code: '516072'
+  watch_reason: ''
+  peers:
+  - DEEPAKNTR
+  - TATACHEM
+- symbol: AEQUS
+  name: Aequs Ltd
+  exchange: NSE
+  sector: Aerospace & Defence Manufacturing
+  screener_url: https://www.screener.in/company/AEQUS/
+  bse_code: '544634'
+  watch_reason: ''
+  peers:
+  - MTAR
+  - DATAPATTNS
+  - PARAS
+- symbol: SDBL
+  name: Som Distilleries and Breweries Ltd
+  exchange: NSE
+  sector: Beverages - Alcohol & Brewing
+  screener_url: https://www.screener.in/company/SDBL/
+  bse_code: '507514'
+  watch_reason: ''
+  peers:
+  - UNITDSPR
+  - RADICO
+- symbol: TARIL
+  name: Transformers and Rectifiers (India) Ltd
+  exchange: NSE
+  sector: Electrical Equipment - Transformers
+  screener_url: https://www.screener.in/company/TARIL/
+  bse_code: '532928'
+  watch_reason: ''
+  peers:
+  - VOLTAMP
+  - EMCO
+  - QPOWER
+- symbol: CYIENTDLM
+  name: Cyient DLM Ltd
+  exchange: NSE
+  sector: Electronics Manufacturing Services
+  screener_url: https://www.screener.in/company/CYIENTDLM/
+  bse_code: '543933'
+  watch_reason: ''
+  peers:
+  - KAYNES
+  - SYRMA
+  - AVALON
+  - PGEL
+- symbol: KAYNES
+  name: Kaynes Technology India Ltd
+  exchange: NSE
+  sector: Electronics Manufacturing Services
+  screener_url: https://www.screener.in/company/KAYNES/
+  bse_code: '543664'
+  watch_reason: ''
+  peers:
+  - CYIENTDLM
+  - SYRMA
+  - AVALON
+  - PGEL
+- symbol: '543619'
+  name: Concord Control Systems Ltd
+  exchange: BSE
+  sector: Defence Electronics - Control Systems
+  screener_url: https://www.screener.in/company/543619/
+  bse_code: '543619'
+  watch_reason: ''
+  peers:
+  - ZENTEC
+  - BEL
+  - PARAS
+- symbol: ROSSTECH
+  name: Rossell Techsys Ltd
+  exchange: NSE
+  sector: Aerospace and Defence
+  screener_url: https://www.screener.in/company/ROSSTECH/
+  bse_code: '544294'
+  watch_reason: Make in india;Aerospace and Defence tailwinds
+  peers: []
+- symbol: AKUMS
+  name: Akums Drugs & Pharmaceuticals
+  exchange: NSE
+  sector: Pharma
+  screener_url: https://www.screener.in/company/AKUMS/consolidated/
+  bse_code: '544222'
+  watch_reason: CDMO
+  peers: []
+- symbol: SHEEL
+  name: Sheel Biotech Ltd
+  exchange: NSE
+  sector: ''
+  screener_url: https://www.screener.in/company/SHEEL/
+  bse_code: ''
+  watch_reason: ''
+  peers: []

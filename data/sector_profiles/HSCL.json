@@ -1,0 +1,15 @@
+{
+  "symbol": "HSCL",
+  "name": "Himadri Speciality Chemical Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/HSCL/",
+  "industry_tag": "",
+  "business_description": "Himadri Speciality Chemical is primarily engaged in the manufacturing of carbon materials and chemicals. [1] It is the No.1 coal pitch manufacturer in India and is the only company to manufacture advanced carbon material in India. It is also the largest player of Naphthalene and SNF in India. [2]",
+  "key_products": [],
+  "input_sensitivity": "(skipped — run without --no-llm)",
+  "output_industries": [
+    "Unclassified"
+  ],
+  "output_note": "",
+  "fetched_date": "2026-03-02T11:13:55.234224"
+}

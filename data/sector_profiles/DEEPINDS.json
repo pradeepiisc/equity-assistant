@@ -1,0 +1,18 @@
+{
+  "symbol": "DEEPINDS",
+  "name": "Deep Industries Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/DEEPINDS/",
+  "industry_tag": "",
+  "business_description": "Deep Industries Ltd provides specialized oil and gas field services, including air and gas compression, drilling, workover, and gas dehydration. The company generates revenue by offering these technical services and equipment on a contract or rental basis to oil and gas exploration and production companies. It also offers integrated project management services for upstream operations.",
+  "key_products": [
+    "Air & Gas Compression Services",
+    "Drilling and Workover Services"
+  ],
+  "input_sensitivity": "(1) Cost risks: Margins are sensitive to equipment procurement and maintenance costs, labor expenses, energy/fuel prices, and interest rates on capital-intensive assets. (2) Revenue/demand risks: Demand is directly driven by capital expenditure and operational activity levels in the upstream oil and gas sector, which are influenced by global crude oil and natural gas prices.",
+  "output_industries": [
+    "Oil & Gas Field Services"
+  ],
+  "output_note": "Oil and gas exploration and production companies directly pay Deep Industries Ltd for air/gas compression, drilling, workover, and gas dehydration services.",
+  "fetched_date": "2026-03-01T15:42:42.779226"
+}

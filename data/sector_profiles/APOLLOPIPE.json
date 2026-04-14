@@ -1,0 +1,18 @@
+{
+  "symbol": "APOLLOPIPE",
+  "name": "Apollo Pipes Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/APOLLOPIPE/",
+  "industry_tag": "",
+  "business_description": "Apollo Pipes Ltd manufactures and sells a range of plastic piping products, including cPVC, uPVC, and HDPE pipes, as well as fittings, taps, water storage tanks, and solvents. The company generates revenue by supplying these products to customers for use in plumbing, water management, agriculture, construction, and infrastructure projects.",
+  "key_products": [
+    "cPVC, uPVC, and HDPE pipes",
+    "PVC taps and fittings"
+  ],
+  "input_sensitivity": "Cost risks are primarily driven by fluctuations in polymer raw material prices (PVC, HDPE, cPVC resins), energy costs, and labour expenses, which directly impact manufacturing margins. Revenue and demand are sensitive to the health of the construction, infrastructure, and agriculture sectors, as well as government spending on water management projects, since these drive end-user demand for piping solutions.",
+  "output_industries": [
+    "Plastic Pipes & Fittings Manufacturing"
+  ],
+  "output_note": "Distributors, contractors, and infrastructure companies pay Apollo Pipes Ltd directly for plastic pipes, fittings, and related products used in plumbing, water management, and construction applications.",
+  "fetched_date": "2026-03-01T15:41:06.908110"
+}

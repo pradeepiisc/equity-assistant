@@ -1,0 +1,18 @@
+{
+  "symbol": "CARYSIL",
+  "name": "Carysil Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/CARYSIL/",
+  "industry_tag": "",
+  "business_description": "Carysil Ltd manufactures and trades kitchen and bath products, primarily focusing on quartz and stainless steel kitchen sinks, as well as related appliances and accessories. The company generates revenue by selling these products to retailers, distributors, and OEMs in both domestic and export markets. Its business model is based on product sales rather than services or recurring revenue streams.",
+  "key_products": [
+    "Quartz Kitchen Sinks",
+    "Stainless Steel Kitchen Sinks"
+  ],
+  "input_sensitivity": "Cost risks include fluctuations in raw material prices (quartz, stainless steel), energy costs, and labor expenses, all of which directly impact manufacturing margins. Revenue is sensitive to demand from the residential and commercial real estate sectors, particularly new kitchen and bathroom installations and renovations, which are influenced by construction activity and consumer discretionary spending.",
+  "output_industries": [
+    "Kitchen & Bath Fixtures Manufacturing"
+  ],
+  "output_note": "Carysil is paid directly by retailers, distributors, and OEMs for its kitchen sinks, bath products, and related kitchen appliances.",
+  "fetched_date": "2026-03-01T15:41:45.126798"
+}

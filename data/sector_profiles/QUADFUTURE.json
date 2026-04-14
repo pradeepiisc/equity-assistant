@@ -1,0 +1,18 @@
+{
+  "symbol": "QUADFUTURE",
+  "name": "Quadrant Future Tek Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/QUADFUTURE/",
+  "industry_tag": "",
+  "business_description": "Quadrant Future Tek Ltd manufactures specialty cables and develops train control and signalling systems. The company generates revenue by selling these products to organizations involved in railway infrastructure and operations. Its business model is based on supplying engineered solutions for railways and related transport systems.",
+  "key_products": [
+    "specialty cables",
+    "train control & signalling systems"
+  ],
+  "input_sensitivity": "Cost risks include fluctuations in prices of raw materials (such as copper and polymers for cables), energy costs, and skilled labour expenses, all of which directly impact manufacturing margins. Revenue and demand are primarily driven by railway infrastructure investment cycles, government spending on rail modernization, and the health of the transport infrastructure sector.",
+  "output_industries": [
+    "Railway Signalling & Specialty Cabling"
+  ],
+  "output_note": "Railway operators and infrastructure companies directly pay Quadrant Future Tek Ltd for specialty cables and train control & signalling systems used in railway projects.",
+  "fetched_date": "2026-03-01T15:41:33.510223"
+}

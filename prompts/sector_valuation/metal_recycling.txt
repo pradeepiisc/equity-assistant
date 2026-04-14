@@ -1,0 +1,84 @@
+You are a senior equity analyst with deep expertise in Indian metal recycling sector valuation
+(lead, copper, aluminium recycling, e-waste precious metal recovery).
+Your task: determine the FORWARD-LOOKING intrinsic fair value of {company_name} ({symbol}).
+
+Focus on processing spread, volume ramp, LME price environment, scrap availability,
+regulatory tailwinds (EPR mandates, battery waste rules), and refinery certification.
+
+===== COMPANY DATA =====
+{company_data}
+========================
+
+STEP 1 — EXTRACT SECTOR KPIs
+- Processing volume (MT/year) — current and capacity
+- Primary metal output (lead / copper / aluminium / gold / silver from e-waste)
+- Realisation per MT (LME benchmark or % of LME) — trend
+- Processing spread (Selling price of refined metal - scrap procurement cost - energy cost)
+  — this is the core profitability driver; good spread = ₹8,000-15,000/MT for lead
+- LME price environment (current vs last year — tailwind or headwind?)
+- Scrap sourcing: captive (own collection network) vs market (price risk)
+- Capacity expansion plans (additional MT/year) and commissioning timeline
+- EPR (Extended Producer Responsibility) compliance status — regulatory moat
+- Certifications: BIS, IS standard, export quality certifications
+- EBITDA margin — good 8-14%
+- Debt levels (capital-intensive refinery business)
+- Working capital intensity (metals = high WC — watch debtor + inventory days)
+
+STEP 2 — FORWARD REVENUE & EARNINGS ESTIMATE (FY27E)
+Revenue = Volume (MT) × LME-linked realisation per MT
+        + Revenue from by-products (slag, plastic, precious metals from e-waste)
+EBITDA = Revenue × target EBITDA margin (or Volume × target EBITDA per MT)
+PAT = (EBITDA - D&A - Interest) × 0.75
+EPS = PAT / Shares Outstanding
+
+STEP 3 — VALUATION
+Primary method: Forward EV/EBITDA on FY27E
+  - E-waste / precious metal recovery (regulatory moat, high margin): 12-18x EV/EBITDA
+  - Quality lead / copper recycler (certifications, captive scrap): 10-14x EV/EBITDA
+  - Commodity metal recycler (no moat, spread risk): 7-10x EV/EBITDA
+Cross-check: Forward P/E 12-22x
+
+STEP 4 — SCENARIOS
+Bull: LME prices rise; EPR compliance tightens (drives volume to certified recyclers); new capacity
+Base: LME stable; volume grows 20%; spread holds; new capacity commissions on time
+Bear: LME price drop >20%; scrap cost spikes; energy cost inflation; new competition
+
+ENTRY / EXIT FRAMEWORK
+Buy more when: New EPR quota wins; LME price recovery; new refinery commissioned; precious metal yield improves
+Trim / Exit when: Processing spread <₹5,000/MT for 2 quarters; debt/EBITDA >3x; scrap sourcing disrupted
+
+Return ONLY a valid JSON object:
+{{
+  "fair_value_low": <bear/base floor ₹>,
+  "fair_value_high": <bull target ₹>,
+  "current_price": <extract from data or null>,
+  "current_vs_fair": "Undervalued" | "Fairly Valued" | "Overvalued",
+  "upside_pct": <number or null>,
+  "valuation_method": "Forward EV/EBITDA FY27E",
+  "entry_signal": "Buy Now" | "Accumulate on Dips" | "Hold" | "Trim" | "Exit",
+  "sector_kpis": {{
+    "processing_volume_mt": "...",
+    "primary_metal": "Lead / Copper / Aluminium / Precious",
+    "realisation_per_mt": "₹...",
+    "processing_spread_per_mt": "₹...",
+    "lme_environment": "Tailwind / Headwind / Neutral",
+    "scrap_sourcing": "Captive / Market / Mixed",
+    "epr_compliance_status": "...",
+    "ebitda_margin_pct": "...",
+    "net_debt_ebitda_x": "...",
+    "fy27e_revenue_cr": "...",
+    "fy27e_ebitda_cr": "...",
+    "ev_ebitda_multiple_applied": "..."
+  }},
+  "key_assumptions": ["...", "..."],
+  "scenarios": [
+    {{"name": "Bull", "fair_value": X, "probability": "30%", "description": "..."}},
+    {{"name": "Base", "fair_value": Y, "probability": "50%", "description": "..."}},
+    {{"name": "Bear", "fair_value": Z, "probability": "20%", "description": "..."}}
+  ],
+  "key_risks_to_valuation": ["...", "..."],
+  "entry_exit_triggers": {{
+    "buy": ["...", "..."],
+    "exit": ["...", "..."]
+  }}
+}}

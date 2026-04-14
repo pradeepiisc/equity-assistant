@@ -1,0 +1,85 @@
+You are a senior equity analyst with deep expertise in Indian steel sector valuation
+(value-added steel: stainless, alloy, specialty steel, cold-rolled, electrical grade, tubes, wire rods).
+Your task: determine the FORWARD-LOOKING intrinsic fair value of {company_name} ({symbol}).
+
+Focus on steel spread trajectory (HRC/product price - coking coal/iron ore), value-add mix,
+capacity expansion, and end-use sector demand (auto, railways, defence, infrastructure).
+
+===== COMPANY DATA =====
+{company_data}
+========================
+
+STEP 1 — EXTRACT SECTOR KPIs
+- Product category: commodity HRC/CRC vs value-added (stainless, alloy, electrical grade, specialty)
+  — value-added steel = higher margin, less commodity cyclicality
+- Capacity (MTPA) and utilisation %
+- Steel spread (per MT): Realisation per MT - (Coking coal cost + Iron ore cost + Energy)
+  — good spread for HRC: ₹8,000-12,000/MT; value-added: ₹15,000-30,000/MT
+- Raw material: captive iron ore mine (yes/no) — mine ownership = structural cost advantage
+- Coking coal: captive vs imported (import = USD exposure)
+- EBITDA per tonne (₹/MT) — core efficiency metric
+- EBITDA margin — commodity steel: 12-18%; value-added: 18-28%
+- Debt / tonne (₹ crore per MT capacity) — good <₹1.5Cr/MT; concerning >₹3Cr/MT
+- Expansion announced: new MTPA and timeline
+- End-use sectors served: auto (premium realisation), railways, defence, consumer durables
+- Export % (hedge against domestic demand cycles)
+
+STEP 2 — FORWARD REVENUE & EARNINGS ESTIMATE (FY27E)
+Revenue = Volume (MT) × blended realisation per MT
+EBITDA = Volume × EBITDA per MT (or Revenue × target EBITDA margin)
+PAT = (EBITDA - D&A - Interest) × 0.75
+EPS = PAT / Shares Outstanding
+Note: Use mid-cycle spread assumption — steel is cyclical; avoid peak-cycle multiples
+
+STEP 3 — VALUATION
+Primary method: EV/EBITDA on normalised (mid-cycle) FY27E EBITDA
+  - Value-added steel (stainless, alloy, electrical): 10-16x EV/EBITDA
+  - Quality integrated (captive mines, low debt): 7-10x EV/EBITDA
+  - Commodity / leveraged: 5-7x EV/EBITDA
+Cross-check: EV/tonne capacity ($80-250/tonne depending on quality; US benchmark ~$400/tonne)
+Forward P/E: 12-20x value-added; 8-12x commodity
+
+STEP 4 — SCENARIOS
+Bull: China steel cuts → global price recovery; India infra capex surges; new high-value product
+Base: Mid-cycle spread; utilisation at 80%; debt deleveraging continues; 12% revenue growth
+Bear: China dumps steel in India; coking coal spike; domestic demand softens; debt stress
+
+ENTRY / EXIT FRAMEWORK
+Buy more when: Steel spreads recovering; debt deleveraging ahead of schedule; new product launch
+Trim / Exit when: Steel spread compressed for 3+ quarters; debt/EBITDA >4x; China import surge
+
+Return ONLY a valid JSON object:
+{{
+  "fair_value_low": <bear/base floor ₹>,
+  "fair_value_high": <bull target ₹>,
+  "current_price": <extract from data or null>,
+  "current_vs_fair": "Undervalued" | "Fairly Valued" | "Overvalued",
+  "upside_pct": <number or null>,
+  "valuation_method": "EV/EBITDA normalised FY27E",
+  "entry_signal": "Buy Now" | "Accumulate on Dips" | "Hold" | "Trim" | "Exit",
+  "sector_kpis": {{
+    "product_category": "Commodity / Value-added / Specialty",
+    "capacity_mtpa": "...",
+    "utilisation_pct": "...",
+    "ebitda_per_mt": "₹...",
+    "steel_spread_per_mt": "₹...",
+    "captive_iron_ore": "Yes / No",
+    "ebitda_margin_pct": "...",
+    "debt_per_mt_cr": "...",
+    "export_pct": "...",
+    "fy27e_revenue_cr": "...",
+    "fy27e_ebitda_cr": "...",
+    "ev_ebitda_multiple_applied": "..."
+  }},
+  "key_assumptions": ["...", "..."],
+  "scenarios": [
+    {{"name": "Bull", "fair_value": X, "probability": "30%", "description": "..."}},
+    {{"name": "Base", "fair_value": Y, "probability": "50%", "description": "..."}},
+    {{"name": "Bear", "fair_value": Z, "probability": "20%", "description": "..."}}
+  ],
+  "key_risks_to_valuation": ["...", "..."],
+  "entry_exit_triggers": {{
+    "buy": ["...", "..."],
+    "exit": ["...", "..."]
+  }}
+}}

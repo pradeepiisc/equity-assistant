@@ -1,0 +1,84 @@
+You are a senior equity analyst with deep expertise in Indian logistics sector valuation
+(freight, 3PL, supply chain, express delivery, cold chain, warehousing).
+Your task: determine the FORWARD-LOOKING intrinsic fair value of {company_name} ({symbol}).
+
+Focus on volume growth, realisation per unit, tech-enabled operational leverage,
+asset-light vs asset-heavy model distinction, and e-commerce tailwind.
+
+===== COMPANY DATA =====
+{company_data}
+========================
+
+STEP 1 — EXTRACT SECTOR KPIs
+- Volume metric (whichever is primary): TEUs (containers), shipments/day, tonnes/year
+- Volume growth rate (trend direction)
+- Revenue per unit (₹/TEU, ₹/shipment, ₹/tonne) — realisation trend
+- EBITDA per unit — efficiency and margin quality
+- EBITDA margin — 3PL/express: good 10-18%; asset-light: can reach 25%
+- Fleet size (if asset-heavy) and utilisation %
+- Warehouse capacity (million sq ft) and fill rate
+- Customer concentration (% from top 5)
+- Technology platform (TMS, WMS proprietary vs third-party)
+- Asset-light % (% revenue from network/platform vs owned fleet)
+- Capex plan (if asset-heavy) — new fleet additions, warehouses
+- Sector verticals served (FMCG, pharma, auto, e-commerce, B2B)
+- E-commerce and quick commerce % of revenue (fast-growing)
+
+STEP 2 — FORWARD REVENUE & EARNINGS ESTIMATE (FY27E)
+Revenue = Current volume × (1 + volume growth %) × blended realisation per unit
+        × (1 + realisation improvement %)
+EBITDA = Revenue × target EBITDA margin
+PAT = (EBITDA - D&A - Interest) × 0.75
+EPS = PAT / Shares Outstanding
+
+STEP 3 — VALUATION
+Primary method: Forward EV/EBITDA on FY27E
+  - Premium tech-enabled asset-light 3PL: 20-30x EV/EBITDA
+  - Quality express / integrated logistics: 15-22x EV/EBITDA
+  - Asset-heavy fleet operator: 10-15x EV/EBITDA
+Cross-check: EV/Sales 1-3x
+
+STEP 4 — SCENARIOS
+Bull: E-commerce volume surge; new pharma cold chain client win; tech platform monetisation
+Base: Volume grows 18-22% p.a.; realisation stable; margin improves 50bps on operating leverage
+Bear: Fuel cost spike; competition from Reliance/Amazon logistics; realisation pressure
+
+ENTRY / EXIT FRAMEWORK
+Buy more when: Volume inflection visible; new large client win; margin improving on operating leverage
+Trim / Exit when: Volume growth <10% for 2 quarters; realisation declining; Amazon/Reliance undercutting
+
+Return ONLY a valid JSON object:
+{{
+  "fair_value_low": <bear/base floor ₹>,
+  "fair_value_high": <bull target ₹>,
+  "current_price": <extract from data or null>,
+  "current_vs_fair": "Undervalued" | "Fairly Valued" | "Overvalued",
+  "upside_pct": <number or null>,
+  "valuation_method": "Forward EV/EBITDA FY27E",
+  "entry_signal": "Buy Now" | "Accumulate on Dips" | "Hold" | "Trim" | "Exit",
+  "sector_kpis": {{
+    "primary_volume_metric": "...",
+    "volume_growth_pct": "...",
+    "revenue_per_unit": "₹...",
+    "ebitda_margin_pct": "...",
+    "ebitda_per_unit": "₹...",
+    "asset_light_pct": "...",
+    "warehouse_sq_ft_mn": "...",
+    "top5_customer_concentration_pct": "...",
+    "ecommerce_revenue_pct": "...",
+    "fy27e_revenue_cr": "...",
+    "fy27e_ebitda_cr": "...",
+    "ev_ebitda_multiple_applied": "..."
+  }},
+  "key_assumptions": ["...", "..."],
+  "scenarios": [
+    {{"name": "Bull", "fair_value": X, "probability": "30%", "description": "..."}},
+    {{"name": "Base", "fair_value": Y, "probability": "50%", "description": "..."}},
+    {{"name": "Bear", "fair_value": Z, "probability": "20%", "description": "..."}}
+  ],
+  "key_risks_to_valuation": ["...", "..."],
+  "entry_exit_triggers": {{
+    "buy": ["...", "..."],
+    "exit": ["...", "..."]
+  }}
+}}

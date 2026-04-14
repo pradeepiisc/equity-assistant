@@ -1,0 +1,18 @@
+{
+  "symbol": "YASHO",
+  "name": "Yasho Industries Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/YASHO/",
+  "industry_tag": "",
+  "business_description": "Yasho Industries Ltd manufactures specialty chemicals, including food antioxidants, aroma chemicals, rubber accelerators, and lubricant additives. The company generates revenue by selling these chemical products directly to industrial customers across various geographies. Its business model is based on supplying specialty chemicals for use in manufacturing, processing, and formulation by other industries.",
+  "key_products": [
+    "food antioxidants",
+    "rubber accelerators"
+  ],
+  "input_sensitivity": "Cost risks include fluctuations in raw material prices (petrochemicals, chemical intermediates), energy costs, and labor expenses, which directly impact margins. Revenue and demand are sensitive to the health of downstream manufacturing sectors such as rubber, lubricants, food processing, and aroma/flavor industries, as their production volumes drive demand for specialty chemicals.",
+  "output_industries": [
+    "Specialty Chemicals (Antioxidants, Aroma, Rubber, Lubricant Additives)"
+  ],
+  "output_note": "Industrial manufacturers and processors pay Yasho Industries Ltd for specialty chemical products such as antioxidants, aroma chemicals, rubber accelerators, and lubricant additives used in their own production processes.",
+  "fetched_date": "2026-03-01T15:37:46.862048"
+}

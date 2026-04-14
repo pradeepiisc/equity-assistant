@@ -1,0 +1,18 @@
+{
+  "symbol": "SPMLINFRA",
+  "name": "SPML Infra Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/SPMLINFRA/",
+  "industry_tag": "",
+  "business_description": "SPML Infra Ltd is engaged in infrastructure development, primarily executing engineering, procurement, and construction (EPC) projects. The company makes money by designing and building large-scale infrastructure such as water supply systems, power transmission lines, and urban infrastructure, typically for government and municipal clients on a contract basis.",
+  "key_products": [
+    "Water supply and sanitation EPC projects",
+    "Power transmission and distribution EPC projects"
+  ],
+  "input_sensitivity": "Cost risks include fluctuations in prices of construction materials (steel, cement, pipes), labour costs, and interest rates affecting project financing. Revenue is highly sensitive to government infrastructure spending, tendering activity, and timely payments from public sector clients.",
+  "output_industries": [
+    "Infrastructure EPC Services"
+  ],
+  "output_note": "Government bodies and municipal corporations directly pay SPML Infra Ltd for executing turnkey EPC contracts in water, power, and urban infrastructure projects.",
+  "fetched_date": "2026-03-01T15:41:18.133359"
+}

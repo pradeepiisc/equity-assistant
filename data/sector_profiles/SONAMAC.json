@@ -1,0 +1,18 @@
+{
+  "symbol": "SONAMAC-SM",
+  "name": "Sona Machinery Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/SONAMAC/",
+  "industry_tag": "",
+  "business_description": "Sona Machinery Ltd manufactures and sells agricultural processing equipment, primarily targeting grain milling and related agro-processing applications. The company generates revenue by selling these machines and systems to businesses involved in agricultural product processing, as well as by supplying equipment for ethanol production.",
+  "key_products": [
+    "agricultural processing equipment",
+    "ethanol production machinery"
+  ],
+  "input_sensitivity": "Cost risks include fluctuations in steel and other metal prices (key raw materials), energy costs, and labor expenses, all of which can impact manufacturing margins. Revenue is directly sensitive to capital expenditure cycles in the agricultural processing and ethanol production sectors, which are influenced by farm output, government policies on ethanol blending, and overall rural/agri-sector investment.",
+  "output_industries": [
+    "Agro-Processing Equipment Manufacturing"
+  ],
+  "output_note": "Agricultural processors and ethanol producers pay Sona Machinery Ltd for specialized machinery and equipment used in grain milling and ethanol production.",
+  "fetched_date": "2026-03-01T15:43:37.382803"
+}

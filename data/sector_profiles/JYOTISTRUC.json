@@ -1,0 +1,18 @@
+{
+  "symbol": "JYOTISTRUC",
+  "name": "Jyoti Structures Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/JYOTISTRUC/",
+  "industry_tag": "",
+  "business_description": "Jyoti Structures Ltd designs, manufactures, and installs infrastructure for electricity transmission and distribution. The company earns revenue primarily from turnkey contracts for building transmission lines and substations, including engineering, procurement, and construction services.",
+  "key_products": [
+    "Transmission line construction",
+    "Substation installation services"
+  ],
+  "input_sensitivity": "Cost risks include steel, conductors, cement, and other raw materials, as well as labour costs and interest rates affecting project financing. Revenue is sensitive to capital expenditure cycles and investment in power transmission infrastructure by utilities and government agencies.",
+  "output_industries": [
+    "Electricity Transmission & Distribution EPC"
+  ],
+  "output_note": "Electric utilities, government agencies, and power transmission companies pay Jyoti Structures Ltd for the engineering, procurement, and construction of transmission lines and substations.",
+  "fetched_date": "2026-03-01T15:42:57.342363"
+}

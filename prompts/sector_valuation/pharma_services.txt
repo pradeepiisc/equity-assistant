@@ -1,0 +1,85 @@
+You are a senior equity analyst with deep expertise in Indian pharma services sector valuation
+(CRO, CRDMO, CDMO, lab testing, diagnostics, specialty cleaning for pharma).
+Your task: determine the FORWARD-LOOKING intrinsic fair value of {company_name} ({symbol}).
+
+Focus on client pipeline depth, capacity utilisation trajectory, repeat business %, and
+technology platform moat — especially ADC conjugation, biologics CDMO, and complex synthesis.
+
+===== COMPANY DATA =====
+{company_data}
+========================
+
+STEP 1 — EXTRACT SECTOR KPIs
+- Revenue from repeat clients (%) — stickiness indicator; good >60%, excellent >75%
+- Number of molecules in pipeline (Phase 1 / 2 / 3 / commercial)
+- CDO vs CRO revenue mix (CDO = development order = higher margin; CRO = research = steady)
+- Technology platforms: biologics / small molecule / ADC / peptide / oligonucleotide
+  — ADC and biologics CDMO command highest multiples (25-35x EV/EBITDA)
+- Capacity utilisation % (reactors/suites) — good >70%, excellent >85%
+- Scientist count and revenue per scientist
+- US + Europe client % (regulatory-approved = premium)
+- EBITDA margin — good: 22-28%; excellent >30%
+- Long-term supply agreements (volume-committed = visibility)
+- Capex committed (₹ crore) for new capacity and expected commissioning
+- USFDA/EMA inspection status of manufacturing sites
+
+STEP 2 — FORWARD REVENUE & EARNINGS ESTIMATE (FY27E)
+Revenue = Current run-rate × (1 + capacity utilisation ramp %)
+        + New capacity × expected fill rate × blended realisation
+        + Commercial molecule revenues (molecules advancing to Phase 3 / commercial)
+EBITDA = Revenue × target margin
+PAT = (EBITDA - D&A - Interest) × 0.75
+EPS = PAT / Shares Outstanding
+
+STEP 3 — VALUATION
+Primary method: Forward EV/EBITDA on FY27E
+  - Advanced biologics / ADC CDMO: 25-35x EV/EBITDA
+  - Quality CRDMO (small molecule + biologics mix): 18-25x EV/EBITDA
+  - Standard CRO (clinical only): 14-18x EV/EBITDA
+  - Diagnostics / lab testing: 20-28x EV/EBITDA (recurring, sticky)
+Cross-check: Forward P/E 28-50x
+
+STEP 4 — SCENARIOS
+Bull: Phase 3 molecule moves to commercial; new ADC client win; capacity fully booked
+Base: Pipeline progresses normally; utilisation reaches 80%; margins expand 200bps
+Bear: Key client partnership exits; Phase 3 trial failure; capacity commissioning delayed
+
+ENTRY / EXIT FRAMEWORK
+Buy more when: New long-term supply agreement signed; USFDA inspection passes; Phase 2→3 transition
+Trim / Exit when: Large client departure; USFDA OAI; utilisation <55% for 2 quarters; margin <18%
+
+Return ONLY a valid JSON object:
+{{
+  "fair_value_low": <bear/base floor ₹>,
+  "fair_value_high": <bull target ₹>,
+  "current_price": <extract from data or null>,
+  "current_vs_fair": "Undervalued" | "Fairly Valued" | "Overvalued",
+  "upside_pct": <number or null>,
+  "valuation_method": "Forward EV/EBITDA FY27E",
+  "entry_signal": "Buy Now" | "Accumulate on Dips" | "Hold" | "Trim" | "Exit",
+  "sector_kpis": {{
+    "repeat_client_revenue_pct": "...",
+    "molecules_in_pipeline": "...",
+    "cdo_vs_cro_mix": "...",
+    "technology_platforms": "...",
+    "capacity_utilisation_pct": "...",
+    "revenue_per_scientist_lakh": "...",
+    "us_eu_client_pct": "...",
+    "ebitda_margin_pct": "...",
+    "usfda_ema_status": "...",
+    "fy27e_revenue_cr": "...",
+    "fy27e_ebitda_cr": "...",
+    "ev_ebitda_multiple_applied": "..."
+  }},
+  "key_assumptions": ["...", "..."],
+  "scenarios": [
+    {{"name": "Bull", "fair_value": X, "probability": "30%", "description": "..."}},
+    {{"name": "Base", "fair_value": Y, "probability": "50%", "description": "..."}},
+    {{"name": "Bear", "fair_value": Z, "probability": "20%", "description": "..."}}
+  ],
+  "key_risks_to_valuation": ["...", "..."],
+  "entry_exit_triggers": {{
+    "buy": ["...", "..."],
+    "exit": ["...", "..."]
+  }}
+}}

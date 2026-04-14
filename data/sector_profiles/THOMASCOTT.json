@@ -1,0 +1,18 @@
+{
+  "symbol": "THOMASCOTT",
+  "name": "Thomas Scott India Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/THOMASCOTT/",
+  "industry_tag": "",
+  "business_description": "Thomas Scott (India) Ltd is engaged in the design, manufacture, and retail of apparel and textile products. The company generates revenue primarily by selling branded clothing and textile goods through its retail outlets and distribution channels.",
+  "key_products": [
+    "Branded apparel",
+    "Textile products"
+  ],
+  "input_sensitivity": "Cost risks include fluctuations in raw material prices (especially cotton and fabrics), labour costs, and energy expenses, all of which directly impact production margins. Revenue is sensitive to consumer discretionary spending and overall retail demand, which are influenced by macroeconomic conditions and fashion trends.",
+  "output_industries": [
+    "Branded Apparel & Textile Retail"
+  ],
+  "output_note": "End consumers and retail customers pay Thomas Scott (India) Ltd directly for branded apparel and textile products sold through its retail stores and distribution channels.",
+  "fetched_date": "2026-03-01T15:40:38.955894"
+}

@@ -1,0 +1,81 @@
+You are a senior equity analyst with deep expertise in Indian electric vehicle sector valuation
+(2W EV, 3W EV, 4W EV, EV components, charging infrastructure).
+Your task: determine the FORWARD-LOOKING intrinsic fair value of {company_name} ({symbol}).
+
+Focus on unit economics at scale, order pipeline, FAME/PLI scheme benefits,
+battery cost trajectory, and competitive positioning vs incumbents and Chinese entrants.
+
+===== COMPANY DATA =====
+{company_data}
+========================
+
+STEP 1 — EXTRACT SECTOR KPIs
+- Units sold per quarter (trend — acceleration or deceleration?)
+- Revenue per unit (₹) — ASP trend (mix shift to premium = good)
+- Gross margin per unit (₹ and %) — must be positive and improving
+- Battery cost per kWh (target <₹10,000/kWh for 2W viability; falling ~15-20% p.a.)
+- Range per charge (km) — consumer demand threshold: 2W >120km, 4W >400km
+- FAME subsidy per unit received and FAME-3 eligibility status
+- PLI scheme status and benefit quantum
+- Charging infrastructure reach (own or partner network)
+- Order book / bulk orders from fleet / govt (delivery companies, state transport)
+- Market share in EV category (India 2W, 3W, B2B fleet)
+- EBITDA status (many EV cos still burning cash — when does EBITDA break-even occur?)
+- Cash burn rate per quarter vs cash on balance sheet
+
+STEP 2 — FORWARD REVENUE & EARNINGS ESTIMATE (FY27E)
+Revenue = Units sold × blended ASP
+Gross Profit = Revenue × Gross Margin %
+EBITDA = Gross Profit - Fixed Costs (marketing, R&D, corporate)
+PAT = EBITDA - D&A - Interest - Tax (if profitable by FY27)
+EPS = PAT / Shares Outstanding (if positive) else use EV/Sales or EV/Unit
+
+STEP 3 — VALUATION
+IMPORTANT: Most Indian EV cos are not yet profitable. Choose method accordingly:
+  - If EBITDA-positive FY27E: EV/EBITDA 25-40x; P/E 40-70x (high growth premium)
+  - If pre-profitability: EV/Sales 2-5x; or EV/Unit sold (Rs 1-3 lakh per EV unit p.a. run-rate)
+  - Comparables: Ola Electric trades at ~3-4x EV/Sales (for reference)
+
+STEP 4 — SCENARIOS
+Bull: Battery costs fall 20%; FAME-3 announced; fleet orders; new 4W model launch
+Base: Volume grows 30%; gross margin improves to 15%; EBITDA breakeven by FY27
+Bear: FAME subsidy removed; Chinese EV imports allowed; battery cost stagnates; cash burn
+
+ENTRY / EXIT FRAMEWORK
+Buy more when: Gross margin per unit crosses 15% for 2 consecutive quarters; large fleet/govt order
+Trim / Exit when: Gross margin negative for 2 consecutive quarters; FAME disqualification; cash runway < 18 months
+
+Return ONLY a valid JSON object:
+{{
+  "fair_value_low": <bear/base floor ₹>,
+  "fair_value_high": <bull target ₹>,
+  "current_price": <extract from data or null>,
+  "current_vs_fair": "Undervalued" | "Fairly Valued" | "Overvalued",
+  "upside_pct": <number or null>,
+  "valuation_method": "EV/Sales FY27E (pre-profit) or Forward P/E (if profitable)",
+  "entry_signal": "Buy Now" | "Accumulate on Dips" | "Hold" | "Trim" | "Exit",
+  "sector_kpis": {{
+    "units_sold_quarterly": "...",
+    "revenue_per_unit": "₹...",
+    "gross_margin_per_unit_pct": "...",
+    "battery_cost_per_kwh": "₹...",
+    "range_km": "...",
+    "fame_pli_benefit_per_unit": "₹...",
+    "market_share_pct": "...",
+    "ebitda_status": "Profitable / Pre-profit / Cash-burning",
+    "cash_runway_months": "...",
+    "fy27e_revenue_cr": "...",
+    "valuation_basis": "EV/Sales X or P/E Yx"
+  }},
+  "key_assumptions": ["...", "..."],
+  "scenarios": [
+    {{"name": "Bull", "fair_value": X, "probability": "30%", "description": "..."}},
+    {{"name": "Base", "fair_value": Y, "probability": "50%", "description": "..."}},
+    {{"name": "Bear", "fair_value": Z, "probability": "20%", "description": "..."}}
+  ],
+  "key_risks_to_valuation": ["...", "..."],
+  "entry_exit_triggers": {{
+    "buy": ["...", "..."],
+    "exit": ["...", "..."]
+  }}
+}}

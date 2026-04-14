@@ -1,0 +1,18 @@
+{
+  "symbol": "FAZE3Q-BE",
+  "name": "Faze Three Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/FAZE3Q/",
+  "industry_tag": "",
+  "business_description": "Faze Three Ltd manufactures and exports finished home textile products such as bathmats, rugs, blankets, throws, and cushions. The company generates revenue by selling these products directly to large retail store chains in the USA, UK, and Europe, primarily through export contracts.",
+  "key_products": [
+    "bathmats",
+    "rugs"
+  ],
+  "input_sensitivity": "Cost risks include fluctuations in raw material prices (such as cotton, synthetic fibers), labor costs, energy, and logistics/freight rates, all of which can impact margins. Revenue is directly sensitive to consumer demand for home textiles in export markets, especially the health of large retail chains in the USA, UK, and Europe.",
+  "output_industries": [
+    "Home Textile Manufacturing & Export"
+  ],
+  "output_note": "Large international retail chains and distributors directly pay Faze Three Ltd for finished home textile products like bathmats and rugs.",
+  "fetched_date": "2026-03-01T15:40:13.399125"
+}

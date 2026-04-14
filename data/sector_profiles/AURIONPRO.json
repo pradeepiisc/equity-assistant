@@ -1,0 +1,18 @@
+{
+  "symbol": "AURIONPRO",
+  "name": "Aurionpro Solutions Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/AURIONPRO/",
+  "industry_tag": "",
+  "business_description": "Aurionpro Solutions Ltd develops and sells software platforms and provides consulting services, primarily targeting transaction banking, customer experience management, smart city and transportation solutions, and cybersecurity. The company generates revenue by licensing its proprietary software products and offering related implementation and consulting services, mainly to financial institutions and public sector clients.",
+  "key_products": [
+    "Transaction Banking Platform",
+    "Customer Experience (ACE Platform)"
+  ],
+  "input_sensitivity": "(1) Cost risks: Margins are mainly affected by employee costs (software development and consulting staff), with moderate sensitivity to IT infrastructure expenses; raw material, energy, and fuel costs are negligible. (2) Revenue/demand risks: Demand is directly driven by IT spending cycles in the banking sector and government/public sector digitalization initiatives, especially in transaction banking and smart city projects.",
+  "output_industries": [
+    "Banking Software & Digital Platforms"
+  ],
+  "output_note": "Banks and financial institutions directly pay Aurionpro for its transaction banking software platforms and related consulting services.",
+  "fetched_date": "2026-03-01T15:44:19.072560"
+}

@@ -1,0 +1,18 @@
+{
+  "symbol": "WPIL",
+  "name": "WPIL",
+  "exchange": "BSE",
+  "screener_url": "",
+  "industry_tag": "",
+  "business_description": "WPIL is primarily engaged in the design, manufacture, and supply of industrial pumps and pumping systems. The company generates revenue by selling these products to industrial and infrastructure clients, as well as providing related services such as installation and maintenance.",
+  "key_products": [
+    "industrial pumps",
+    "pumping systems"
+  ],
+  "input_sensitivity": "Cost risks include fluctuations in prices of metals (such as cast iron, steel, and alloys), energy costs, and labor expenses, all of which directly impact manufacturing margins. Revenue is sensitive to capital expenditure cycles in infrastructure, water management, and industrial projects, as demand for pumps is closely tied to new project launches and upgrades in these sectors.",
+  "output_industries": [
+    "Industrial Pumps & Flow Systems"
+  ],
+  "output_note": "WPIL is paid directly by industrial and infrastructure companies for the supply of industrial pumps and complete pumping systems.",
+  "fetched_date": "2026-03-01T15:40:25.029587"
+}

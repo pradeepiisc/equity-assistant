@@ -1,0 +1,18 @@
+{
+  "symbol": "VMARCIND-SM",
+  "name": "V-Marc India Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/VMARCIND/",
+  "industry_tag": "",
+  "business_description": "V-Marc India Ltd manufactures and sells PVC insulated wires and cables. The company generates revenue by producing these electrical products and supplying them to customers who require wiring solutions for power transmission and distribution.",
+  "key_products": [
+    "PVC insulated wires",
+    "PVC insulated cables"
+  ],
+  "input_sensitivity": "Cost risks are primarily driven by fluctuations in prices of copper, aluminum, and PVC resin (key raw materials), as well as energy and labor costs. Revenue and demand are directly linked to the pace of construction activity, infrastructure development, and overall investment in power transmission and distribution projects.",
+  "output_industries": [
+    "Wires & Cables Manufacturing"
+  ],
+  "output_note": "V-Marc India Ltd is paid directly by distributors, electrical contractors, and infrastructure companies for supplying PVC insulated wires and cables.",
+  "fetched_date": "2026-03-01T15:39:59.965114"
+}

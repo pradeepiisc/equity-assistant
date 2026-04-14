@@ -1,0 +1,15 @@
+{
+  "symbol": "CAPACITE",
+  "name": "Capacite Infraprojects Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/CAPACITE/",
+  "industry_tag": "",
+  "business_description": "Capacit'e Infraprojects Limited is primarily engaged in the EPC business and provides turnkey solutions for housing, high rises, super high rises, speciality buildings and urban infrastructure. The company offers these services to leading real-estate and government bodies in India. [1] [2]",
+  "key_products": [],
+  "input_sensitivity": "(skipped — run without --no-llm)",
+  "output_industries": [
+    "Unclassified"
+  ],
+  "output_note": "",
+  "fetched_date": "2026-03-02T00:18:38.843257"
+}

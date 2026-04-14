@@ -1,0 +1,18 @@
+{
+  "symbol": "HCC",
+  "name": "Hindustan Construction Company Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/HCC/",
+  "industry_tag": "",
+  "business_description": "Hindustan Construction Company Ltd is an engineering and construction firm that executes large-scale infrastructure projects across India. It generates revenue by designing, building, and commissioning structures such as dams, tunnels, bridges, power plants, roads, and industrial buildings for government and private clients, typically under contract-based models.",
+  "key_products": [
+    "Infrastructure project construction (dams, tunnels, bridges, power plants, roads)",
+    "Engineering and project management services"
+  ],
+  "input_sensitivity": "Cost risks include fluctuations in prices of construction materials (cement, steel), labour costs, fuel and energy expenses, and interest rates affecting project financing. Revenue and demand are directly driven by government infrastructure spending, public sector investment cycles, and private sector capital expenditure in large-scale civil works.",
+  "output_industries": [
+    "Civil Infrastructure EPC & Construction"
+  ],
+  "output_note": "Government agencies and private developers pay HCC for turnkey engineering, procurement, and construction (EPC) services to deliver completed infrastructure projects.",
+  "fetched_date": "2026-03-01T15:41:13.735728"
+}

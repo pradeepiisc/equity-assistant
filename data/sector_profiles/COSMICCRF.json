@@ -1,0 +1,15 @@
+{
+  "symbol": "COSMICCRF",
+  "name": "COSMICCRF",
+  "exchange": "BSE",
+  "screener_url": "",
+  "industry_tag": "",
+  "business_description": "COSMICCRF's business activities are not described in the provided information. Based on the company name and lack of further detail, it is not possible to determine its exact revenue model or operations.",
+  "key_products": [],
+  "input_sensitivity": "Insufficient information to assess cost or revenue sensitivities specific to COSMICCRF.",
+  "output_industries": [
+    "Specialty Chemicals (CRF-related)"
+  ],
+  "output_note": "Direct buyers are likely industrial customers purchasing specialty chemicals or materials related to CRF, but this is inferred solely from the company name.",
+  "fetched_date": "2026-03-01T15:42:04.088808"
+}

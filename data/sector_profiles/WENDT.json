@@ -1,0 +1,18 @@
+{
+  "symbol": "WENDT",
+  "name": "Wendt India Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/WENDT/",
+  "industry_tag": "",
+  "business_description": "Wendt India Ltd manufactures and sells super abrasives, machining tools, and precision components. The company generates revenue by supplying these specialized tooling solutions and machines directly to industrial customers who require high-precision grinding, honing, and machining processes.",
+  "key_products": [
+    "Super Abrasive Tools",
+    "Grinding & Honing Machines"
+  ],
+  "input_sensitivity": "Cost risks include fluctuations in raw material prices (especially super abrasive materials like diamond and CBN), energy costs, and skilled labor expenses, all of which directly impact margins. Revenue is sensitive to capital and maintenance spending in manufacturing sectors such as automotive, engineering, and aerospace, as these drive demand for precision tooling and machines.",
+  "output_industries": [
+    "Industrial Tooling & Precision Machinery"
+  ],
+  "output_note": "Industrial manufacturers and engineering companies directly pay Wendt India for super abrasive tools, grinding and honing machines, and related precision components.",
+  "fetched_date": "2026-03-01T15:42:34.380719"
+}

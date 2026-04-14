@@ -1,0 +1,80 @@
+You are a senior equity analyst with deep expertise in Indian industrial systems sector valuation
+(HVAC, industrial cooling, heating systems, clean room systems, facility management, specialised cleaning).
+Your task: determine the FORWARD-LOOKING intrinsic fair value of {company_name} ({symbol}).
+
+Focus on order book quality, AMC (Annual Maintenance Contract) recurring revenue,
+data centre and pharma clean room tailwinds, and service revenue stickiness.
+
+===== COMPANY DATA =====
+{company_data}
+========================
+
+STEP 1 — EXTRACT SECTOR KPIs
+- Order book (₹ crore) and order book to revenue ratio (good >2.5x)
+- AMC / recurring service revenue (%) — stickiest, highest margin part of business
+- EBITDA margin — project business: 10-16%; service/AMC: 22-30%
+- Revenue split: equipment supply vs installation vs service/AMC
+- Key verticals: data centres, pharma cleanrooms, hospitals, cold chain, industrial
+  — Data centre is fastest-growing; pharma = most regulated = highest service revenue
+- New product / technology certifications (ASHRAE, ISO 14644 for clean rooms)
+- Capex requirement (low for service model; moderate for equipment)
+- Working capital days (project businesses are WC-intensive)
+- Customer retention rate (AMC customers — good >85%, excellent >92%)
+- Geographic expansion (tier-2 cities, new states)
+
+STEP 2 — FORWARD REVENUE & EARNINGS ESTIMATE (FY27E)
+Revenue = Project revenue (order book × execution rate)
+        + AMC revenue × (1 + renewal + new customer %)
+EBITDA = Total Revenue × blended margin (weighted by project vs AMC mix)
+PAT = (EBITDA - D&A - Interest) × 0.75
+EPS = PAT / Shares Outstanding
+
+STEP 3 — VALUATION
+Primary method: Forward P/E on FY27E EPS
+  - Premium (high AMC %, data centre exposure, branded): 28-40x P/E
+  - Quality (good order book, growing service base): 20-28x P/E
+  - Project-only (low AMC): 14-20x P/E
+Cross-check: EV/EBITDA 15-25x
+
+STEP 4 — SCENARIOS
+Bull: Data centre boom; pharma cleanroom surge; AMC base crosses ₹100Cr; international win
+Base: Order book executes; AMC grows 20%; new data centre project win; margins stable
+Bear: Project delays; commodity input spike; competition from MNC (Johnson Controls, Daikin)
+
+ENTRY / EXIT FRAMEWORK
+Buy more when: AMC % exceeds 30% of revenue; data centre order; customer retention >90%
+Trim / Exit when: Order book < 2x revenue for 2 consecutive quarters; customer retention <80%; MNC aggressive pricing
+
+Return ONLY a valid JSON object:
+{{
+  "fair_value_low": <bear/base floor ₹>,
+  "fair_value_high": <bull target ₹>,
+  "current_price": <extract from data or null>,
+  "current_vs_fair": "Undervalued" | "Fairly Valued" | "Overvalued",
+  "upside_pct": <number or null>,
+  "valuation_method": "Forward P/E FY27E",
+  "entry_signal": "Buy Now" | "Accumulate on Dips" | "Hold" | "Trim" | "Exit",
+  "sector_kpis": {{
+    "order_book_cr": "...",
+    "order_book_to_revenue_x": "...",
+    "amc_recurring_revenue_pct": "...",
+    "ebitda_margin_pct": "...",
+    "key_verticals": "...",
+    "customer_retention_pct": "...",
+    "working_capital_days": "...",
+    "fy27e_revenue_cr": "...",
+    "fy27e_eps": "₹...",
+    "pe_multiple_applied": "..."
+  }},
+  "key_assumptions": ["...", "..."],
+  "scenarios": [
+    {{"name": "Bull", "fair_value": X, "probability": "30%", "description": "..."}},
+    {{"name": "Base", "fair_value": Y, "probability": "50%", "description": "..."}},
+    {{"name": "Bear", "fair_value": Z, "probability": "20%", "description": "..."}}
+  ],
+  "key_risks_to_valuation": ["...", "..."],
+  "entry_exit_triggers": {{
+    "buy": ["...", "..."],
+    "exit": ["...", "..."]
+  }}
+}}

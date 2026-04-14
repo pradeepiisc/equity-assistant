@@ -1,0 +1,18 @@
+{
+  "symbol": "APEX",
+  "name": "Apex Frozen Foods Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/APEX/",
+  "industry_tag": "",
+  "business_description": "Apex Frozen Foods Ltd processes and exports shrimp products. The company generates revenue by selling processed and packaged shrimp to international buyers, primarily in the food industry. Its business model is based on sourcing raw shrimp, processing them, and exporting the finished products.",
+  "key_products": [
+    "Processed shrimp",
+    "Frozen shrimp"
+  ],
+  "input_sensitivity": "Cost risks include fluctuations in raw shrimp prices, fuel and energy costs for processing and cold storage, and labour expenses. Revenue and demand are sensitive to global seafood consumption trends, international trade regulations, and the health of the food import sector in key export markets.",
+  "output_industries": [
+    "Processed Seafood Export"
+  ],
+  "output_note": "International food importers and distributors pay Apex Frozen Foods Ltd for processed and frozen shrimp products.",
+  "fetched_date": "2026-03-01T15:39:33.610428"
+}

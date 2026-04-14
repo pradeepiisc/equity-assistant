@@ -1,0 +1,18 @@
+{
+  "symbol": "BIOCON",
+  "name": "Biocon Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/BIOCON/",
+  "industry_tag": "",
+  "business_description": "Biocon Ltd manufactures biotechnology products and provides research services. The company generates revenue by producing and selling biopharmaceuticals such as biosimilars, generic insulins, and APIs, as well as offering contract research and development services to global pharmaceutical companies.",
+  "key_products": [
+    "Biosimilars",
+    "Contract Research Services"
+  ],
+  "input_sensitivity": "Cost risks include fluctuations in prices of fermentation raw materials, energy, and skilled scientific labor, which directly impact production margins. Revenue is sensitive to global pharmaceutical sector R&D spending, regulatory approvals, and demand for affordable biologics and research outsourcing from pharma and biotech companies.",
+  "output_industries": [
+    "Pharma APIs / CRDMO"
+  ],
+  "output_note": "Global pharmaceutical and biotech companies directly pay Biocon for biosimilars, APIs, and contract research and development services.",
+  "fetched_date": "2026-03-01T15:42:01.466036"
+}

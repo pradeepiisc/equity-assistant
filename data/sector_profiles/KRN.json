@@ -1,0 +1,17 @@
+{
+  "symbol": "KRN",
+  "name": "KRN Heat Exchanger and Refrigeration Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/KRN/",
+  "industry_tag": "",
+  "business_description": "KRN Heat Exchanger and Refrigeration Ltd manufactures fin and tube-type heat exchangers used in heating, ventilation, air conditioning, and refrigeration systems. The company generates revenue by selling these heat exchangers directly to OEMs and system integrators in the HVACR industry, who use them as critical components in their equipment.",
+  "key_products": [
+    "fin and tube-type heat exchangers"
+  ],
+  "input_sensitivity": "Cost risks include fluctuations in prices of metals (such as copper and aluminum), energy costs, and labor expenses, all of which directly impact manufacturing margins. Revenue and demand are sensitive to capital expenditure cycles and growth in the HVACR sector, which is driven by construction activity, commercial and industrial demand for climate control, and replacement cycles.",
+  "output_industries": [
+    "HVACR Components & Equipment"
+  ],
+  "output_note": "OEMs and system integrators in the HVACR industry pay KRN directly for fin and tube-type heat exchangers used in their heating, ventilation, air conditioning, and refrigeration systems.",
+  "fetched_date": "2026-03-01T15:40:16.422477"
+}

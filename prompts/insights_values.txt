@@ -1,0 +1,54 @@
+You are a financial data extraction specialist. Your job is to find specific metric values
+mentioned in earnings call transcripts and investor presentations for {company_name} ({symbol}).
+
+METRICS TO EXTRACT:
+{metrics_list}
+
+TRANSCRIPTS AND PRESENTATIONS (multiple quarters, newest first):
+{transcripts_text}
+
+---
+INSTRUCTIONS:
+1. Read ALL the transcripts carefully. Each transcript covers one quarter.
+2. For each metric listed above, find every mention across all quarters and extract the numeric value.
+3. Identify the quarter label from context (e.g. "Q3 FY26", "Q2 FY25", "Dec 2025 quarter").
+4. Include the unit in the value (e.g. "1,200 million", "₹45 Cr", "32%", "850 clients").
+5. Use null if a metric is NOT mentioned in a specific quarter.
+6. Do NOT invent or estimate values — only extract values explicitly stated in the text.
+7. If the same metric is mentioned multiple times in a quarter, use the most definitive/final figure.
+8. For each extracted value, record the source: the filename it came from and a brief verbatim excerpt
+   (1–2 sentences max) from the document that directly supports the value.
+
+Return ONLY a valid JSON object with this exact structure:
+{
+  "quarters": ["Q3 FY26", "Q2 FY26", "Q1 FY26", "Q4 FY25", "Q3 FY25", ...],
+  "metrics": {
+    "Metric Name 1": {
+      "Q3 FY26": "value with unit or null",
+      "Q2 FY26": "value with unit or null"
+    },
+    "Metric Name 2": {
+      ...
+    }
+  },
+  "sources": {
+    "Metric Name 1|Q3 FY26": {
+      "file": "filename.pdf",
+      "excerpt": "exact quote from the document supporting this value"
+    },
+    "Metric Name 1|Q2 FY26": {
+      "file": "filename.pdf",
+      "excerpt": "exact quote..."
+    }
+  },
+  "extraction_notes": "brief note about data quality or coverage gaps"
+}
+
+Rules for sources:
+- Only populate sources for non-null values.
+- The "excerpt" must be a direct quote from the document, not a paraphrase.
+- If the same value appears in multiple documents, cite the most authoritative one (transcript > PPT).
+- Use the exact filename as it appears in the === TRANSCRIPT: filename === header.
+
+The "quarters" array must list ALL quarters found across all transcripts, newest first.
+Use the same quarter labels as keys inside each metric object and inside sources.

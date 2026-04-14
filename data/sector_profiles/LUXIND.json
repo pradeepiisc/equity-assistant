@@ -1,0 +1,18 @@
+{
+  "symbol": "LUXIND",
+  "name": "Lux Industries Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/LUXIND/",
+  "industry_tag": "",
+  "business_description": "Lux Industries Ltd manufactures and markets innerwear, thermals, and casual apparel, primarily targeting the mid-segment of the Indian hosiery market. The company generates revenue by selling branded clothing products through wholesale and retail channels. Its flagship brand is 'LUX', which drives a significant portion of its sales.",
+  "key_products": [
+    "Innerwear",
+    "Thermals"
+  ],
+  "input_sensitivity": "Cost risks include fluctuations in cotton and synthetic yarn prices, labour costs, and energy expenses, all of which directly impact manufacturing margins. Revenue and demand are sensitive to consumer spending on apparel, particularly in the mass and mid-market segments, and are influenced by retail sector health and seasonal demand for thermals.",
+  "output_industries": [
+    "Branded Hosiery & Innerwear"
+  ],
+  "output_note": "Retailers and wholesalers pay Lux Industries Ltd directly for branded innerwear and thermal apparel products.",
+  "fetched_date": "2026-03-01T15:40:47.088209"
+}

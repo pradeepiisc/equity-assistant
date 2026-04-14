@@ -1,0 +1,18 @@
+{
+  "symbol": "DBREALTY",
+  "name": "Valor Estate Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/DBREALTY/",
+  "industry_tag": "",
+  "business_description": "Valor Estate Ltd is primarily engaged in real estate construction and development, focusing on projects in and around Mumbai. The company generates revenue by developing residential and commercial properties and selling or leasing them to end users. Its income is derived from property sales, leasing, and related real estate activities.",
+  "key_products": [
+    "Residential property development",
+    "Commercial property development"
+  ],
+  "input_sensitivity": "Cost risks include fluctuations in construction raw material prices (cement, steel), labour costs, fuel and energy expenses, and interest rates affecting project financing. Revenue and demand are directly sensitive to Mumbai's real estate market health, urban population growth, and macroeconomic factors such as property affordability and mortgage availability.",
+  "output_industries": [
+    "Real Estate Development & Sales"
+  ],
+  "output_note": "End buyers (individuals and businesses) pay Valor Estate Ltd for completed residential and commercial properties, either through outright purchase or lease agreements.",
+  "fetched_date": "2026-03-01T15:44:26.250710"
+}

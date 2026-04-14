@@ -1,0 +1,18 @@
+{
+  "symbol": "NEWJAISA-SM",
+  "name": "Newjaisa Technologies Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/NEWJAISA/",
+  "industry_tag": "",
+  "business_description": "Newjaisa Technologies Ltd refurbishes and sells used laptops, monitors, tablets, and related accessories. The company acquires pre-owned electronics, restores them to working condition, and sells them at discounted prices, generating revenue from direct sales of these refurbished devices.",
+  "key_products": [
+    "Refurbished laptops",
+    "Refurbished monitors"
+  ],
+  "input_sensitivity": "Cost risks include the price and availability of used electronic devices for refurbishment, labour costs for technical staff, and logistics expenses. Revenue is sensitive to consumer and small business demand for affordable computing devices, which is influenced by overall IT spending trends and price sensitivity in the electronics market.",
+  "output_industries": [
+    "Refurbished IT Hardware Retail"
+  ],
+  "output_note": "Individual consumers and small businesses pay Newjaisa Technologies Ltd directly for refurbished laptops, monitors, tablets, and accessories.",
+  "fetched_date": "2026-03-01T15:45:16.040763"
+}

@@ -1,0 +1,18 @@
+{
+  "symbol": "EMMIL-SM",
+  "name": "Energy-Mission Machineries (India) Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/EMMIL/",
+  "industry_tag": "",
+  "business_description": "Energy-Mission Machineries (India) Ltd designs and manufactures CNC, NC, and conventional metal forming machines. The company generates revenue by selling these machines to industrial customers who require equipment for metal fabrication and forming processes.",
+  "key_products": [
+    "CNC metal forming machines",
+    "NC and conventional metal forming machines"
+  ],
+  "input_sensitivity": "Cost risks include fluctuations in steel and metal prices (key raw materials), labour costs, and energy expenses, all of which directly impact manufacturing margins. Revenue is sensitive to capital expenditure cycles in the metal fabrication and engineering sectors, as demand for new machinery rises with increased industrial investment.",
+  "output_industries": [
+    "Metal Forming Machinery & Equipment"
+  ],
+  "output_note": "Industrial manufacturers and fabrication companies directly pay Energy-Mission Machineries (India) Ltd for CNC, NC, and conventional metal forming machines.",
+  "fetched_date": "2026-03-01T15:41:10.633142"
+}

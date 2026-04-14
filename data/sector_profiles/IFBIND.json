@@ -1,0 +1,19 @@
+{
+  "symbol": "IFBIND",
+  "name": "IFB Industries Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/IFBIND/",
+  "industry_tag": "",
+  "business_description": "IFB Industries Ltd operates in two main segments: it manufactures and sells consumer durables such as washing machines, dishwashers, and kitchen appliances to retail customers, and it produces fine blanked components for automotive and electrical OEMs. The company generates revenue by selling finished appliances through retail channels and supplying precision-engineered components to manufacturers in the automotive and electrical sectors.",
+  "key_products": [
+    "washing machines",
+    "fine blanked automotive components"
+  ],
+  "input_sensitivity": "(1) Cost risks: Margins are sensitive to steel and other metal prices (for both appliances and components), energy costs, and labour expenses. (2) Revenue/demand risks: Demand for consumer durables is driven by discretionary consumer spending and housing trends, while demand for fine blanked components depends on the production volumes of automotive and electrical OEMs.",
+  "output_industries": [
+    "Consumer Appliances & White Goods",
+    "Automotive Fine Blanking Components"
+  ],
+  "output_note": "IFB Industries is paid by retail distributors and end-consumers for its appliances, and by automotive and electrical OEMs for its fine blanked components.",
+  "fetched_date": "2026-03-01T15:43:01.092287"
+}

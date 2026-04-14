@@ -1,0 +1,17 @@
+{
+  "symbol": "SILVERIETF",
+  "name": "ICICI Prudential Silver ETF",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/SILVERIETF/",
+  "industry_tag": "",
+  "business_description": "ICICI Prudential Silver ETF is an exchange-traded fund that tracks the price of physical silver. It makes money by charging management fees to investors who buy and hold units of the ETF, which invests in silver bullion and aims to mirror its market price.",
+  "key_products": [
+    "Silver ETF units"
+  ],
+  "input_sensitivity": "Cost risks: The fund's margins are sensitive to regulatory fees, custodian charges, and management expenses, but not to commodity prices directly as these are passed to investors. Revenue/demand risks: Demand is driven by investor appetite for silver as an asset class, influenced by macro factors like inflation, interest rates, and precious metals market sentiment.",
+  "output_industries": [
+    "Exchange-Traded Fund (ETF) Asset Management"
+  ],
+  "output_note": "Individual and institutional investors pay the company management fees for providing exposure to silver through ETF units.",
+  "fetched_date": "2026-03-01T15:41:29.893329"
+}

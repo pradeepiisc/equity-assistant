@@ -1,0 +1,18 @@
+{
+  "symbol": "HIRECT",
+  "name": "Hind Rectifiers Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/HIRECT/",
+  "industry_tag": "",
+  "business_description": "Hind Rectifiers Ltd manufactures and sells power electronic equipment such as converters, inverters, rectifiers, and propulsion systems, primarily for railway applications. The company generates revenue by supplying these specialized electrical products and systems directly to railway operators and related infrastructure projects.",
+  "key_products": [
+    "Converters and inverters for locomotives",
+    "Traction transformers and switch board cabinets"
+  ],
+  "input_sensitivity": "Cost risks: Margins are sensitive to prices of electrical and electronic raw materials (copper, steel, semiconductors), labor, and energy costs. Revenue/demand risks: Demand is directly driven by railway infrastructure spending, new locomotive procurement, and modernization projects by Indian Railways and related public sector undertakings.",
+  "output_industries": [
+    "Railway Electrification & Locomotive Systems"
+  ],
+  "output_note": "Railway operators and public sector railway infrastructure companies directly pay Hind Rectifiers Ltd for power electronic equipment and systems used in locomotives and railway electrification projects.",
+  "fetched_date": "2026-03-01T15:45:12.790364"
+}

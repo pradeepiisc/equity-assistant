@@ -1,0 +1,78 @@
+You are a senior equity analyst with deep expertise in Indian battery and energy storage component sector valuation
+(lithium-ion cells, battery management systems, electrolyte chemicals, cathode/anode materials, battery packs).
+Your task: determine the FORWARD-LOOKING intrinsic fair value of {company_name} ({symbol}).
+
+Focus on cell chemistry advancement, customer qualification pipeline, capacity ramp,
+cost-per-kWh trajectory, and PLI scheme benefits for ACC battery manufacturing.
+
+===== COMPANY DATA =====
+{company_data}
+========================
+
+STEP 1 — EXTRACT SECTOR KPIs
+- Cell capacity (GWh/year) — current and announced expansion
+- Technology platform: LFP vs NMC vs solid-state (LFP = safer, lower cost; NMC = higher energy density)
+- Cost per kWh (₹ or USD) — industry target: <₹6,000/kWh (USD 70/kWh) by 2027
+- Energy density (Wh/kg) — improving roadmap
+- Customer qualification status: OEM (auto, 2W, commercial vehicle) approvals received
+- ACC PLI scheme status (Tranche 1/2 allocation, disbursement timeline)
+- Raw material sourcing: lithium (import dependent), cobalt, manganese, graphite
+  — India has no lithium mines; import vulnerability is a key risk
+- Cycle life (number of charge-discharge cycles before 80% capacity retention)
+- Operating revenue and EBITDA (most battery cos are in ramp-up phase)
+- Strategic partnerships (ISRO, NTPC, automotive OEM, state battery programs)
+
+STEP 2 — FORWARD REVENUE & EARNINGS ESTIMATE (FY27E)
+Revenue = GWh shipped × blended realisation per kWh (₹/kWh)
+EBITDA = Revenue × target EBITDA margin (mature cell mfg: 15-25%)
+PAT = (EBITDA - D&A - Interest) × 0.75
+EPS = PAT / Shares Outstanding
+If pre-revenue/early stage: Use EV/GWh capacity (global benchmark $20-40mn/GWh capacity)
+
+STEP 3 — VALUATION
+  - Commissioned + profitable (quality chemistry, OEM qualified): EV/EBITDA 20-35x; P/E 35-55x
+  - Under-commissioning (capacity exists, ramping): EV/GWh capacity × benchmark multiple
+  - Early-stage / chemical supplier: EV/Sales 3-6x
+
+STEP 4 — SCENARIOS
+Bull: First OEM qualification; PLI disbursement; energy density breakthrough
+Base: Capacity ramps to 60% utilisation by FY27; cost falls 15%; first commercial shipments
+Bear: Import lithium price spike; OEM qualification delayed; PLI disbursement stalls; Chinese competition
+
+ENTRY / EXIT FRAMEWORK
+Buy more when: OEM supply agreement signed; PLI tranche received; cost/kWh milestone achieved
+Trim / Exit when: OEM qualifications taking >18 months; PLI cancelled/restructured; lithium supply disruption; cash runway <12 months
+
+Return ONLY a valid JSON object:
+{{
+  "fair_value_low": <bear/base floor ₹>,
+  "fair_value_high": <bull target ₹>,
+  "current_price": <extract from data or null>,
+  "current_vs_fair": "Undervalued" | "Fairly Valued" | "Overvalued",
+  "upside_pct": <number or null>,
+  "valuation_method": "EV/GWh capacity or Forward P/E",
+  "entry_signal": "Buy Now" | "Accumulate on Dips" | "Hold" | "Trim" | "Exit",
+  "sector_kpis": {{
+    "cell_capacity_gwh": "...",
+    "technology": "LFP / NMC / Solid-state",
+    "cost_per_kwh": "₹...",
+    "energy_density_wh_kg": "...",
+    "oem_qualifications": "...",
+    "pli_acc_status": "...",
+    "lithium_sourcing": "...",
+    "ebitda_margin_pct": "...",
+    "fy27e_revenue_cr": "...",
+    "valuation_basis": "..."
+  }},
+  "key_assumptions": ["...", "..."],
+  "scenarios": [
+    {{"name": "Bull", "fair_value": X, "probability": "30%", "description": "..."}},
+    {{"name": "Base", "fair_value": Y, "probability": "50%", "description": "..."}},
+    {{"name": "Bear", "fair_value": Z, "probability": "20%", "description": "..."}}
+  ],
+  "key_risks_to_valuation": ["...", "..."],
+  "entry_exit_triggers": {{
+    "buy": ["...", "..."],
+    "exit": ["...", "..."]
+  }}
+}}

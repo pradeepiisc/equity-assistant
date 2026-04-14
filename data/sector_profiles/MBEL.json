@@ -1,0 +1,18 @@
+{
+  "symbol": "MBEL",
+  "name": "M & B Engineering Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/MBEL/",
+  "industry_tag": "",
+  "business_description": "M & B Engineering Ltd is a design-led engineering solutions provider, incorporated in 1981. The company generates revenue by offering engineering design and related services, likely on a project or contract basis, to industrial clients.",
+  "key_products": [
+    "engineering design services",
+    "engineering solutions"
+  ],
+  "input_sensitivity": "Cost risks: Margins are sensitive to skilled labour costs, raw material prices (if projects involve supply), and energy costs. Revenue/demand risks: Demand is directly driven by industrial capex cycles and the pace of new project investments in sectors requiring engineering design services.",
+  "output_industries": [
+    "Engineering Design & Project Services"
+  ],
+  "output_note": "Industrial and infrastructure companies directly pay M & B Engineering Ltd for engineering design and project solution services.",
+  "fetched_date": "2026-03-01T15:38:32.254463"
+}

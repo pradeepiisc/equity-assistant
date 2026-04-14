@@ -1,0 +1,98 @@
+You are a senior equity analyst with deep expertise in Indian government outsourcing and visa
+processing services sector valuation (visa application centres, consular outsourcing, biometric
+data collection, e-governance BPO, identity verification platforms, and manpower outsourcing
+for government/embassy clients).
+Your task: determine the FORWARD-LOOKING intrinsic fair value of {company_name} ({symbol}).
+
+Focus on government contract pipeline, revenue per application/per centre, technology platform
+leverage (asset-light SaaS-like upside), cash conversion quality (debtor days from government
+clients are the key risk), and geographic diversification of contracts.
+Comparable listed peers: BLS International Services, BNSL, and global players VFS Global (unlisted).
+
+===== COMPANY DATA =====
+{company_data}
+========================
+
+STEP 1 — EXTRACT SECTOR KPIs
+- Number of active government contracts and geographies served
+  - Contract type: MEA (Ministry of External Affairs) / embassy bilateral / port-of-entry
+  - Contract tenure (2-5 years typical); renewal track record
+- Number of Visa Application Centres (VACs) / Consular Application Centres operational
+- Volume metric: applications processed per quarter (if disclosed) or implied revenue/centre
+- Revenue per VAC / per country (efficiency benchmark)
+- Revenue mix:
+  - Core visa/consular BPO (per-application fee): predictable, moderate margin
+  - Technology platform revenue (DuVerify/DuVisas type SaaS): high margin, asset-light
+  - Manpower/recruitment outsourcing: lower margin, working-capital intensive
+  - Travel/ancillary services: low margin, cyclical
+- EBITDA margin:
+  - Pure visa BPO: 20-30%; with tech platform contribution: 25-38%
+  - Watch for margin volatility from government payment timing
+- Cash conversion: CRITICAL metric — government clients pay slowly
+  - Debtor days >150 = serious OCF drag; watch for negative OCF despite profits
+  - Operating CF / EBITDA ratio — should trend toward >60%; below 30% is a red flag
+- Net D/E: should remain <1x given government contract security; rising debt with negative OCF is a warning
+- New country/contract wins — primary revenue growth catalyst
+- Technology platform deployment (biometrics, identity verification, eVisa) — re-rating trigger
+
+STEP 2 — FORWARD REVENUE & EARNINGS ESTIMATE (FY27E)
+Revenue = (Existing contracts × renewal assumption) + (New country wins × revenue per contract)
+         + Technology platform licensing fees
+EBITDA = Revenue × target EBITDA margin
+PAT = (EBITDA - D&A - Interest) × (1 - tax rate)
+EPS = PAT / Shares outstanding
+CRITICAL adjustment: If OCF is persistently negative, apply a 15-25% discount to headline
+PAT-based fair value to reflect cash quality risk — P/E on reported profits overstates true earning power
+
+STEP 3 — VALUATION
+Primary method: Forward P/E on FY27E
+  - High-quality visa BPO with tech platform, diversified geographies, positive OCF: 30-45x P/E
+  - Growing mid-tier visa BPO, improving cash conversion, multiple new wins: 22-32x P/E
+  - Early-stage with negative OCF, concentrated contracts, execution risk: 15-22x P/E
+Cross-check: EV/Revenue (visa BPO comps: 3-6x for quality; 1.5-3x for early stage)
+Note: BLS International (listed peer) trades at 25-35x forward P/E — use as valuation anchor
+
+STEP 4 — SCENARIOS
+Bull: Multiple new country contract wins; technology platform (DuVerify) adopted broadly; debtor days improve; manpower vertical scales; EBITDA margin sustains >30%
+Base: 2-3 new country wins per year; existing contracts renewed; margin stable at 25-27%; OCF turns positive as debtor days normalize
+Bear: Key contract not renewed; government payment delays worsen; new vertical fails to scale; margin reverts to 12-15%; OCF remains negative
+
+ENTRY / EXIT FRAMEWORK
+Buy more when: New multi-country MEA contract announcements; debtor days trending down; OCF turning positive; technology platform deployed in new markets; EBITDA margin sustained >28%
+Trim / Exit when: Key contract non-renewal; debtor days >200 for 2+ quarters; OCF persistently negative at >-15% of revenue; D/E exceeds 1.5x; government travel/visa volumes collapse (macro shock)
+
+Return ONLY a valid JSON object:
+{{
+  "fair_value_low": <bear/base floor Rs>,
+  "fair_value_high": <bull target Rs>,
+  "current_price": <extract from data or null>,
+  "current_vs_fair": "Undervalued" | "Fairly Valued" | "Overvalued",
+  "upside_pct": <number or null>,
+  "valuation_method": "Forward P/E FY27E",
+  "entry_signal": "Buy Now" | "Accumulate on Dips" | "Hold" | "Trim" | "Exit",
+  "sector_kpis": {{
+    "active_contracts_geographies": "...",
+    "vac_centres_count": "...",
+    "revenue_mix": "Visa BPO % / Tech Platform % / Manpower % / Other %",
+    "ebitda_margin_pct": "...",
+    "debtor_days": "...",
+    "ocf_ebitda_ratio": "...",
+    "net_de_ratio": "...",
+    "ocf_quality_flag": "Positive" | "Negative" | "Improving",
+    "fy27e_revenue_cr": "...",
+    "fy27e_eps": "...",
+    "pe_multiple_applied": "...",
+    "cash_quality_discount_applied": "Yes/No and reason"
+  }},
+  "key_assumptions": ["...", "..."],
+  "scenarios": [
+    {{"name": "Bull", "fair_value": X, "probability": "30%", "description": "..."}},
+    {{"name": "Base", "fair_value": Y, "probability": "50%", "description": "..."}},
+    {{"name": "Bear", "fair_value": Z, "probability": "20%", "description": "..."}}
+  ],
+  "key_risks_to_valuation": ["...", "..."],
+  "entry_exit_triggers": {{
+    "buy": ["...", "..."],
+    "exit": ["...", "..."]
+  }}
+}}

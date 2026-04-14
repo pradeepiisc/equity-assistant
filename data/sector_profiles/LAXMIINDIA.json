@@ -1,0 +1,18 @@
+{
+  "symbol": "LAXMIINDIA",
+  "name": "Laxmi India Finance Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/LAXMIINDIA/",
+  "industry_tag": "",
+  "business_description": "Laxmi India Finance Ltd is a Non-Banking Financial Company (NBFC) that provides financial services such as loans and credit facilities. The company earns revenue primarily through interest income and fees charged on the loans it extends to its customers.",
+  "key_products": [
+    "Loans",
+    "Credit facilities"
+  ],
+  "input_sensitivity": "Cost risks: The company's margins are sensitive to changes in borrowing costs, primarily driven by interest rates in the financial markets. Revenue/demand risks: Demand for loans is directly influenced by macroeconomic conditions, credit demand in the economy, and regulatory policies affecting NBFCs.",
+  "output_industries": [
+    "Retail & SME Lending NBFC"
+  ],
+  "output_note": "Individuals and small businesses directly pay Laxmi India Finance Ltd for loans and credit facilities provided to them.",
+  "fetched_date": "2026-03-01T15:41:48.453665"
+}

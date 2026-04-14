@@ -1,0 +1,18 @@
+{
+  "symbol": "QPOWER",
+  "name": "Quality Power Electrical Equipments Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/QPOWER/",
+  "industry_tag": "",
+  "business_description": "Quality Power Electrical Equipments Ltd manufactures and sells energy transition equipment and power technologies. The company generates revenue by producing and supplying electrical equipment used in power infrastructure and energy management projects.",
+  "key_products": [
+    "energy transition equipment",
+    "power technologies"
+  ],
+  "input_sensitivity": "Cost risks: Margins are sensitive to prices of metals (such as copper, aluminum, steel), electronic components, and energy, as well as labor costs. Revenue/demand risks: Demand is directly driven by capital expenditure in power infrastructure, grid modernization, and energy transition projects, which are influenced by government policies and utility sector investments.",
+  "output_industries": [
+    "Power Transmission & Distribution Equipment"
+  ],
+  "output_note": "Utilities, EPC contractors, and power infrastructure companies directly pay Quality Power Electrical Equipments Ltd for energy transition equipment and power technology products.",
+  "fetched_date": "2026-03-01T15:37:55.155927"
+}

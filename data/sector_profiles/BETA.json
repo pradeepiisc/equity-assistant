@@ -1,0 +1,18 @@
+{
+  "symbol": "BETA",
+  "name": "Beta Drugs Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/BETA/",
+  "industry_tag": "",
+  "business_description": "Beta Drugs Ltd manufactures a wide range of oncology (anti-cancer) drugs, supplying both the domestic Indian market and export markets. The company generates revenue by producing and selling these pharmaceutical formulations to hospitals, pharmacies, and distributors.",
+  "key_products": [
+    "Oncology (anti-cancer) drugs",
+    "Pharmaceutical formulations"
+  ],
+  "input_sensitivity": "Cost risks: Margins are sensitive to prices of active pharmaceutical ingredients (APIs), solvents, packaging materials, energy, and labor costs. Revenue/demand risks: Demand is directly driven by cancer incidence rates, healthcare infrastructure spending, and government procurement policies in both domestic and export markets.",
+  "output_industries": [
+    "Pharma Formulations (Oncology)"
+  ],
+  "output_note": "Hospitals, pharmacies, and pharmaceutical distributors directly pay Beta Drugs Ltd for oncology (anti-cancer) drug formulations.",
+  "fetched_date": "2026-03-01T15:41:03.235382"
+}

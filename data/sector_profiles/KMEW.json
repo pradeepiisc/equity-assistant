@@ -1,0 +1,18 @@
+{
+  "symbol": "KMEW",
+  "name": "Knowledge Marine & Engineering Works Ltd",
+  "exchange": "BSE",
+  "screener_url": "https://www.screener.in/company/KMEW/",
+  "industry_tag": "",
+  "business_description": "Knowledge Marine & Engineering Works Ltd generates revenue by providing dredging services, owning and operating marine craft, and offering repair, maintenance, and refitting services for marine vessels and infrastructure. The company earns fees from contracts for these marine engineering services, primarily from port authorities and maritime infrastructure operators.",
+  "key_products": [
+    "Dredging services",
+    "Marine craft repair and maintenance"
+  ],
+  "input_sensitivity": "Cost risks include fuel prices, labour costs, marine equipment and spare parts, and interest rates affecting capital expenditure. Revenue is sensitive to government and port authority spending on maritime infrastructure, port expansion, and maintenance budgets, as well as overall trade and shipping activity.",
+  "output_industries": [
+    "Marine Engineering & Dredging Services"
+  ],
+  "output_note": "Port authorities and maritime infrastructure operators directly pay the company for dredging, marine craft operation, and repair/maintenance services.",
+  "fetched_date": "2026-03-01T15:39:36.587900"
+}

@@ -1,0 +1,17 @@
+{
+  "symbol": "SHREEOSFM-SM",
+  "name": "Shree OSFM E-Mobility Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/SHREEOSFM/",
+  "industry_tag": "",
+  "business_description": "Shree OSFM E-Mobility Ltd provides vehicle rental services, generating revenue by leasing vehicles to customers for a fee. The company earns money through rental charges based on usage duration and vehicle type.",
+  "key_products": [
+    "Vehicle rental services"
+  ],
+  "input_sensitivity": "(1) Cost risks: The company's margins are sensitive to vehicle acquisition costs, maintenance expenses, fuel prices (if not fully electric), and labor costs. (2) Revenue/demand risks: Demand is directly driven by overall economic activity and corporate or institutional demand for mobility solutions, which can fluctuate with business travel trends and transportation needs.",
+  "output_industries": [
+    "Vehicle / Equipment Rental"
+  ],
+  "output_note": "Corporate and institutional clients directly pay Shree OSFM E-Mobility Ltd for vehicle rental services.",
+  "fetched_date": "2026-03-01T15:40:31.352620"
+}

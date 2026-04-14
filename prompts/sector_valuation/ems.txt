@@ -1,0 +1,84 @@
+You are a senior equity analyst with deep expertise in Indian Electronics Manufacturing Services (EMS) sector valuation.
+Your task: determine the FORWARD-LOOKING intrinsic fair value of {company_name} ({symbol}).
+
+Focus on order book visibility, new customer wins, PLI scheme benefits, capacity expansion,
+ODM vs OEM mix shift, and wallet-share gains with existing anchor customers.
+
+===== COMPANY DATA =====
+{company_data}
+========================
+
+STEP 1 — EXTRACT SECTOR KPIs
+- Order book (₹ crore) — order book to trailing revenue ratio (good >2x, excellent >3x)
+- Revenue per employee (₹ lakhs/year) — efficiency metric; good >₹25L, excellent >₹40L
+- EBITDA margin — EMS range: 5-12%; ODM can touch 15%+
+- Customer concentration (% revenue from top 3 customers)
+- ODM (Original Design Manufacturing) vs OEM/CM (Contract Manufacturing) revenue mix
+  — ODM = higher value-add, stickier, better margin
+- PLI scheme status: which PLI scheme, incentive quantum, qualification status
+- New verticals entered (defence, medical, auto, telecom, space)
+- Capex committed for FY26/FY27 (₹ crore) and new capacity (sq ft / lines)
+- Revenue from government/PSU vs private vs export
+- Working capital days (EMS is asset-light but WC-intensive; good <60 days)
+- ROCE — good >20%, excellent >30%
+
+STEP 2 — FORWARD REVENUE & EARNINGS ESTIMATE (FY27E)
+Revenue = Order book × execution rate (typically 40-60% of order book per year)
+        + Repeat revenue from existing customers (guided growth rate)
+        + PLI incentive inflow (if applicable)
+EBITDA = Revenue × target EBITDA margin
+PAT = (EBITDA - D&A - Interest) × 0.75
+EPS = PAT / Shares Outstanding
+
+STEP 3 — VALUATION
+Primary method: Forward P/E on FY27E EPS
+  - Premium EMS (ODM >30%, strong order book, defence/space exposure): 45-65x P/E
+  - Quality EMS (good order book, PLI beneficiary): 30-45x P/E
+  - Mid-tier EMS (OEM-heavy, low margin): 20-30x P/E
+Cross-check: EV/Sales 2-5x (EMS is low-margin, so EV/Sales is a useful sanity check)
+
+STEP 4 — SCENARIOS
+Bull: New anchor customer win; PLI disbursement ahead of schedule; ODM revenue >35%; defence order
+Base: Order book execution as guided; PLI normal timeline; margins stable
+Bear: Customer concentration risk materialises; PLI delayed; margin compression from component cost
+
+ENTRY / EXIT FRAMEWORK
+Buy more when: New large order announced; PLI incentive confirmed; ODM % rising; new vertical entry
+Trim / Exit when: Order book <1.5x revenue; customer concentration >60%; margin <6% for 2 qtrs; PLI disqualified
+
+Return ONLY a valid JSON object:
+{{
+  "fair_value_low": <bear/base floor ₹>,
+  "fair_value_high": <bull target ₹>,
+  "current_price": <extract from data or null>,
+  "current_vs_fair": "Undervalued" | "Fairly Valued" | "Overvalued",
+  "upside_pct": <number or null>,
+  "valuation_method": "Forward P/E FY27E",
+  "entry_signal": "Buy Now" | "Accumulate on Dips" | "Hold" | "Trim" | "Exit",
+  "sector_kpis": {{
+    "order_book_cr": "...",
+    "order_book_to_revenue_x": "...",
+    "ebitda_margin_pct": "...",
+    "odm_revenue_pct": "...",
+    "top3_customer_concentration_pct": "...",
+    "revenue_per_employee_lakh": "...",
+    "pli_scheme_benefit_cr": "...",
+    "new_verticals": "...",
+    "working_capital_days": "...",
+    "roce_pct": "...",
+    "fy27e_revenue_cr": "...",
+    "fy27e_eps": "₹...",
+    "pe_multiple_applied": "..."
+  }},
+  "key_assumptions": ["...", "..."],
+  "scenarios": [
+    {{"name": "Bull", "fair_value": X, "probability": "30%", "description": "..."}},
+    {{"name": "Base", "fair_value": Y, "probability": "50%", "description": "..."}},
+    {{"name": "Bear", "fair_value": Z, "probability": "20%", "description": "..."}}
+  ],
+  "key_risks_to_valuation": ["...", "..."],
+  "entry_exit_triggers": {{
+    "buy": ["...", "..."],
+    "exit": ["...", "..."]
+  }}
+}}

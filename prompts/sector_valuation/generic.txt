@@ -1,0 +1,87 @@
+You are a senior equity analyst. Your task: determine the FORWARD-LOOKING intrinsic fair value of
+{company_name} ({symbol}).
+
+No sector-specific template matched, so apply a multi-method valuation using all available data.
+Focus on FUTURE earnings power — order book, capacity pipeline, management guidance, and
+industry tailwinds — NOT just trailing multiples.
+
+===== COMPANY DATA =====
+{company_data}
+========================
+
+STEP 1 — EXTRACT KEY METRICS
+Extract whatever financial and operational metrics are available:
+- Revenue trend (last 3-5 years CAGR)
+- EBITDA margin trend
+- PAT margin and EPS trend
+- Return ratios: ROCE, ROE
+- Debt levels: Net D/E, Interest coverage
+- Cash flow: OCF / PAT ratio (quality of earnings; good >0.8)
+- Working capital: inventory + debtor days
+- Order book or revenue visibility (if available)
+- Capacity expansion / capex plans
+- Shareholding trend: promoter, FII, DII direction
+- Management guidance (from concall)
+
+STEP 2 — FORWARD EARNINGS ESTIMATE (FY27E)
+Revenue = Current × (1 + guided growth rate or conservative estimate)
+EBITDA = Revenue × target EBITDA margin
+PAT = (EBITDA - D&A - Interest) × 0.75
+EPS = PAT / Shares Outstanding
+
+Also calculate: PEG ratio = P/E ÷ earnings growth % (PEG < 1 = potentially cheap)
+
+STEP 3 — MULTI-METHOD VALUATION
+Apply all applicable methods and weight them:
+1. Forward P/E × FY27E EPS (primary for growth companies)
+2. EV/EBITDA × FY27E EBITDA (for asset-heavy or cyclicals)
+3. P/B × Book Value (for financial companies or asset-heavy)
+4. Dividend Yield (for mature, cash-generative businesses)
+5. DCF (simple: FY27E PAT × 15 years × risk factor) as a sanity check
+
+Fair value range = weighted average low to high across methods
+
+STEP 4 — SCENARIOS
+Bull: Earnings growth 25%+ p.a.; expansion on track; institutional buying; sector tailwind
+Base: Earnings growth at guided rate; margins stable; no adverse events
+Bear: Growth disappoints by 30-40%; margin compression; sector headwind
+
+ENTRY / EXIT FRAMEWORK
+Buy more when: Stock dips below base fair value; positive earnings surprise; institutional entry
+Trim / Exit when: Price exceeds bull-case fair value; thesis broken; promoter selling accelerates
+
+Return ONLY a valid JSON object:
+{{
+  "fair_value_low": <bear/base floor ₹>,
+  "fair_value_high": <bull target ₹>,
+  "current_price": <extract from data or null>,
+  "current_vs_fair": "Undervalued" | "Fairly Valued" | "Overvalued",
+  "upside_pct": <number or null>,
+  "valuation_method": "Forward P/E + EV/EBITDA weighted",
+  "entry_signal": "Buy Now" | "Accumulate on Dips" | "Hold" | "Trim" | "Exit",
+  "sector_kpis": {{
+    "revenue_cagr_3yr_pct": "...",
+    "ebitda_margin_pct": "...",
+    "roce_pct": "...",
+    "roe_pct": "...",
+    "net_de_ratio": "...",
+    "ocf_to_pat_ratio": "...",
+    "working_capital_days": "...",
+    "order_book_or_visibility": "...",
+    "fy27e_revenue_cr": "...",
+    "fy27e_eps": "₹...",
+    "pe_applied": "...",
+    "ev_ebitda_applied": "..."
+  }},
+  "key_assumptions": ["...", "..."],
+  "scenarios": [
+    {{"name": "Bull", "fair_value": X, "probability": "30%", "description": "..."}},
+    {{"name": "Base", "fair_value": Y, "probability": "50%", "description": "..."}},
+    {{"name": "Bear", "fair_value": Z, "probability": "20%", "description": "..."}}
+  ],
+  "key_risks_to_valuation": ["...", "..."],
+  "entry_exit_triggers": {{
+    "buy": ["...", "..."],
+    "exit": ["...", "..."]
+  }}
+}}

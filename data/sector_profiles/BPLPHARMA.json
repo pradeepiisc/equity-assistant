@@ -1,0 +1,18 @@
+{
+  "symbol": "BPLPHARMA",
+  "name": "BPLPHARMA",
+  "exchange": "BSE",
+  "screener_url": "",
+  "industry_tag": "",
+  "business_description": "BPLPHARMA is engaged in the development, manufacturing, and sale of pharmaceutical products. The company generates revenue by producing and selling medicines and related pharmaceutical formulations to distributors, hospitals, and pharmacies.",
+  "key_products": [
+    "pharmaceutical formulations",
+    "medicines"
+  ],
+  "input_sensitivity": "Cost risks include fluctuations in prices of active pharmaceutical ingredients (APIs), excipients, packaging materials, energy, and labor. Revenue is sensitive to healthcare sector demand, regulatory approvals, and government healthcare spending.",
+  "output_industries": [
+    "Pharmaceutical Formulations Manufacturing"
+  ],
+  "output_note": "Distributors, hospitals, and pharmacies pay BPLPHARMA for its pharmaceutical formulations and medicines.",
+  "fetched_date": "2026-03-01T15:40:56.185659"
+}

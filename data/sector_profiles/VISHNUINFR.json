@@ -1,0 +1,18 @@
+{
+  "symbol": "VISHNUINFR-SM",
+  "name": "Vishnusurya Projects and Infra Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/VISHNUINFR/",
+  "industry_tag": "",
+  "business_description": "Vishnusurya Projects and Infra Ltd executes turnkey contracts for large-scale infrastructure construction projects. The company generates revenue by designing, building, and delivering completed infrastructure assets to clients, typically under fixed-price or milestone-based contracts.",
+  "key_products": [
+    "Turnkey infrastructure construction",
+    "Project management services"
+  ],
+  "input_sensitivity": "(1) Cost risks: Margins are sensitive to fluctuations in raw material prices (cement, steel, aggregates), labour costs, fuel and energy expenses, and interest rates impacting project financing. (2) Revenue/demand risks: Demand is directly driven by government and private sector capital expenditure on infrastructure development, especially in roads, bridges, and civil works.",
+  "output_industries": [
+    "Infrastructure EPC / Civil Construction"
+  ],
+  "output_note": "Government agencies and private developers pay Vishnusurya Projects and Infra Ltd to construct and deliver completed infrastructure projects under turnkey contracts.",
+  "fetched_date": "2026-03-01T15:43:09.602386"
+}

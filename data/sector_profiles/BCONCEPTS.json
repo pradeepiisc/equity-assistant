@@ -1,0 +1,18 @@
+{
+  "symbol": "BCONCEPTS",
+  "name": "Brand Concepts Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/BCONCEPTS/",
+  "industry_tag": "",
+  "business_description": "Brand Concepts Ltd designs, manufactures, and sells bags, backpacks, and fashion accessories. The company generates revenue by selling these products to retailers, distributors, and possibly directly to consumers in both Indian and international markets.",
+  "key_products": [
+    "bags",
+    "backpacks"
+  ],
+  "input_sensitivity": "Cost risks include fluctuations in raw material prices (such as synthetic fabrics, zippers, and metal fittings), labor costs, and logistics/fuel expenses, all of which can impact manufacturing margins. Revenue is sensitive to discretionary consumer spending and retail sector health, as demand for fashion accessories and bags is closely tied to consumer confidence and lifestyle trends.",
+  "output_industries": [
+    "Fashion Accessories & Luggage Manufacturing"
+  ],
+  "output_note": "Retailers, distributors, and possibly end consumers pay Brand Concepts Ltd for its branded bags, backpacks, and fashion accessories.",
+  "fetched_date": "2026-03-01T15:43:17.875474"
+}

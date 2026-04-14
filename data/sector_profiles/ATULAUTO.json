@@ -1,0 +1,18 @@
+{
+  "symbol": "ATULAUTO",
+  "name": "Atul Auto Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/ATULAUTO/",
+  "industry_tag": "",
+  "business_description": "Atul Auto Ltd manufactures and exports auto rickshaws, generating revenue primarily from the sale of these vehicles to domestic and international buyers. The company earns money by producing and selling three-wheeled commercial vehicles used for passenger and goods transport.",
+  "key_products": [
+    "Auto rickshaws (three-wheelers)",
+    "Spare parts for auto rickshaws"
+  ],
+  "input_sensitivity": "Cost risks include fluctuations in prices of steel, rubber, and other raw materials, as well as labour and energy costs, which directly impact manufacturing margins. Revenue is sensitive to demand for affordable commercial transport solutions, which is driven by urbanization, small business activity, and regulatory policies affecting three-wheeler usage.",
+  "output_industries": [
+    "Three-Wheeler OEM (Passenger & Cargo)"
+  ],
+  "output_note": "Dealers, fleet operators, and export distributors directly pay Atul Auto Ltd for new auto rickshaws and related spare parts.",
+  "fetched_date": "2026-03-01T15:42:19.708427"
+}

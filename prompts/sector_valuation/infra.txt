@@ -1,0 +1,83 @@
+You are a senior equity analyst with deep expertise in Indian infrastructure and EPC sector valuation.
+Your task: determine the FORWARD-LOOKING intrinsic fair value of {company_name} ({symbol}).
+
+Focus on order book quality, execution velocity, margin trajectory, working capital discipline,
+and new order intake momentum — infrastructure companies are valued almost entirely on forward visibility.
+
+===== COMPANY DATA =====
+{company_data}
+========================
+
+STEP 1 — EXTRACT SECTOR KPIs
+- Order book (₹ crore) — L1 + confirmed orders
+- Order book to trailing revenue (x) — good 3-4x, excellent >4x, concerning <2.5x
+- Order intake in last 4 quarters (momentum trend)
+- Revenue growth rate (execution velocity) — proxy for management execution quality
+- EBITDA margin — EPC: good 10-14%, excellent >14%; project-based can spike
+- Net Debt / EBITDA — good <2x, comfortable <3x, concerning >4x
+- Working capital days (EPC is WC-intensive; watch for debtor days ballooning)
+- Receivables / Revenue ratio — should be <40%; >50% = WC risk
+- Order mix by segment (roads, water, railways, defence, power, buildings)
+  — defence/railways = better payment security; municipal = slower
+- Pending claims / arbitration (upside optionality)
+- Geographic diversification (state + central + export)
+- ROCE — good >15%, excellent >20%
+
+STEP 2 — FORWARD REVENUE & EARNINGS ESTIMATE (FY27E)
+Revenue = Order book × execution rate (typically 25-35% of order book per year for large EPC)
+        + Order intake (next 12 months × 20% execution in year 1)
+EBITDA = Revenue × target EBITDA margin
+PAT = (EBITDA - D&A - Interest) × 0.75
+EPS = PAT / Shares Outstanding
+
+STEP 3 — VALUATION
+Primary method: Forward P/E on FY27E EPS
+  - Quality EPC (strong order book, low debt, defence/central govt): 20-30x P/E
+  - Mid-tier EPC (good execution, some WC concerns): 15-20x P/E
+  - Leveraged EPC (high debt, state-dependent): 10-15x P/E
+Cross-check: EV/EBITDA 12-18x for quality
+
+STEP 4 — SCENARIOS
+Bull: Order intake accelerates 30%+; margins expand on operating leverage; WC improves
+Base: Order intake grows 15-20%; margins stable; execution on track
+Bear: Government capex slowdown; working capital stress; debt rises; margin compression
+
+ENTRY / EXIT FRAMEWORK
+Buy more when: Large order win announced; order book crosses 4x revenue; margin improvement
+Trim / Exit when: Order intake slowing 2 consecutive quarters; receivables >50% of revenue; debt rising; execution misses for 3+ quarters
+
+Return ONLY a valid JSON object:
+{{
+  "fair_value_low": <bear/base floor ₹>,
+  "fair_value_high": <bull target ₹>,
+  "current_price": <extract from data or null>,
+  "current_vs_fair": "Undervalued" | "Fairly Valued" | "Overvalued",
+  "upside_pct": <number or null>,
+  "valuation_method": "Forward P/E FY27E",
+  "entry_signal": "Buy Now" | "Accumulate on Dips" | "Hold" | "Trim" | "Exit",
+  "sector_kpis": {{
+    "order_book_cr": "...",
+    "order_book_to_revenue_x": "...",
+    "quarterly_order_intake_trend": "...",
+    "ebitda_margin_pct": "...",
+    "net_debt_ebitda_x": "...",
+    "working_capital_days": "...",
+    "receivables_to_revenue_pct": "...",
+    "order_mix_segments": "...",
+    "roce_pct": "...",
+    "fy27e_revenue_cr": "...",
+    "fy27e_eps": "₹...",
+    "pe_multiple_applied": "..."
+  }},
+  "key_assumptions": ["...", "..."],
+  "scenarios": [
+    {{"name": "Bull", "fair_value": X, "probability": "30%", "description": "..."}},
+    {{"name": "Base", "fair_value": Y, "probability": "50%", "description": "..."}},
+    {{"name": "Bear", "fair_value": Z, "probability": "20%", "description": "..."}}
+  ],
+  "key_risks_to_valuation": ["...", "..."],
+  "entry_exit_triggers": {{
+    "buy": ["...", "..."],
+    "exit": ["...", "..."]
+  }}
+}}

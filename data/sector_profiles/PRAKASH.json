@@ -1,0 +1,18 @@
+{
+  "symbol": "PRAKASH",
+  "name": "Prakash Industries Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/PRAKASH/",
+  "industry_tag": "",
+  "business_description": "Prakash Industries Ltd manufactures and sells steel products, generating revenue primarily from the sale of these goods. The company also operates power generation facilities, selling electricity as an additional revenue stream.",
+  "key_products": [
+    "Steel products (such as billets, TMT bars, wire rods)",
+    "Electricity (from captive power generation)"
+  ],
+  "input_sensitivity": "Cost risks: The company's margins are highly sensitive to fluctuations in iron ore, coal, and energy prices, as well as labor costs and interest rates. Revenue/demand risks: Demand for steel products is directly driven by the health of the construction, infrastructure, and manufacturing sectors, which are influenced by macroeconomic growth and government spending on infrastructure.",
+  "output_industries": [
+    "Steel Products (Long & Semi-finished)"
+  ],
+  "output_note": "The company receives payments primarily from construction material distributors, infrastructure contractors, and manufacturers for its steel products.",
+  "fetched_date": "2026-03-01T15:44:23.154991"
+}

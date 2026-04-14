@@ -1,0 +1,18 @@
+{
+  "symbol": "PROTEAN",
+  "name": "Protean eGov Technologies Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/PROTEAN/",
+  "industry_tag": "",
+  "business_description": "Protean eGov Technologies Ltd develops and operates large-scale, citizen-centric e-governance technology platforms for government and public sector clients. The company generates revenue primarily through the design, implementation, and ongoing management of digital infrastructure and IT solutions for government services, typically on a project or transaction fee basis.",
+  "key_products": [
+    "PAN card issuance and management platform",
+    "Digital identity and e-governance IT solutions"
+  ],
+  "input_sensitivity": "Cost risks are mainly related to skilled IT labour and technology infrastructure expenses, as well as potential increases in compliance and cybersecurity costs. Revenue is directly driven by government spending on digital public infrastructure and the pace of new e-governance project rollouts in India.",
+  "output_industries": [
+    "Government e-Governance IT Solutions"
+  ],
+  "output_note": "Central and state government agencies, as well as public sector bodies, directly pay Protean eGov Technologies for the development, deployment, and maintenance of e-governance technology platforms and related digital services.",
+  "fetched_date": "2026-03-01T15:44:41.410807"
+}

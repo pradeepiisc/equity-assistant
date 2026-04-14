@@ -1,0 +1,17 @@
+{
+  "symbol": "DDEVPLSTIK",
+  "name": "DDev Plastiks Industries Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/DDEVPLSTIK/",
+  "industry_tag": "",
+  "business_description": "DDev Plastiks Industries Ltd manufactures plastic compounds, which are engineered materials created by blending polymers with additives to achieve specific properties. The company generates revenue by selling these plastic compounds to manufacturers who use them as raw materials in their own production processes.",
+  "key_products": [
+    "Plastic Compounds"
+  ],
+  "input_sensitivity": "Cost risks include fluctuations in prices of petrochemical feedstocks (such as polymers and additives), energy costs, and labor expenses, all of which directly impact production margins. Revenue is primarily driven by demand from downstream manufacturing sectors that require plastic compounds for their products, making the company's sales sensitive to the overall health of the manufacturing and industrial sectors.",
+  "output_industries": [
+    "Plastic Compounding & Materials"
+  ],
+  "output_note": "Manufacturers and industrial processors directly pay DDev Plastiks Industries Ltd for engineered plastic compounds used as input materials in their production lines.",
+  "fetched_date": "2026-03-01T15:41:22.275256"
+}

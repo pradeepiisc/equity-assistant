@@ -1,0 +1,347 @@
+# Sector mapping for portfolio daily report
+# Format: SYMBOL: "Sector Name"
+# Add any missing symbols from your 133 holdings here.
+# Run: python -m workflows.portfolio_daily_report --no-dma
+# to see which symbols appear under "Unclassified".
+
+# ── Banking & Finance ─────────────────────────────────────────────────────────
+JKBANK: "Banking"
+J&KBANK: "Banking"
+BANDHAN: "Banking"
+RBLBANK: "Banking"
+DCBBANK: "Banking"
+FEDERALBNK: "Banking"
+IDFCFIRSTB: "Banking"
+AUBANK: "Banking"
+UJJIVANSFB: "Banking"
+EQUITASBNK: "Banking"
+SURYODAY: "Banking"
+ESAFSFB: "Banking"
+UTKARSHBNK: "Banking"
+HDFCBANK: "Banking"
+ICICIBANK: "Banking"
+AXISBANK: "Banking"
+KOTAKBANK: "Banking"
+SBIN: "Banking"
+PNB: "Banking"
+CANBK: "Banking"
+BANKBARODA: "Banking"
+INDUSINDBK: "Banking"
+YESBANK: "Banking"
+
+# ── NBFC / Financial Services ─────────────────────────────────────────────────
+CHOLAFIN: "NBFC"
+M&MFIN: "NBFC"
+SHRIRAMFIN: "NBFC"
+BAJFINANCE: "NBFC"
+MUTHOOTFIN: "NBFC"
+MANAPPURAM: "NBFC"
+ZAGGLE: "Fintech"
+PAYTM: "Fintech"
+POLICYBZR: "Fintech"
+
+# ── Pharma & Healthcare ───────────────────────────────────────────────────────
+DCAL: "Pharma"
+BIOCON: "Pharma"
+SUNPHARMA: "Pharma"
+DRREDDY: "Pharma"
+CIPLA: "Pharma"
+DIVISLAB: "Pharma"
+LUPIN: "Pharma"
+ALKEM: "Pharma"
+YATHARTH: "Healthcare"
+KIMS: "Healthcare"
+RAINBOW: "Healthcare"
+SUVENPHAR: "Pharma"
+LAURUS: "Pharma"
+
+# ── Power & Energy ────────────────────────────────────────────────────────────
+QPOWER: "Power"
+SWSOLAR: "Renewable Energy"
+IEX: "Power"
+TARIL: "Power"
+TATAPOWER: "Power"
+ADANIGREEN: "Renewable Energy"
+NTPC: "Power"
+POWERGRID: "Power"
+CESC: "Power"
+TORNTPOWER: "Power"
+JPPOWER: "Power"
+NHPC: "Power"
+SJVN: "Power"
+RPOWER: "Power"
+
+# ── Oil & Gas ─────────────────────────────────────────────────────────────────
+ONGC: "Oil & Gas"
+RELIANCE: "Oil & Gas"
+BPCL: "Oil & Gas"
+IOC: "Oil & Gas"
+HINDPETRO: "Oil & Gas"
+GAIL: "Oil & Gas"
+IGL: "Oil & Gas"
+MGL: "Oil & Gas"
+ATGL: "Oil & Gas"
+
+# ── Capital Goods / Industrials ───────────────────────────────────────────────
+ABB: "Capital Goods"
+AEROFLEX: "Industrial"
+APOLLOPIPE: "Pipes & Fittings"
+SYRMA: "Electronics"
+SIEMENS: "Capital Goods"
+BHEL: "Capital Goods"
+GRINDWELL: "Capital Goods"
+ELGIEQUIP: "Capital Goods"
+CUMMINSIND: "Capital Goods"
+THERMAX: "Capital Goods"
+JYOTICNC: "Capital Goods"
+AVALON: "Electronics"
+
+# ── IT & Tech ─────────────────────────────────────────────────────────────────
+INFY: "IT Services"
+TCS: "IT Services"
+WIPRO: "IT Services"
+HCLTECH: "IT Services"
+TECHM: "IT Services"
+LTIM: "IT Services"
+MPHASIS: "IT Services"
+COFORGE: "IT Services"
+PERSISTENT: "IT Services"
+HAPPSTMNDS: "IT Services"
+
+# ── FMCG ─────────────────────────────────────────────────────────────────────
+BAJAJCON: "FMCG"
+DABUR: "FMCG"
+HINDUNILVR: "FMCG"
+ITC: "FMCG"
+MARICO: "FMCG"
+GODREJCP: "FMCG"
+COLPAL: "FMCG"
+BRITANNIA: "FMCG"
+NESTLEIND: "FMCG"
+
+# ── Infrastructure / Construction ─────────────────────────────────────────────
+JYOTISTRUC: "Infrastructure"
+KEC: "Infrastructure"
+KALPATPOWR: "Infrastructure"
+GPIL: "Infrastructure"
+IRB: "Infrastructure"
+NHAI: "Infrastructure"
+
+# ── Chemicals ────────────────────────────────────────────────────────────────
+DEEPAKNITR: "Chemicals"
+GNFC: "Chemicals"
+AAVAS: "Chemicals"
+PIDILITIND: "Chemicals"
+
+# ── Logistics ────────────────────────────────────────────────────────────────
+MAHLOG: "Logistics"
+BLUEDART: "Logistics"
+GATIL: "Logistics"
+VRLLOGISTICS: "Logistics"
+SGAWAN: "Logistics"
+
+# ── Textiles ─────────────────────────────────────────────────────────────────
+SIYARAM: "Textiles"
+PAGEIND: "Textiles"
+ARVINDFASH: "Textiles"
+KPRMILL: "Textiles"
+
+# ── Consumer Durables ────────────────────────────────────────────────────────
+IFBIND: "Consumer Durables"
+TTKPREST: "Consumer Durables"
+HAVELLS: "Consumer Durables"
+VOLTAS: "Consumer Durables"
+BLUESTAR: "Consumer Durables"
+
+# ── Irrigation / Agri ────────────────────────────────────────────────────────
+JAINREC: "Agri / Irrigation"
+RALLIS: "Agri"
+UPL: "Agri"
+
+# ── Chemicals (additional) ────────────────────────────────────────────────────
+TANFACIND: "Chemicals"
+FINEORG: "Chemicals"
+ATSL: "Chemicals"
+
+# ── SME / Small Cap (add sector as you identify them) ─────────────────────────
+FCL: "SME"
+APEX: "SME"
+KRN: "SME"
+KMEW: "SME"
+INFLAME: "SME"
+SONAMAC-SM: "SME"
+BEWLTD-SM: "SME"
+AFFORDABLE: "SME"
+BETA: "SME"
+MEGATHERM-SM: "SME"
+AGARIND: "SME"
+TECHERA-SM: "SME"
+DENTALKART-SM: "Healthcare"
+MBEL: "SME"
+WENDT: "Capital Goods"
+DBREALTY: "Real Estate"
+
+# ── Travel & Hospitality ──────────────────────────────────────────────────────
+YATRA: "Travel"
+INDHOTEL: "Hotels"
+LEMONTRE: "Hotels"
+IRCTC: "Travel"
+
+# ── Auto & Auto Ancillary ─────────────────────────────────────────────────────
+TATAMOTORS: "Auto"
+M&M: "Auto"
+MARUTI: "Auto"
+BAJAJ-AUTO: "Auto"
+HEROMOTOCO: "Auto"
+EICHERMOT: "Auto"
+MOTHERSON: "Auto Ancillary"
+BOSCHLTD: "Auto Ancillary"
+
+# ── Real Estate ───────────────────────────────────────────────────────────────
+DLF: "Real Estate"
+GODREJPROP: "Real Estate"
+OBEROIRLTY: "Real Estate"
+PRESTIGE: "Real Estate"
+
+# ── Metals & Mining ───────────────────────────────────────────────────────────
+TATASTEEL: "Metals"
+JSWSTEEL: "Metals"
+HINDALCO: "Metals"
+VEDL: "Metals"
+NMDC: "Metals"
+COALINDIA: "Mining"
+
+# ── ETFs / Gold / Silver ─────────────────────────────────────────────────────
+GOLDBEES: "Gold ETF"
+GOLDIETF: "Gold ETF"
+HDFCGOLD: "Gold ETF"
+NIPPONIGOLD: "Gold ETF"
+SILVERIETF: "Silver ETF"
+SILVERBEES: "Silver ETF"
+JUNIORBEES: "Index ETF"
+NIFTYBEES: "Index ETF"
+
+# ── Telecom ───────────────────────────────────────────────────────────────────
+BHARTIARTL: "Telecom"
+VODAFONE: "Telecom"
+
+# ── E-Waste / Recycling ───────────────────────────────────────────────────────
+NAMOEWASTEMANAGEMENT: "E-Waste"
+
+# ── Digital / Media ───────────────────────────────────────────────────────────
+DUDIGITAL: "Digital Services"
+ADCOUNTY: "Digital Services"
+RADIOWALLA-SM: "Media"
+PVRINOX: "Entertainment"
+
+# ── Consumer / Retail ─────────────────────────────────────────────────────────
+VAIBHAVGBL: "Consumer"
+STOVEKRAFT: "Consumer Durables"
+LUXIND: "Textiles"
+CARYSIL: "Consumer Durables"
+THOMASCOTT: "Textiles"
+AYMSYNTEX: "Textiles"
+TEXELIN: "Textiles"
+RAYMONDLSL: "Textiles"
+SHREEOSFM-SM: "Consumer"
+
+# ── Chemicals & Materials ─────────────────────────────────────────────────────
+YASHO: "Chemicals"
+PATELCHEM: "Chemicals"
+XPROINDIA: "Chemicals"
+GANESHCP: "Chemicals"
+DEEPAKFERT: "Chemicals"
+SIYSIL: "Chemicals"
+TATVA: "Chemicals"
+DDEVPLSTIK: "Chemicals"
+
+# ── Auto Ancillary ────────────────────────────────────────────────────────────
+GREAVESCOT: "Auto Ancillary"
+ATULAUTO: "Auto Ancillary"
+
+# ── Capital Goods / Engineering ───────────────────────────────────────────────
+WPIL: "Capital Goods"
+YUKEN: "Capital Goods"
+EIMCOELECO: "Capital Goods"
+THEJO: "Capital Goods"
+EFFWA-SM: "Capital Goods"
+KIRLFER: "Capital Goods"
+SHREEREF: "Capital Goods"
+INDOSMC: "Capital Goods"
+ADVAIT: "Capital Goods"
+QUADFUTURE: "Capital Goods"
+HIRECT: "Electronics"
+SAHASRA-SM: "Electronics"
+
+# ── Infrastructure / Construction ─────────────────────────────────────────────
+CAPACITE: "Infrastructure"
+HCC: "Infrastructure"
+SPMLINFRA: "Infrastructure"
+NRAIL: "Infrastructure"
+OMINFRAL: "Infrastructure"
+VISHNUINFR-SM: "Infrastructure"
+FABTECH: "Infrastructure"
+DHABRIYA: "Logistics"
+
+# ── Hotels / Hospitality ──────────────────────────────────────────────────────
+SAMHI: "Hotels"
+SUBAHOTELS-SM: "Hotels"
+
+# ── Pharma / Healthcare ───────────────────────────────────────────────────────
+BPLPHARMA: "Pharma"
+KILITCH: "Pharma"
+SUDEEPPHRM: "Pharma"
+SANJIVIN: "Healthcare"
+GUJAPOLLO: "Healthcare"
+
+# ── Financial Services ────────────────────────────────────────────────────────
+NORTHARC: "NBFC"
+SGFIN: "NBFC"
+UGROCAP: "NBFC"
+EMKAY: "Financial Services"
+NUVAMA: "Financial Services"
+PROTEAN: "IT Services"
+
+# ── IT Services / Tech ────────────────────────────────────────────────────────
+AURIONPRO: "IT Services"
+ICIL: "IT Services"
+BLS: "IT Services"
+ZTECH-SM: "IT Services"
+PRATHAM-SM: "IT Services"
+
+# ── Metals / Recycling ────────────────────────────────────────────────────────
+WALCHANNAG: "Metals"
+GRAVITA: "Metals"
+
+# ── Agri / Food ───────────────────────────────────────────────────────────────
+GODREJAGRO: "Agri"
+HMAAGRO: "Agri"
+
+# ── Telecom / Fiber ───────────────────────────────────────────────────────────
+HFCL: "Telecom"
+
+# ── Real Estate / Hospitality ─────────────────────────────────────────────────
+LOTUSDEV: "Real Estate"
+
+# ── Remaining holdings (classified from portfolio 2026-03-01) ─────────────────
+TBI-SM: "Agri"                   # TBI Corn — agri processing
+QLL: "Packaging"                  # Qualitek Labels — packaging/print
+PARTYCRUS-SM: "Entertainment"     # Party Cruiser — events/travel
+HSCL: "Chemicals"                 # Himadri Speciality Chemical
+INFINIUM-SM: "Chemicals"          # Infinium Pharmachem
+VMARCIND-SM: "Consumer Durables"  # V Marc India — electrical consumer products
+FAZE3Q-BE: "Textiles"             # Faze Three — home textiles
+LAXMIINDIA: "NBFC"                # Laxmi India Finance
+HPL: "Capital Goods"              # HPL Electric & Power
+DEEPINDS: "Oil & Gas"             # Deep Industries — O&G services
+VIKRAN: "Capital Goods"           # Vikran Engineering
+BCONCEPTS: "Consumer"             # Brand Concepts — fashion/accessories
+ASMTEC: "Electronics"             # ASM Technologies
+PRAKASH: "Metals"                 # Prakash Industries — steel
+NEWJAISA-SM: "Electronics"        # NewJaisa — refurbished electronics
+ACLD: "Capital Goods"
+UNIECOM: "Digital Services"
+EMMIL-SM: "Capital Goods"
+COSMICCRF: "Chemicals"
+C2C-SM: "IT Services"
+CHTR: "Capital Goods"

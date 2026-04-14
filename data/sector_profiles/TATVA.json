@@ -1,0 +1,18 @@
+{
+  "symbol": "TATVA",
+  "name": "Tatva Chintan Pharma Chem Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/TATVA/",
+  "industry_tag": "",
+  "business_description": "Tatva Chintan Pharma Chem Ltd manufactures specialty chemicals, including structure directing agents, phase transfer catalysts, electrolyte salts for batteries, and intermediates used in pharmaceuticals and agrochemicals. The company generates revenue by selling these high-value chemicals directly to industrial customers who use them as critical inputs in their own manufacturing processes.",
+  "key_products": [
+    "Structure Directing Agents",
+    "Phase Transfer Catalysts"
+  ],
+  "input_sensitivity": "(1) Cost risks: Margins are sensitive to fluctuations in prices of chemical raw materials, energy, and fuel, as well as foreign exchange rates due to import/export exposure. (2) Revenue/demand risks: Demand is directly driven by capital expenditure and production cycles in the specialty chemicals, battery materials, pharmaceutical, and agrochemical manufacturing sectors.",
+  "output_industries": [
+    "Specialty Chemicals (Catalysts & Intermediates)"
+  ],
+  "output_note": "Industrial manufacturers in the specialty chemicals, battery, pharmaceutical, and agrochemical sectors pay Tatva Chintan for specialty chemical products such as catalysts, intermediates, and electrolyte salts.",
+  "fetched_date": "2026-03-01T15:43:30.828413"
+}

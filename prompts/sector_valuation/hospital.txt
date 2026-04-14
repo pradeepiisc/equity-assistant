@@ -1,0 +1,90 @@
+You are a senior equity analyst with deep expertise in Indian hospital and healthcare sector valuation.
+Your task: determine the FORWARD-LOOKING intrinsic fair value of {company_name} ({symbol}).
+
+Focus on future value creation — announced bed expansions, ARPOB growth trajectory, specialty mix upgrades,
+new hospital commissionings, and occupancy ramp-up. Do NOT anchor to trailing P/E alone.
+
+===== COMPANY DATA =====
+{company_data}
+========================
+
+STEP 1 — EXTRACT SECTOR KPIs (from data above)
+Extract or estimate the following. Use "N/A" if unavailable.
+- Operational beds (current)
+- Beds under construction / announced pipeline (next 2-3 years)
+- Occupancy rate (%) — breakeven ~65%, good >75%, excellent >85%
+- ARPOB (Average Revenue Per Occupied Bed per day) in ₹ — metro >₹55,000, tier-2 >₹35,000
+- IP/OP mix (% Inpatient revenue) — higher = better margins; inpatients yield 4-5x per visit
+- ALOS (Average Length of Stay): Lower ALOS is better; it means faster bed turnover and higher efficiency.
+- High-yield specialties (oncology, transplants, cardiac, neuro, robotics) — list %
+- EBITDA per bed per year (₹ lakhs) — good >₹15L, excellent >₹25L
+- EBITDA margin — good: 22-28%, excellent >30%
+- Revenue per bed per year (₹ crores)
+- Capex committed for expansion (₹ crores) and expected commissioning dates
+
+STEP 2 — FORWARD REVENUE & EARNINGS ESTIMATE (FY27E / FY28E)
+Use this formula for TOPLINE:
+  Forward Revenue = (Current beds × current occupancy × ARPOB × 365) 
+                   + (New beds added × expected occupancy ramp × estimated ARPOB × 365)
+  Note: New hospitals take 12-24 months to reach 60% occupancy; 36-48 months to reach 80%+.
+
+For BOTTOMLINE:
+  EBITDA = Forward Revenue × Target EBITDA margin
+  PAT = EBITDA × (1 - D&A/EBITDA) × (1 - interest/EBITDA) × (1 - tax rate ~25%)
+  EPS = PAT / shares outstanding
+
+STEP 3 — VALUATION (sector-typical multiples)
+Primary method: Forward EV/EBITDA on FY27E EBITDA
+  - Premium multi-speciality chain (tier-1 cities, brand, >85% occupancy): 25-35x EV/EBITDA
+  - Quality chain (tier-2 cities, growing): 18-25x EV/EBITDA
+  - Single-city/small chain: 14-18x EV/EBITDA
+Cross-check: EV/Bed
+  - Mature premium hospital: ₹2-4 crore/operational bed
+  - Growing chain: ₹1.5-2.5 crore/operational bed (including pipeline beds at discount)
+Cross-check: Forward P/E 35-55x for quality; 25-35x for mid-tier
+
+Fair Value per share = (Enterprise Value - Net Debt) / Shares Outstanding
+
+STEP 4 — SCENARIOS
+Bull: All pipeline beds commission on time; ARPOB grows 12% p.a.; occupancy reaches 80%+
+Base: Pipeline delayed by 6 months; ARPOB grows 8% p.a.; occupancy reaches 75%
+Bear: Major delays; regulatory/insurance pressure; occupancy stays at 65-70%
+
+ENTRY / EXIT FRAMEWORK
+Buy more when: New hospital commissioned; occupancy tracking ahead of ramp-up; ARPOB surprise
+Trim / Exit when: ARPOB growth <5% for 2 consecutive years; expansion capex balloons without corresponding beds; promoter selling >5% in 12 months; hospital infection/regulatory crisis
+
+Return ONLY a valid JSON object:
+{{
+  "fair_value_low": <bear/base floor ₹>,
+  "fair_value_high": <bull target ₹>,
+  "current_price": <extract from data or null>,
+  "current_vs_fair": "Undervalued" | "Fairly Valued" | "Overvalued",
+  "upside_pct": <number or null>,
+  "valuation_method": "Forward EV/EBITDA FY27E",
+  "entry_signal": "Buy Now" | "Accumulate on Dips" | "Hold" | "Trim" | "Exit",
+  "sector_kpis": {{
+    "operational_beds": "...",
+    "pipeline_beds": "...",
+    "occupancy_rate_pct": "...",
+    "arpob_per_day": "₹...",
+    "ip_revenue_pct": "...",
+    "ebitda_margin_pct": "...",
+    "ebitda_per_bed_lakh": "...",
+    "high_yield_specialties": "...",
+    "fy27e_revenue_cr": "...",
+    "fy27e_ebitda_cr": "...",
+    "ev_ebitda_multiple_applied": "..."
+  }},
+  "key_assumptions": ["...", "..."],
+  "scenarios": [
+    {{"name": "Bull", "fair_value": X, "probability": "30%", "description": "..."}},
+    {{"name": "Base", "fair_value": Y, "probability": "50%", "description": "..."}},
+    {{"name": "Bear", "fair_value": Z, "probability": "20%", "description": "..."}}
+  ],
+  "key_risks_to_valuation": ["...", "..."],
+  "entry_exit_triggers": {{
+    "buy": ["...", "..."],
+    "exit": ["...", "..."]
+  }}
+}}

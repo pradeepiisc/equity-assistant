@@ -1,0 +1,18 @@
+{
+  "symbol": "AFFORDABLE",
+  "name": "Affordable Robotic & Automation Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/AFFORDABLE/",
+  "industry_tag": "",
+  "business_description": "Affordable Robotic & Automation Ltd provides turnkey automation solutions for industrial clients, designing and implementing custom automation systems for manufacturing and production processes. The company generates revenue by engineering, installing, and servicing automation equipment and systems tailored to client requirements.",
+  "key_products": [
+    "Turnkey industrial automation systems",
+    "Automation engineering and installation services"
+  ],
+  "input_sensitivity": "Cost risks include prices of electrical and mechanical components, labour costs for skilled engineers and technicians, and energy costs for system testing and installation. Revenue is sensitive to industrial capex cycles, especially manufacturing sector investment in automation and modernization.",
+  "output_industries": [
+    "Industrial Automation Solutions"
+  ],
+  "output_note": "Industrial manufacturers and production companies pay Affordable Robotic & Automation Ltd directly for custom-designed automation systems and related engineering services.",
+  "fetched_date": "2026-03-01T15:44:51.790236"
+}

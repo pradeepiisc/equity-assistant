@@ -1,0 +1,18 @@
+{
+  "symbol": "ZENTEC",
+  "name": "Zen Technologies Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/ZENTEC/",
+  "industry_tag": "",
+  "business_description": "Zen Technologies Ltd designs, develops, and manufactures combat training and counter-drone solutions primarily for defense and security forces. The company generates revenue by supplying these advanced simulation and security systems to armed forces, police, and paramilitary organizations.",
+  "key_products": [
+    "Combat training simulators",
+    "Counter-drone solutions"
+  ],
+  "input_sensitivity": "Key cost drivers include electronic components, specialized hardware, software development costs, and skilled engineering labor.",
+  "output_industries": [
+    "Defence Simulation & Training Systems"
+  ],
+  "output_note": "Indian Armed Forces (Army, Navy, Air Force), paramilitary, and foreign defence agencies directly pay Zen Technologies for combat training simulators and counter-drone systems. Government/PSU procurement and export sales are both within the same defence sector.",
+  "fetched_date": "2026-03-01T14:08:14.770072"
+}

@@ -1,0 +1,15 @@
+{
+  "symbol": "NORTHARC",
+  "name": "Northern ARC Capital Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/NORTHARC/",
+  "industry_tag": "",
+  "business_description": "Founded in 2009, Northern Arc Capital Limited offers retail loans to underserved households and businesses in India. [1]",
+  "key_products": [],
+  "input_sensitivity": "(skipped — run without --no-llm)",
+  "output_industries": [
+    "Unclassified"
+  ],
+  "output_note": "",
+  "fetched_date": "2026-03-02T00:18:36.699037"
+}

@@ -1,0 +1,18 @@
+{
+  "symbol": "UNIECOM",
+  "name": "Unicommerce eSolutions Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/UNIECOM/",
+  "industry_tag": "",
+  "business_description": "Unicommerce eSolutions Ltd provides a SaaS platform that enables brands, sellers, and logistics providers to manage their e-commerce operations. The company generates revenue primarily through subscription fees and usage charges for its software services. Its business model is based on recurring payments from clients who use its platform to streamline order processing, inventory management, and supply chain workflows.",
+  "key_products": [
+    "E-commerce operations management SaaS platform",
+    "Order and inventory management software"
+  ],
+  "input_sensitivity": "Cost risks are minimal as the company operates a SaaS model, with primary expenses in software development, cloud infrastructure, and skilled labour. Revenue is sensitive to the growth and health of the e-commerce sector, as demand for its platform rises with increased online retail activity and digital adoption by brands and sellers.",
+  "output_industries": [
+    "E-commerce Operations SaaS"
+  ],
+  "output_note": "Brands, sellers, and logistics providers directly pay Unicommerce for access to its e-commerce operations management SaaS platform and related software services.",
+  "fetched_date": "2026-03-01T15:40:59.376490"
+}

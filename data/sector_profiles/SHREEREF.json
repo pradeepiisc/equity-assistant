@@ -1,0 +1,15 @@
+{
+  "symbol": "SHREEREF",
+  "name": "SHREEREF",
+  "exchange": "BSE",
+  "screener_url": "",
+  "industry_tag": "",
+  "business_description": "(scrape only)",
+  "key_products": [],
+  "input_sensitivity": "(skipped — run without --no-llm)",
+  "output_industries": [
+    "Unclassified"
+  ],
+  "output_note": "",
+  "fetched_date": "2026-03-02T09:19:24.115711"
+}

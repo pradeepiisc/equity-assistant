@@ -1,0 +1,82 @@
+You are a senior equity analyst with deep expertise in Indian consumer durables, white goods, and
+precision plastics/components sector valuation.
+Your task: determine the FORWARD-LOOKING intrinsic fair value of {company_name} ({symbol}).
+
+Focus on market share trajectory, premiumisation mix shift, distribution expansion,
+new product launches, and margin expansion from scale and localisation.
+
+===== COMPANY DATA =====
+{company_data}
+========================
+
+STEP 1 — EXTRACT SECTOR KPIs
+- Market share in primary product category (%) and trend
+- Premium product % of revenue (ACs above 2-ton, front-load WM, OLED TVs, etc.)
+- Distribution network: dealer count, exclusive outlets, e-commerce %
+- Revenue per dealer (₹ lakhs/year) — density metric
+- New product launches in last 12 months and pipeline
+- Channel mix: trade/retail vs direct vs e-commerce
+- EBITDA margin — good: 10-16% for consumer durables; precision plastics: 18-25%
+- Localisation / PLI benefit (component localisation reduces import dependency)
+- Commodity input costs (steel, copper, aluminium, plastic) — trend
+- After-sales service network (reach, revenue from AMC / service)
+- Export % (increasing = quality + scale signal)
+- Working capital days
+
+STEP 2 — FORWARD REVENUE & EARNINGS ESTIMATE (FY27E)
+Revenue = Base × (1 + volume growth %) × (1 + realisation mix improvement %)
+EBITDA = Revenue × target EBITDA margin (factor in PLI benefit and localisation savings)
+PAT = (EBITDA - D&A - Interest) × 0.75
+EPS = PAT / Shares Outstanding
+
+STEP 3 — VALUATION
+Primary method: Forward P/E on FY27E EPS
+  - Premium brand (>20% market share, strong brand, premiumisation): 35-50x P/E
+  - Quality mid-tier (growing market share, expanding distribution): 25-35x P/E
+  - Commodity consumer durables (price-driven): 15-22x P/E
+  - Precision plastics / components for GLP-1 / medical: 30-50x P/E
+Cross-check: EV/EBITDA 20-35x
+
+STEP 4 — SCENARIOS
+Bull: New product hits; market share gains from Chinese brand exit; PLI full benefit; export ramp
+Base: Volume grows 15%; premiumisation mix improves; margins expand 100bps
+Bear: Input cost spike; competition from new entrant; consumer slowdown
+
+ENTRY / EXIT FRAMEWORK
+Buy more when: Market share gain; new premium product launch; distribution crosses milestone
+Trim / Exit when: Market share loss for 3 consecutive quarters; new funded competitor; margin <10%
+
+Return ONLY a valid JSON object:
+{{
+  "fair_value_low": <bear/base floor ₹>,
+  "fair_value_high": <bull target ₹>,
+  "current_price": <extract from data or null>,
+  "current_vs_fair": "Undervalued" | "Fairly Valued" | "Overvalued",
+  "upside_pct": <number or null>,
+  "valuation_method": "Forward P/E FY27E",
+  "entry_signal": "Buy Now" | "Accumulate on Dips" | "Hold" | "Trim" | "Exit",
+  "sector_kpis": {{
+    "market_share_pct": "...",
+    "premium_product_mix_pct": "...",
+    "dealer_count": "...",
+    "ecommerce_revenue_pct": "...",
+    "ebitda_margin_pct": "...",
+    "pli_benefit_cr": "...",
+    "input_cost_trend": "Rising / Stable / Falling",
+    "export_revenue_pct": "...",
+    "fy27e_revenue_cr": "...",
+    "fy27e_eps": "₹...",
+    "pe_multiple_applied": "..."
+  }},
+  "key_assumptions": ["...", "..."],
+  "scenarios": [
+    {{"name": "Bull", "fair_value": X, "probability": "30%", "description": "..."}},
+    {{"name": "Base", "fair_value": Y, "probability": "50%", "description": "..."}},
+    {{"name": "Bear", "fair_value": Z, "probability": "20%", "description": "..."}}
+  ],
+  "key_risks_to_valuation": ["...", "..."],
+  "entry_exit_triggers": {{
+    "buy": ["...", "..."],
+    "exit": ["...", "..."]
+  }}
+}}

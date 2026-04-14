@@ -1,0 +1,18 @@
+{
+  "symbol": "EFFWA-SM",
+  "name": "Effwa Infra & Research Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/EFFWA/",
+  "industry_tag": "",
+  "business_description": "Effwa Infra & Research Ltd provides engineering, consultancy, procurement, construction, and integrated project management services focused on environmental pollution control. The company generates revenue by designing and executing pollution control projects and offering related technical services to industrial clients.",
+  "key_products": [
+    "Environmental engineering consultancy",
+    "Pollution control project construction"
+  ],
+  "input_sensitivity": "Cost risks include labour, construction materials, and energy costs, which directly impact project margins. Revenue is sensitive to industrial capex cycles and regulatory enforcement of environmental standards, as demand is driven by industries needing pollution control solutions to comply with environmental regulations.",
+  "output_industries": [
+    "Environmental Pollution Control EPC & Consultancy"
+  ],
+  "output_note": "Industrial companies and government bodies pay Effwa Infra & Research Ltd for engineering, consultancy, and construction services related to environmental pollution control projects.",
+  "fetched_date": "2026-03-01T15:40:09.880837"
+}

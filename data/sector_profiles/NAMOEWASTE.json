@@ -1,0 +1,18 @@
+{
+  "symbol": "NAMOEWASTE",
+  "name": "Namo eWaste Management Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/NAMOEWASTE/",
+  "industry_tag": "",
+  "business_description": "Namo eWaste Management Ltd provides collection, disposal, and recycling services for electronic waste. The company generates revenue by processing discarded electronics and extracting reusable materials, as well as offering compliant waste management solutions to businesses and consumers.",
+  "key_products": [
+    "e-waste collection services",
+    "e-waste recycling and disposal"
+  ],
+  "input_sensitivity": "Margins are sensitive to labor costs, logistics/fuel expenses for collection and transport, and the market prices of recovered materials such as metals (copper, gold, silver) from e-waste.",
+  "output_industries": [
+    "E-Waste Recycling & Precious Metal Recovery"
+  ],
+  "output_note": "Metal refiners, commodity traders, and manufacturers of new electronics purchase recovered copper, gold, silver, and other materials extracted by Namo eWaste from processed electronic scrap.",
+  "fetched_date": "2026-03-01T14:08:10.767968"
+}

@@ -1,0 +1,94 @@
+You are a senior equity analyst with deep expertise in Indian paper and paperboard manufacturing
+from recycled fibre (wastepaper-based mills). Your task: determine the FORWARD-LOOKING intrinsic
+fair value of {company_name} ({symbol}).
+
+Focus on conversion spread (realisation - wastepaper cost - energy cost), grade mix,
+capacity utilisation, domestic packaging demand tailwinds, and wastepaper sourcing economics.
+This is distinct from metal recycling (no LME linkage) and e-waste (no precious metal recovery).
+
+===== COMPANY DATA =====
+{company_data}
+========================
+
+STEP 1 — EXTRACT SECTOR KPIs
+- Total installed capacity (MT/year) and current utilisation %
+  Good: >80% utilisation; Warning: <70%
+- Grade mix: newsprint / writing & printing (W&P) / kraft / duplex board / tissue
+  (packaging grades = kraft, duplex command better margins; newsprint = commodity)
+- Realisation per MT (₹/MT) — by grade if disclosed; trend over last 4 quarters
+- Wastepaper procurement cost (₹/MT) — largest input cost (50-60% of revenue)
+  Sourcing mix: domestic wastepaper (price stable) vs imported OCC (USD-denominated, FX risk)
+  Domestic OCC typically ₹8,000-12,000/MT; imported OCC USD 130-180/MT
+- Energy cost per MT — paper mills are coal/gas/steam intensive; 15-25% of revenue
+- Conversion spread = Realisation per MT - Wastepaper cost per MT - Energy cost per MT
+  Healthy spread: ₹3,000-7,000/MT for duplex/kraft; ₹1,500-3,000/MT for newsprint
+- EBITDA margin: good range 12-18% for packaging grades, 8-12% for newsprint/W&P
+- Working capital days (receivable + inventory days) — paper sector tends to be high (60-90 days)
+- Net debt / EBITDA: paper mills are capex-heavy; watch >3x as a red flag
+- Capital expansion plans: new machines, de-inking plant, tissue capacity
+
+STEP 2 — DEMAND DRIVERS & REVENUE ESTIMATE (FY27E)
+Revenue = Capacity (MT) × Utilisation % × Realisation per MT
+Key demand drivers:
+  - E-commerce boom → corrugated packaging → kraft/testliner/fluting demand
+  - FMCG & pharma → duplex board (carton packaging) demand
+  - Education & government printing → W&P demand
+  - Cigarette industry → ivory board demand
+  - Regulatory tailwinds: plastic ban → paper packaging substitution
+EBITDA = Revenue × target EBITDA margin (or Volume × target conversion spread per MT)
+PAT = (EBITDA - D&A - Interest) × 0.75
+EPS = PAT / Shares Outstanding
+
+STEP 3 — VALUATION
+Primary method: Forward EV/EBITDA on FY27E
+  - Diversified packaging grades (kraft + duplex, high utilisation, captive wastepaper): 8-12x EV/EBITDA
+  - Mixed grades (W&P + packaging, moderate utilisation): 6-9x EV/EBITDA
+  - Pure newsprint / commodity grades (low margin, demand declining): 4-7x EV/EBITDA
+Cross-check: Forward P/E 10-18x (use lower end for commodity grades)
+
+STEP 4 — SCENARIOS
+Bull: OCC prices soften; energy costs decline; kraft/duplex capacity ramps; plastic ban accelerates paper packaging
+Base: OCC stable; utilisation 80-85%; conversion spread holds; volume growth 8-12% on e-commerce demand
+Bear: OCC import prices spike (USD appreciation); energy cost inflation; newsprint demand secular decline; new capacity over-supply
+
+ENTRY / EXIT FRAMEWORK
+Buy more when: Wastepaper costs falling 2+ quarters; new packaging capacity commissioned; utilisation >85%; EBITDA margin expansion; plastic ban enforcement tightening
+Trim / Exit when: Conversion spread <₹2,000/MT for 2 quarters; net debt/EBITDA >3.5x; major capacity addition by competitor in same grade; OCC import cost spike >20% YoY
+
+Return ONLY a valid JSON object:
+{{
+  "fair_value_low": <bear/base floor ₹>,
+  "fair_value_high": <bull target ₹>,
+  "current_price": <extract from data or null>,
+  "current_vs_fair": "Undervalued" | "Fairly Valued" | "Overvalued",
+  "upside_pct": <number or null>,
+  "valuation_method": "Forward EV/EBITDA FY27E",
+  "entry_signal": "Buy Now" | "Accumulate on Dips" | "Hold" | "Trim" | "Exit",
+  "sector_kpis": {{
+    "capacity_mt_year": "...",
+    "utilisation_pct": "...",
+    "grade_mix": "...",
+    "realisation_per_mt": "₹...",
+    "wastepaper_cost_per_mt": "₹...",
+    "occ_sourcing_mix": "Domestic / Imported / Mixed",
+    "energy_cost_per_mt": "₹...",
+    "conversion_spread_per_mt": "₹...",
+    "ebitda_margin_pct": "...",
+    "net_debt_ebitda_x": "...",
+    "working_capital_days": "...",
+    "fy27e_revenue_cr": "...",
+    "fy27e_ebitda_cr": "...",
+    "ev_ebitda_multiple_applied": "..."
+  }},
+  "key_assumptions": ["...", "..."],
+  "scenarios": [
+    {{"name": "Bull", "fair_value": X, "probability": "30%", "description": "..."}},
+    {{"name": "Base", "fair_value": Y, "probability": "50%", "description": "..."}},
+    {{"name": "Bear", "fair_value": Z, "probability": "20%", "description": "..."}}
+  ],
+  "key_risks_to_valuation": ["...", "..."],
+  "entry_exit_triggers": {{
+    "buy": ["...", "..."],
+    "exit": ["...", "..."]
+  }}
+}}

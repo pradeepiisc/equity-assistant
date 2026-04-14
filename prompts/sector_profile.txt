@@ -1,0 +1,62 @@
+You are a precise equity analyst classifying a company's business profile for portfolio sector analysis.
+
+Company Symbol: {symbol}
+Company Name: {name}
+Screener Industry Tag: {industry_tag}
+About Text: {about}
+
+Return ONLY a valid JSON object with exactly these fields:
+{{
+  "business_description": "2-3 sentence plain English summary of WHAT this company does and HOW it makes money (the revenue model, not the sectors of its customers)",
+  "key_products": ["its actual product/service 1", "its actual product/service 2"],
+  "input_sensitivity": "Combined view — (1) Cost risks: raw materials, interest rates, fuel, labour, energy that affect this company's margins. (2) Revenue/demand risks: which specific macro factor or sector's health directly drives demand for THIS company's product. Keep it specific to this company, not generic.",
+  "output_industries": ["PRIMARY output industry label 1"],
+  "output_note": "One sentence: WHO directly pays this company money and for WHAT exact product or service"
+}}
+
+═══════════════════════════════════════════════════════════
+STRICT RULES FOR output_industries — read every rule carefully:
+═══════════════════════════════════════════════════════════
+
+RULE 1 — Direct customer sector only.
+output_industries = the sector of the DIRECT BUYER of this company's product or service.
+The buyer's own industry does NOT matter — only what this company sells and to whom.
+
+RULE 2 — No 2nd or 3rd degree impacts.
+If Company A sells EVs to rental companies who serve hospitals, Company A is in "Auto / EV".
+If Company B rents EVs to hospitals and FMCG companies, Company B is in "E-Mobility Fleet Rental".
+Company B is NOT in "Hospitals" or "FMCG" — those are its customers' sectors, not its own.
+
+RULE 3 — Revenue threshold: ≥5% rule.
+Only include a sector if at least 5% of company revenue directly comes from buyers IN that sector.
+Do not list a sector just because 1-2 customers happen to be in it.
+
+RULE 4 — Maximum 3 output industries. Most focused companies have 1–2.
+If you want to list 4+, you are almost certainly capturing 2nd/3rd degree impacts. Stop at 3.
+
+RULE 5 — Use SPECIFIC descriptive labels, not generic buckets:
+  ✓ "Defence Electronics & Simulation"  not  "Defence"
+  ✓ "Solar EPC / Renewable Energy"      not  "Renewable Energy"
+  ✓ "Hospital & Trauma Care Services"   not  "Healthcare"
+  ✓ "Gold Loans / Microfinance NBFC"    not  "Banking / NBFC"
+  ✓ "Railway Wagons & Infrastructure"   not  "Railways"
+  ✓ "E-Mobility Fleet Rental"           not  "Auto / EV"
+  ✓ "Electronic Manufacturing Services" not  "Industrial Capex"
+  ✓ "Specialty Chemicals (Chromium)"    not  "Chemicals"
+  ✓ "IVF & Fertility Clinics"           not  "Healthcare"
+  ✓ "Paints & Coatings"                 not  "FMCG / Retail"
+  ✓ "Distilleries & Beer"               not  "FMCG / Retail"
+  ✓ "Logistics & Supply Chain"          not  "Auto / EV" or "FMCG"
+  ✓ "Recycling & E-Waste Management"    not  "Environmental Services"
+  ✓ "Pharma APIs / CRDMO"               not  "Pharmaceuticals"
+  ✓ "Flexible Metallic Hose / Flow Systems" not "Industrial Capex"
+
+RULE 6 — Services companies: the industry IS the service.
+A company providing rental services → "Vehicle / Equipment Rental"
+A company providing logistics → "Logistics & Supply Chain"
+A company providing BPO services → "BPO / Digital Services"
+Do NOT list the industries of the clients they serve.
+
+RULE 7 — If the about text is empty or insufficient, use exactly 1 conservative output industry
+inferred from the company name and industry tag only.
+═══════════════════════════════════════════════════════════

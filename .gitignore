@@ -1,0 +1,36 @@
+# Environment & secrets
+.env
+.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# macOS
+.DS_Store
+
+# Portfolio holdings (per account) and personal exports
+**/holdings/
+**/holdings/*
+holdings/
+
+# Screener data that should stay local
+data/companies/
+
+# Generated reports (optional — remove these lines if you want to commit reports)
+#data/companies/*/reports/*.md
+#data/companies/*/reports/*.json
+
+# Downloaded PDFs (large files — store locally, don't commit)
+data/companies/*/transcripts/*.pdf

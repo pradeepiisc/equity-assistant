@@ -1,0 +1,18 @@
+{
+  "symbol": "EIMCOELECO",
+  "name": "Eimco Elecon (India) Ltd",
+  "exchange": "NSE",
+  "screener_url": "https://www.screener.in/company/EIMCOELECO/",
+  "industry_tag": "",
+  "business_description": "Eimco Elecon (India) Ltd designs, manufactures, and sells specialized equipment used in underground and opencast mining operations. The company generates revenue by selling mining machinery such as loaders and dumpers directly to mining companies and contractors. Its business model is based on the sale of capital equipment and related after-sales services.",
+  "key_products": [
+    "Side Dump Loaders",
+    "Load Haul Dumpers"
+  ],
+  "input_sensitivity": "Cost risks include fluctuations in steel and other metal prices, energy costs, and labor expenses, all of which impact manufacturing margins. Revenue is highly sensitive to the capital expenditure cycles and project activity in the mining sector, particularly coal and other mineral mining, as these drive demand for new mining equipment.",
+  "output_industries": [
+    "Mining Equipment Manufacturing"
+  ],
+  "output_note": "Mining companies and mining contractors pay Eimco Elecon directly for specialized underground and opencast mining equipment such as loaders and dumpers.",
+  "fetched_date": "2026-03-01T15:41:26.718559"
+}

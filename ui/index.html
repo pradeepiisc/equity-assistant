@@ -1,0 +1,557 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Equity Assistant</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked@9/marked.min.js"></script>
+<style>
+body{background:#080d1a}
+.term{background:#0d1117;font-family:'Courier New',monospace}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:#0d1117}
+::-webkit-scrollbar-thumb{background:#2d3748;border-radius:3px}
+.nav-active{background:rgba(59,130,246,.13);border-left:3px solid #3b82f6!important}
+.nav-item{border-left:3px solid transparent;transition:all .12s}
+.card{transition:transform .12s,box-shadow .12s}
+.card:hover{transform:translateY(-1px);box-shadow:0 4px 20px rgba(0,0,0,.45)}
+.md h1{font-size:1.4rem;font-weight:700;color:#f1f5f9;border-bottom:1px solid #334155;padding-bottom:.4rem;margin:1rem 0 .5rem}
+.md h2{font-size:1.1rem;font-weight:600;color:#e2e8f0;border-bottom:1px solid #1e293b;padding-bottom:.3rem;margin:.9rem 0 .4rem}
+.md h3{font-size:.95rem;font-weight:600;color:#cbd5e1;margin:.7rem 0 .25rem}
+.md p{color:#cbd5e1;margin:.35rem 0;line-height:1.65;font-size:.85rem}
+.md ul,.md ol{padding-left:1.3rem;margin:.35rem 0}
+.md li{color:#cbd5e1;margin:.18rem 0;font-size:.85rem;line-height:1.6}
+.md ul{list-style:disc}.md ol{list-style:decimal}
+.md code{background:#1e293b;color:#a5f3fc;padding:.08rem .28rem;border-radius:3px;font-size:.78rem;font-family:monospace}
+.md pre{background:#1e293b;padding:.65rem .9rem;border-radius:6px;overflow-x:auto;margin:.55rem 0}
+.md pre code{background:none;padding:0;font-size:.76rem}
+.md table{width:100%;border-collapse:collapse;margin:.55rem 0;font-size:.78rem}
+.md th{background:#1e293b;color:#94a3b8;padding:.35rem .65rem;border:1px solid #334155;font-weight:600;text-align:left}
+.md td{padding:.3rem .65rem;border:1px solid #1a2233;color:#cbd5e1}
+.md tr:nth-child(even) td{background:#0f172a}
+.md blockquote{border-left:3px solid #3b82f6;padding:.25rem .65rem;color:#94a3b8;margin:.45rem 0;font-size:.83rem}
+.md strong{color:#f1f5f9;font-weight:600}
+.md hr{border-color:#334155;margin:.7rem 0}
+.md a{color:#60a5fa}
+</style></head><body>
+<div id="root"></div>
+<script type="text/babel">
+const {useState,useEffect,useRef,useCallback,useMemo}=React;
+
+const sa=s=>(s||'').replace(/\x1b\[[0-9;]*[mGKHFABCDJsuhl]/g,'');
+const lc=r=>{const s=sa(r).toLowerCase();
+  if(s.includes('traceback')||s.includes('error:')||s.includes('exception')||s.includes('failed'))return 'text-red-400';
+  if(s.includes('warning')||s.includes('warn')||s.includes('skip'))return 'text-yellow-300';
+  if(s.includes('✓')||s.match(/\b(done|complete|success|saved|finished)\b/))return 'text-emerald-400';
+  if(s.startsWith('$')||s.startsWith('[server'))return 'text-gray-600';
+  if(s.match(/\b(fetching|loading|running|scraping|analysing|analyzing|generating)\b/)||s.includes('→'))return 'text-cyan-300';
+  return 'text-gray-300';
+};
+
+const NAV=[
+  {id:'daily',    e:'🌅',label:'Daily',       sub:'Every market day'},
+  {id:'weekly',   e:'📅',label:'Weekly',      sub:'Every week'},
+  {id:'research', e:'🔬',label:'Deep Research',sub:'Per company'},
+  {id:'quarterly',e:'📈',label:'Quarterly',   sub:'Results season'},
+  {id:'valuation',e:'💰',label:'Valuation',   sub:'Sizing decisions'},
+  {id:'onboard',  e:'➕',label:'Onboard',     sub:'Add to watchlist'},
+  {id:'reports',  e:'📁',label:'Reports',     sub:'Browse outputs'},
+];
+
+const WF={
+  daily:[
+    {id:'dr',title:'Portfolio Daily Report',
+     desc:'10-section morning report: P&L, position sizing alerts, DMA status, top 20 holdings, sector concentration, SIP signals, top movers, tax-loss harvest.',
+     badge:'No company needed',bc:'text-sky-400',
+     opts:[{l:'▶ Run (with DMA)',w:'portfolio_daily_report',a:[]},{l:'⚡ Skip DMA (faster)',w:'portfolio_daily_report_nodma',a:[]}]},
+    {id:'wa',title:'Watchlist Entry Alerts',
+     desc:'DMA entry signals for all watchlist stocks: 🟢 Fresh Entry · 🔵 Accumulate · 🟡 Watch · ⚠️ Extended · ✅ Already Held.',
+     badge:'No company needed',bc:'text-sky-400',
+     opts:[{l:'▶ Run',w:'watchlist_alerts',a:[]}]},
+    {id:'nd',title:'News Digest',
+     desc:'Google News RSS headlines for top 20 holdings + all watchlist stocks. Fast daily scan.',
+     badge:'No company needed',bc:'text-sky-400',
+     opts:[{l:'▶ Top 20',w:'news_digest',a:[]},{l:'▶ Top 30',w:'news_digest',a:['--top','30']}]},
+    {id:'cl',title:"Today's Losers — Add or Exit?",
+     desc:"Conviction review for today's top 5 losers. Combines DMA + holding size + existing analysis → Add / Hold / Trim / Exit with price levels.",
+     badge:'No company needed',bc:'text-sky-400',
+     opts:[{l:'▶ Top 5 Losers',w:'conviction_builder_losers',a:[]}]},
+  ],
+  weekly:[
+    {id:'ia',title:'Investor Activity (Shareholding)',
+     desc:'Scrapes Screener.in shareholding for high-conviction holdings + watchlist. Promoter/FII/DII trend across 4 quarters, flags changes ≥1.5pp QoQ.',
+     badge:'Chrome CDP needed',bc:'text-amber-400',
+     opts:[{l:'▶ All (>1% allocation)',w:'investor_activity',a:[]}],
+     cm:'multi',ca:'--symbols'},
+    {id:'sa',title:'Sector Analysis',
+     desc:'LLM-enriched profiles for all holdings, grouped by primary output industry (≥5% revenue rule). Profiles cached 30 days.',
+     badge:'Live Screener scrape',bc:'text-amber-400',
+     opts:[{l:'▶ All holdings',w:'sector_analysis',a:[]},{l:'▶ Force refresh',w:'sector_analysis',a:['--refresh']},{l:'▶ No LLM',w:'sector_analysis',a:['--no-llm']}],
+     cm:'multi',ca:'--symbols'},
+    {id:'wg',title:'Watchlist Gap Analysis',
+     desc:'Finds sectors absent/thin in your portfolio and recommends top 3 watchlist picks for best diversification. Needs sector_analysis run first.',
+     badge:'Needs sector_analysis cache',bc:'text-violet-400',
+     opts:[{l:'▶ Find Gaps',w:'watchlist_gap_analysis',a:[]}]},
+  ],
+  research:[
+    {id:'df',title:'1 · Fetch Company Data',
+     desc:'Downloads concall PDFs, news, shareholding, financial tables (P&L/BS/CF/Ratios) from Screener.in. Step 1 — must run before Full Analysis.',
+     badge:'Select one company',bc:'text-emerald-400',cm:'single',
+     opts:[{l:'▶ Fetch All',w:'data_fetch',a:[]},{l:'▶ Skip financials',w:'data_fetch',a:['--skip-financials']}]},
+    {id:'fa',title:'2 · Full Company Analysis',
+     desc:'6 LLM skills: transcript → shareholding → news → financials → peer comparison → valuation. Produces master_report.md.',
+     badge:'Requires Data Fetch first',bc:'text-violet-400',cm:'single',
+     opts:[{l:'▶ Run Analysis',w:'full_company_analysis',a:[]}]},
+    {id:'cb',title:'Conviction Builder (Specific Stocks)',
+     desc:'For selected stocks: DMA + holding data + all analysis → Add / Hold / Trim / Exit with specific price levels.',
+     badge:'Select companies',bc:'text-emerald-400',cm:'multi',
+     opts:[{l:'▶ Review Selected',w:'conviction_builder',a:[]}]},
+    {id:'vp',title:'ValuePickr Forum',
+     desc:'Fetches expert community analysis from ValuePickr forum. Thesis + early discussion + recent posts → valuepickr.md.',
+     badge:'Select one company',bc:'text-emerald-400',cm:'single',
+     opts:[{l:'▶ Fetch Forum',w:'valuepickr',a:[]}]},
+    {id:'is',title:'Extract Insights Values',
+     desc:'LLM extracts quarterly metric values from transcripts/PPTs: order book, ARPOB, utilisation, guidance figures → markdown table.',
+     badge:'Select one company',bc:'text-emerald-400',cm:'single',
+     opts:[{l:'▶ Extract Metrics',w:'extract_insights_values',a:[]},{l:'▶ Force refresh',w:'extract_insights_values',a:['--refresh']}]},
+  ],
+  quarterly:[
+    {id:'ba',title:'Batch All Watchlist',
+     desc:'data_fetch + full_company_analysis for every company in watchlist.yaml. ~5–10 min/company. Use "Skip existing" for best efficiency.',
+     badge:'Long running (~2–4 hrs)',bc:'text-rose-400',
+     opts:[{l:'▶ Skip existing (recommended)',w:'batch_skip_existing',a:[]},{l:'▶ Re-run all',w:'batch_company_analysis',a:[]},{l:'▶ Data only',w:'batch_company_analysis',a:['--data-only']},{l:'▶ Analysis only',w:'batch_company_analysis',a:['--analysis-only']}],
+     cm:'multi',ca:'--symbols'},
+    {id:'gr',title:'Growth Ranking',
+     desc:'LLM assigns growth score 1–10 + trajectory (Accelerating/Stable/Decelerating/Weak) for all companies. Run quarterly to see who is growing fastest.',
+     badge:'All companies',bc:'text-sky-400',
+     opts:[{l:'▶ Rank All',w:'growth_ranking',a:[]},{l:'▶ Force refresh',w:'growth_ranking',a:['--refresh']}],
+     cm:'multi',ca:'--symbols'},
+    {id:'ei',title:'Extract Insights Values (Batch)',
+     desc:'Batch insights extraction for all/selected companies. Quarterly metric tables from transcripts via LLM.',
+     badge:'All or selected',bc:'text-sky-400',
+     opts:[{l:'▶ All companies',w:'extract_insights_values',a:[]},{l:'▶ Force refresh',w:'extract_insights_values',a:['--refresh']}],
+     cm:'multi',ca:'--symbols'},
+    {id:'thv',title:'Top Holdings Valuation',
+     desc:'Runs valuation_agent for top N holdings by portfolio weight. Fair value (₹) + entry signal per holding. For sizing decisions.',
+     badge:'Portfolio holdings',bc:'text-sky-400',
+     opts:[{l:'▶ Top 10',w:'top_holdings_valuation',a:[]},{l:'▶ Top 20',w:'top_holdings_valuation',a:['--top','20']}]},
+  ],
+  valuation:[
+    {id:'vs',title:'Standalone Valuation',
+     desc:'Sector-aware forward valuation. 27 sector prompts. Outputs: fair value range (₹), Bull/Base/Bear scenarios with probability, entry/exit triggers, sector KPIs.',
+     badge:'Select one company',bc:'text-emerald-400',cm:'single',
+     opts:[{l:'▶ Run Valuation',w:'valuation',a:[]}]},
+    {id:'thv2',title:'Top Holdings Valuation',
+     desc:'Automated valuation for your top N portfolio holdings. Which of your biggest bets are still cheap vs. fair vs. expensive?',
+     badge:'Portfolio holdings',bc:'text-sky-400',
+     opts:[{l:'▶ Top 10',w:'top_holdings_valuation',a:[]},{l:'▶ Top 20',w:'top_holdings_valuation',a:['--top','20']}]},
+  ],
+  onboard:[{id:'ob',title:'Onboard New Company',isOnboard:true,
+    desc:'Full pipeline: adds to watchlist.yaml → creates folders → fetches all data → extracts insights → ValuePickr → full analysis + valuation.',
+    badge:'New company form',bc:'text-emerald-400'}],
+  reports:[{id:'rb',title:'Browse Reports',isReports:true,desc:''}],
+};
+
+// CompanySelector
+function CmpSel({companies,mode,selected,onChange,placeholder}){
+  const [q,setQ]=useState(''),[ open,setOpen]=useState(false),ref=useRef(null);
+  useEffect(()=>{
+    const h=e=>{if(ref.current&&!ref.current.contains(e.target))setOpen(false)};
+    document.addEventListener('mousedown',h);return()=>document.removeEventListener('mousedown',h);
+  },[]);
+  const filtered=useMemo(()=>{const lq=q.toLowerCase();
+    return companies.filter(c=>c.symbol.toLowerCase().includes(lq)||(c.name||'').toLowerCase().includes(lq)||(c.sector||'').toLowerCase().includes(lq)).slice(0,60);
+  },[companies,q]);
+  const toggle=sym=>{
+    if(mode==='single'){onChange([sym]);setOpen(false);setQ('');}
+    else onChange(selected.includes(sym)?selected.filter(s=>s!==sym):[...selected,sym]);
+  };
+  return(
+    <div ref={ref} className="relative">
+      <div className="flex flex-wrap gap-1 min-h-9 px-3 py-1.5 bg-gray-800 border border-gray-700 rounded-lg cursor-pointer hover:border-blue-500 transition-colors"
+        onClick={()=>setOpen(v=>!v)}>
+        {selected.length===0?<span className="text-gray-500 text-sm self-center">{placeholder||'Select company…'}</span>
+          :selected.map(s=>(
+            <span key={s} className="px-2 py-0.5 bg-blue-900/60 text-blue-200 rounded text-xs font-mono flex items-center gap-1">
+              {s}<button onClick={e=>{e.stopPropagation();toggle(s);}} className="text-blue-400 hover:text-white">×</button>
+            </span>
+          ))}
+      </div>
+      {open&&(
+        <div className="absolute top-full left-0 right-0 mt-1 bg-gray-800 border border-gray-700 rounded-lg shadow-2xl z-50 max-h-56 overflow-y-auto">
+          <div className="sticky top-0 bg-gray-800 p-2 border-b border-gray-700">
+            <input autoFocus value={q} onChange={e=>setQ(e.target.value)}
+              placeholder="Search symbol, name, sector…"
+              className="w-full bg-gray-900 text-sm text-gray-100 px-3 py-1.5 rounded outline-none border border-gray-700 focus:border-blue-500"
+              onClick={e=>e.stopPropagation()}
+              onKeyDown={e => {
+                if (e.key === 'Enter') {
+                  if (filtered.length === 1) {
+                    toggle(filtered[0].symbol);
+                    setOpen(false);
+                    setQ('');
+                  } else if (filtered.length > 1 && mode === 'single') {
+                    toggle(filtered[0].symbol);
+                    setOpen(false);
+                    setQ('');
+                  }
+                  // Optionally: blur input so user can just hit Enter then Run
+                }
+              }}
+            />
+          </div>
+          {filtered.length===0?<div className="px-3 py-2 text-gray-500 text-sm">No match</div>
+            :filtered.map(c=>(
+              <div key={c.symbol} onClick={()=>toggle(c.symbol)}
+                className={`px-3 py-2 cursor-pointer hover:bg-gray-700 flex items-center gap-3 ${selected.includes(c.symbol)?'bg-blue-900/20':''}`}>
+                <span className="font-mono text-xs text-blue-300 w-24 shrink-0">{c.symbol}</span>
+                <div className="min-w-0">
+                  <div className="text-sm text-gray-200 truncate">{c.name}</div>
+                  <div className="text-xs text-gray-500 truncate">{c.sector}</div>
+                </div>
+                {selected.includes(c.symbol)&&<span className="ml-auto text-blue-400 shrink-0">✓</span>}
+              </div>
+            ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Terminal
+function Terminal({job,onClose}){
+  const [lines,setLines]=useState([]);
+  const [status,setStatus]=useState('connecting');
+  const endRef=useRef(null),esRef=useRef(null);
+  useEffect(()=>{
+    if(!job?.job_id)return;
+    setLines([]);setStatus('connecting');
+    if(esRef.current)esRef.current.close();
+    const es=new EventSource(`/api/stream/${job.job_id}`);
+    esRef.current=es;
+    es.onmessage=ev=>{
+      const d=JSON.parse(ev.data);
+      if(d.done){setStatus(d.status);es.close();return;}
+      if(d.line!==null){setLines(p=>[...p,d.line]);setStatus(d.status);}
+    };
+    es.onerror=()=>{setStatus('error');es.close();};
+    return()=>es.close();
+  },[job?.job_id]);
+  useEffect(()=>{endRef.current?.scrollIntoView({behavior:'smooth'});},[lines]);
+  const si={done:{dot:'✓',cls:'text-emerald-400',l:'Done'},error:{dot:'✗',cls:'text-red-400',l:'Error'},
+    running:{dot:'●',cls:'text-yellow-400',l:'Running'},queued:{dot:'○',cls:'text-gray-400',l:'Queued'},
+    connecting:{dot:'…',cls:'text-gray-400',l:'Connecting'}}[status]||{dot:'?',cls:'text-gray-500',l:status};
+  return(
+    <div className="flex flex-col h-full term">
+      <div className="flex items-center gap-3 px-4 py-2 border-b border-gray-800 shrink-0">
+        <span className={`text-xs font-bold font-mono ${si.cls}`}>{si.dot} {si.l}</span>
+        <span className="text-xs text-gray-500 font-mono">{job?.workflow}</span>
+        {job?.args?.length>0&&<span className="text-xs text-gray-700 font-mono truncate max-w-xs">{job.args.join(' ')}</span>}
+        <button onClick={onClose} className="ml-auto text-gray-600 hover:text-gray-300 text-lg">×</button>
+      </div>
+      <div className="flex-1 overflow-y-auto p-3">
+        {lines.map((l,i)=>(
+          <div key={i} className={`text-xs leading-5 font-mono whitespace-pre-wrap break-all ${lc(l)}`}>{sa(l)}</div>
+        ))}
+        {['running','connecting','queued'].includes(status)&&<div className="text-yellow-400 font-mono text-xs animate-pulse mt-1">▌</div>}
+        <div ref={endRef}/>
+      </div>
+    </div>
+  );
+}
+
+// Report Modal
+function ReportModal({report,onClose}){
+  const [content,setContent]=useState('');
+  const [loading,setLoading]=useState(true);
+  useEffect(()=>{
+    if(!report)return;setLoading(true);
+    fetch(`/api/report-content?path=${encodeURIComponent(report.path)}`)
+      .then(r=>r.json()).then(d=>{setContent(d.content||d.error||'');setLoading(false);});
+  },[report?.path]);
+  if(!report)return null;
+  const isMd=report.type==='md';
+  const isJson=report.type==='json';
+  return(
+    <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
+      <div className="bg-gray-900 border border-gray-700 rounded-xl w-full max-w-5xl flex flex-col shadow-2xl" style={{height:'90vh'}}>
+        <div className="flex items-center justify-between px-6 py-3 border-b border-gray-700 shrink-0">
+          <div>
+            <h2 className="text-white font-semibold text-sm">{report.name}</h2>
+            <p className="text-gray-600 text-xs mt-0.5 truncate max-w-lg">{report.path}</p>
+          </div>
+          <button onClick={onClose} className="text-gray-400 hover:text-white text-2xl ml-4">×</button>
+        </div>
+        <div className="flex-1 overflow-y-auto p-6">
+          {loading?<div className="text-gray-400 text-center mt-20">Loading…</div>
+            :isMd?<div className="md text-sm" dangerouslySetInnerHTML={{__html:marked.parse(content)}}/>
+            :isJson?<pre className="text-xs text-gray-300 whitespace-pre-wrap font-mono">{(()=>{try{return JSON.stringify(JSON.parse(content),null,2);}catch{return content;}})()}</pre>
+            :<pre className="text-xs text-gray-300 whitespace-pre-wrap font-mono">{content}</pre>}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Onboard Form
+function OnboardForm({onRun}){
+  const [f,setF]=useState({symbol:'',name:'',sector:'',url:'',bse:'',reason:''});
+  const set=k=>e=>setF(p=>({...p,[k]:e.target.value}));
+  const run=()=>{
+    const args=[f.symbol];
+    if(f.name)args.push('--name',f.name);
+    if(f.sector)args.push('--sector',f.sector);
+    if(f.url)args.push('--screener-url',f.url);
+    if(f.bse)args.push('--bse-code',f.bse);
+    if(f.reason)args.push('--reason',f.reason);
+    onRun('onboard_company',args);
+  };
+  const inp="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm text-gray-100 outline-none focus:border-blue-500";
+  return(
+    <div className="space-y-3">
+      <div className="grid grid-cols-2 gap-3">
+        {[{k:'symbol',l:'Symbol *',p:'e.g. ROSSTECH'},{k:'name',l:'Company Name *',p:'e.g. Rossell Techsys Ltd'},
+          {k:'sector',l:'Sector',p:'e.g. Aerospace and Defence'},{k:'bse',l:'BSE Code',p:'e.g. 544294'}]
+          .map(({k,l,p})=>(
+            <div key={k}><label className="text-xs text-gray-500 block mb-1">{l}</label>
+              <input value={f[k]} onChange={set(k)} placeholder={p} className={inp}/></div>
+          ))}
+      </div>
+      <div><label className="text-xs text-gray-500 block mb-1">Screener URL</label>
+        <input value={f.url} onChange={set('url')} placeholder="https://www.screener.in/company/ROSSTECH/" className={inp}/></div>
+      <div><label className="text-xs text-gray-500 block mb-1">Watch Reason</label>
+        <input value={f.reason} onChange={set('reason')} placeholder="e.g. Make in India; Defence tailwinds" className={inp}/></div>
+      <button onClick={run} disabled={!f.symbol||!f.name}
+        className="px-4 py-2 bg-blue-600 hover:bg-blue-500 disabled:opacity-40 disabled:cursor-not-allowed rounded-lg text-sm font-medium text-white">
+        ▶ Onboard {f.symbol||'Company'}
+      </button>
+    </div>
+  );
+}
+
+// Reports Browser
+function ReportsBrowser({companies,onView}){
+  const [sym,setSym]=useState('');
+  const [rpts,setRpts]=useState([]);
+  const [portRpts,setPortRpts]=useState([]);
+  const [tab,setTab]=useState('company');
+  useEffect(()=>{fetch('/api/portfolio-reports').then(r=>r.json()).then(setPortRpts);},[]);
+  useEffect(()=>{
+    if(!sym){setRpts([]);return;}
+    fetch(`/api/reports/${sym}`).then(r=>r.json()).then(setRpts);
+  },[sym]);
+  const ico=n=>{
+    if(n.includes('master'))return'⭐';if(n.includes('valuation'))return'💰';
+    if(n.includes('transcript'))return'🎙️';if(n.includes('financial'))return'📊';
+    if(n.includes('shareholding'))return'👥';if(n.includes('news'))return'📰';
+    if(n.includes('growth'))return'📈';if(n.includes('peer'))return'🏆';return'📄';
+  };
+  const pico=n=>{
+    if(n.includes('daily_report'))return'📊';if(n.includes('conviction'))return'📉';
+    if(n.includes('news'))return'📰';if(n.includes('growth'))return'📈';
+    if(n.includes('watchlist'))return'🔔';if(n.includes('sector'))return'🗂️';return'📄';
+  };
+  const rCard=(r,icon)=>(
+    <div key={r.path||r.name} onClick={()=>onView(r)}
+      className="flex items-center gap-3 p-3 bg-gray-800 border border-gray-700 rounded-lg cursor-pointer hover:border-blue-500 transition-colors card">
+      <span className="text-xl shrink-0">{icon}</span>
+      <div className="min-w-0">
+        <div className="text-sm text-gray-200 truncate">{r.name}</div>
+        <div className="text-xs text-gray-500">{r.modified} · {(r.size/1024).toFixed(1)}KB</div>
+      </div>
+    </div>
+  );
+  return(
+    <div className="space-y-4">
+      <div className="flex gap-2">
+        {['company','portfolio'].map(t=>(
+          <button key={t} onClick={()=>setTab(t)}
+            className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-colors ${tab===t?'bg-blue-700 text-white':'bg-gray-800 text-gray-400 hover:bg-gray-700'}`}>
+            {t==='company'?'🏢 Company Reports':'📁 Portfolio Reports'}
+          </button>
+        ))}
+      </div>
+      {tab==='company'&&(
+        <>
+          <CmpSel companies={companies} mode="single" selected={sym?[sym]:[]}
+            onChange={arr=>setSym(arr[0]||'')} placeholder="Select company to browse reports…"/>
+          {rpts.length>0
+            ?<div className="grid grid-cols-2 gap-2">{rpts.map(r=>rCard(r,ico(r.name)))}</div>
+            :sym&&<div className="text-gray-500 text-sm text-center py-8">No reports found for {sym}</div>}
+        </>
+      )}
+      {tab==='portfolio'&&(
+        <div className="grid grid-cols-2 gap-2">
+          {portRpts.map(r=>rCard(r,pico(r.name)))}
+          {portRpts.length===0&&<div className="col-span-2 text-gray-500 text-sm text-center py-8">No portfolio reports found. Run a workflow first.</div>}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Workflow Card
+function WFCard({wf,companies,onRun}){
+  const [open,setOpen]=useState(false);
+  const [sel,setSel]=useState([]);
+  const fire=opt=>{
+    let args=[...(opt.a||[])];
+    if(wf.cm&&sel.length>0){
+      const key=wf.ca||(wf.cm==='single'?'':'--symbols');
+      if(key)args=[...args,key,...sel]; else args=[...args,...sel];
+    }
+    onRun(opt.w,args);
+  };
+  const needsCmp=wf.cm==='single'&&sel.length===0;
+  return(
+    <div className="bg-gray-900 border border-gray-700 rounded-xl overflow-hidden card">
+      <div className="p-4 cursor-pointer hover:bg-gray-800/40 transition-colors" onClick={()=>setOpen(v=>!v)}>
+        <div className="flex items-start justify-between gap-2">
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-1 flex-wrap">
+              <h3 className="text-sm font-semibold text-gray-100">{wf.title}</h3>
+              <span className={`text-xs ${wf.bc||'text-gray-500'}`}>{wf.badge}</span>
+            </div>
+            <p className="text-xs text-gray-400 leading-relaxed">{wf.desc}</p>
+          </div>
+          <span className="text-gray-600 text-sm ml-2 mt-0.5 shrink-0">{open?'▲':'▼'}</span>
+        </div>
+      </div>
+      {open&&(
+        <div className="px-4 pb-4 border-t border-gray-800 pt-3 space-y-3">
+          {wf.isOnboard&&<OnboardForm onRun={onRun}/>}
+          {!wf.isOnboard&&wf.cm&&(
+            <div>
+              <label className="text-xs text-gray-500 mb-1 block">
+                {wf.cm==='single'?'Company (required)':'Companies (optional — leave empty for all)'}
+              </label>
+              <CmpSel companies={companies} mode={wf.cm} selected={sel} onChange={setSel}
+                placeholder={wf.cm==='single'?'Select company…':'All (or pick specific companies)…'}/>
+            </div>
+          )}
+          {!wf.isOnboard&&wf.opts&&(
+            <div className="flex flex-wrap gap-2">
+              {wf.opts.map((opt,i)=>(
+                <button key={i} onClick={()=>fire(opt)} disabled={needsCmp}
+                  className="px-3 py-1.5 bg-blue-700 hover:bg-blue-600 disabled:opacity-40 disabled:cursor-not-allowed rounded-lg text-xs font-medium text-white transition-colors">
+                  {needsCmp?'← Pick a company first':opt.l+(wf.cm==='single'&&sel.length>0?` — ${sel[0]}`:'')}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Jobs sidebar
+function JobsSidebar({onSelect}){
+  const [jobs,setJobs]=useState([]);
+  useEffect(()=>{
+    const f=()=>fetch('/api/jobs').then(r=>r.json()).then(setJobs);
+    f();const t=setInterval(f,3000);return()=>clearInterval(t);
+  },[]);
+  if(jobs.length===0)return<div className="text-gray-600 text-xs text-center py-3">No jobs yet</div>;
+  const si={done:'text-emerald-400',error:'text-red-400',running:'text-yellow-400'};
+  const dot={done:'✓',error:'✗',running:'●',queued:'○'};
+  return(
+    <div className="space-y-0.5">
+      {jobs.slice(0,8).map(j=>(
+        <div key={j.id} onClick={()=>onSelect(j)}
+          className="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-800 cursor-pointer">
+          <span className={`text-xs w-4 shrink-0 ${si[j.status]||'text-gray-500'}`}>{dot[j.status]||'?'}</span>
+          <div className="min-w-0 flex-1">
+            <div className="text-xs text-gray-300 truncate font-mono">{j.workflow}</div>
+            {j.args?.length>0&&<div className="text-xs text-gray-600 truncate">{j.args.join(' ')}</div>}
+          </div>
+          <span className="text-xs text-gray-600 shrink-0">{(j.started_at||'').slice(11,16)}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// App
+function App(){
+  const [cat,setCat]=useState('daily');
+  const [companies,setCompanies]=useState([]);
+  const [termJob,setTermJob]=useState(null);
+  const [termOpen,setTermOpen]=useState(false);
+  const [report,setReport]=useState(null);
+  useEffect(()=>{fetch('/api/companies').then(r=>r.json()).then(setCompanies);},[]);
+  const run=useCallback(async(workflow,args)=>{
+    const res=await fetch('/api/run',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({workflow,args})});
+    const d=await res.json();
+    if(d.job_id){setTermJob(d);setTermOpen(true);}
+  },[]);
+  const activeCat=NAV.find(n=>n.id===cat);
+  const workflows=WF[cat]||[];
+  return(
+    <div className="flex h-screen overflow-hidden text-gray-100" style={{background:'#080d1a'}}>
+      {/* Sidebar */}
+      <div className="w-52 shrink-0 flex flex-col bg-gray-900 border-r border-gray-800">
+        <div className="px-4 py-4 border-b border-gray-800">
+          <div className="text-blue-400 font-bold text-sm">📈 Equity Assistant</div>
+          <div className="text-gray-600 text-xs mt-0.5">Investor Workbench</div>
+        </div>
+        <nav className="flex-1 overflow-y-auto py-2">
+          {NAV.map(n=>(
+            <button key={n.id} onClick={()=>setCat(n.id)}
+              className={`nav-item w-full text-left px-4 py-2.5 hover:bg-gray-800 ${cat===n.id?'nav-active':''}`}>
+              <div className="flex items-center gap-2">
+                <span className="text-base">{n.e}</span>
+                <div>
+                  <div className={`text-sm font-medium ${cat===n.id?'text-blue-300':'text-gray-300'}`}>{n.label}</div>
+                  <div className="text-xs text-gray-600">{n.sub}</div>
+                </div>
+              </div>
+            </button>
+          ))}
+        </nav>
+        <div className="border-t border-gray-800 p-3">
+          <div className="text-xs text-gray-600 mb-2 font-medium">Recent Jobs</div>
+          <JobsSidebar onSelect={j=>{setTermJob(j);setTermOpen(true);}}/>
+        </div>
+      </div>
+
+      {/* Main */}
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+        {/* Header */}
+        <div className="px-6 py-3 border-b border-gray-800 bg-gray-900/40 flex items-center justify-between shrink-0">
+          <div>
+            <h1 className="text-base font-semibold text-white">{activeCat?.e} {activeCat?.label}</h1>
+            <p className="text-xs text-gray-500">{activeCat?.sub}</p>
+          </div>
+          <span className="text-xs text-gray-600 font-mono">{companies.length} companies</span>
+        </div>
+
+        {/* Cards */}
+        <div className="flex-1 overflow-y-auto p-6">
+          {cat==='reports'
+            ?<ReportsBrowser companies={companies} onView={setReport}/>
+            :<div className="grid grid-cols-2 gap-4 max-w-5xl">
+              {workflows.map(wf=>(
+                <WFCard key={wf.id} wf={wf} companies={companies} onRun={run}/>
+              ))}
+            </div>
+          }
+        </div>
+
+        {/* Terminal */}
+        {termOpen&&(
+          <div className="border-t border-gray-700 shrink-0" style={{height:'300px'}}>
+            <Terminal job={termJob} onClose={()=>setTermOpen(false)}/>
+          </div>
+        )}
+      </div>
+
+      {report&&<ReportModal report={report} onClose={()=>setReport(null)}/>}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body></html>

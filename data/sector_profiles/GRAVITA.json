@@ -1,0 +1,18 @@
+{
+  "symbol": "GRAVITA",
+  "name": "Gravita India Ltd",
+  "exchange": "BSE",
+  "screener_url": "https://www.screener.in/company/GRAVITA/",
+  "industry_tag": "",
+  "business_description": "Gravita India Ltd primarily recycles lead, aluminum, and plastic scrap to produce refined metals and recycled materials, which it sells to industrial customers. The company also undertakes turnkey projects for setting up recycling plants, generating revenue from both product sales and project services.",
+  "key_products": [
+    "Refined lead (from recycling)",
+    "Turnkey recycling plant projects"
+  ],
+  "input_sensitivity": "(1) Cost risks: Margins are sensitive to fluctuations in scrap input prices (lead, aluminum, plastic), energy costs, and labor expenses. (2) Revenue/demand risks: Demand is directly driven by the health of the battery manufacturing, metal processing, and industrial sectors that require recycled lead and aluminum.",
+  "output_industries": [
+    "Recycling & E-Waste Management"
+  ],
+  "output_note": "Industrial manufacturers and recycling companies pay Gravita India Ltd for recycled lead, aluminum, plastic materials, and turnkey recycling plant solutions.",
+  "fetched_date": "2026-03-01T15:42:53.964719"
+}

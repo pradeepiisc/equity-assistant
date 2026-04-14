@@ -1,0 +1,18 @@
+{
+  "symbol": "DHABRIYA",
+  "name": "DHABRIYA",
+  "exchange": "BSE",
+  "screener_url": "",
+  "industry_tag": "",
+  "business_description": "Dhabriya manufactures and sells architectural products, primarily focused on doors, windows, and interior solutions. The company generates revenue by supplying these products to builders, contractors, and property developers for use in residential and commercial construction projects.",
+  "key_products": [
+    "doors",
+    "windows"
+  ],
+  "input_sensitivity": "Cost risks include fluctuations in raw material prices (such as wood, PVC, and metal), labour costs, and energy expenses, all of which impact manufacturing margins. Revenue is sensitive to the health of the construction and real estate sectors, as demand for doors and windows is directly tied to new building activity and renovation cycles.",
+  "output_industries": [
+    "Architectural Products & Interior Solutions"
+  ],
+  "output_note": "Builders, contractors, and property developers pay Dhabriya directly for doors, windows, and related interior architectural products used in construction and renovation projects.",
+  "fetched_date": "2026-03-01T15:40:43.607281"
+}
