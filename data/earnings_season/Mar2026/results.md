@@ -1,7 +1,7 @@
 # Quarterly Results — Mar 2026
-*Updated: 2026-04-13*
+*Updated: 2026-04-15*
 
-*135 companies with financial comparison*
+*139 companies with financial comparison*
 
 ### ABB India Ltd (ABB)
 | | Mar 2025 | Dec 2025 | Mar 2026 | QoQ | YoY |
@@ -259,6 +259,14 @@
 | Net Profit | 15 | 10 | — | — | — |
 | EPS | 6.63 | 4.38 | — | — | — |
 
+### Eimco Elecon (India) Ltd (EIMCOELECO)
+| | Mar 2025 | Dec 2025 | Mar 2026 | QoQ | YoY |
+|---|---|---|---|---|---|
+| Sales | 64 | 63 | 67 | ▲6% | ▲4% |
+| OPM% | 28% | 20% | 19% | ▼0.5pp | ▼8.9pp |
+| Net Profit | 15 | 13 | 6.36 | ▼49% | ▼57% |
+| EPS | 26 | 22 | 11 | ▼49% | ▼57% |
+
 ### Emkay Global Financial Services Ltd (EMKAY)
 | | Mar 2025 | Dec 2025 | Mar 2026 | QoQ | YoY |
 |---|---|---|---|---|---|
@@ -306,6 +314,14 @@
 | OPM% | 6% | 11% | — | — | — |
 | Net Profit | 5.00 | 12 | — | — | — |
 | EPS | 1.26 | 3.02 | — | — | — |
+
+### Gaudium IVF and Women Health Ltd (GAUDIUMIVF)
+| | Mar 2025 | Dec 2025 | Mar 2026 | QoQ | YoY |
+|---|---|---|---|---|---|
+| Sales | — | — | — | — | — |
+| OPM% | — | — | — | — | — |
+| Net Profit | — | — | — | — | — |
+| EPS | — | — | — | — | — |
 
 ### Gravita India Ltd (GRAVITA)
 | | Mar 2025 | Dec 2025 | Mar 2026 | QoQ | YoY |
@@ -579,6 +595,14 @@
 | Net Profit | -125 | 95 | — | — | — |
 | EPS | -13 | 9.75 | — | — | — |
 
+### Qualitek Labs Ltd (QLL)
+| | Mar 2025 | Dec 2025 | Mar 2026 | QoQ | YoY |
+|---|---|---|---|---|---|
+| Sales | — | — | — | — | — |
+| OPM% | — | — | — | — | — |
+| Net Profit | — | — | — | — | — |
+| EPS | — | — | — | — | — |
+
 ### Quality Power Electrical Equipments Ltd (QPOWER)
 | | Mar 2025 | Dec 2025 | Mar 2026 | QoQ | YoY |
 |---|---|---|---|---|---|
@@ -698,6 +722,14 @@
 | OPM% | 5% | 11% | — | — | — |
 | Net Profit | 12 | 20 | — | — | — |
 | EPS | 1.68 | 2.66 | — | — | — |
+
+### Stovekraft Ltd (STOVEKRAFT)
+| | Mar 2025 | Dec 2025 | Mar 2026 | QoQ | YoY |
+|---|---|---|---|---|---|
+| Sales | — | — | — | — | — |
+| OPM% | — | — | — | — | — |
+| Net Profit | — | — | — | — | — |
+| EPS | — | — | — | — | — |
 
 ### Suba Hotels Ltd (SUBAHOTELS-SM)
 | | Mar 2025 | Sep 2025 | Mar 2026 | HoH | YoY |

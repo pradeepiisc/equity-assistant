@@ -440,6 +440,21 @@ def _looks_like_financial_page(html: str) -> bool:
     return any(m in h for m in markers)
 
 
+def _expected_quarter_label() -> str:
+    """Estimate the latest quarter label string, e.g., 'Mar 2026'.
+    Mirrors the logic used by earnings_season expected-quarter estimation."""
+    today = datetime.now()
+    y = today.year
+    m = today.month
+    if m >= 10:
+        return f"Sep {y}"
+    if m >= 7:
+        return f"Jun {y}"
+    if m >= 4:
+        return f"Mar {y}"
+    return f"Dec {y-1}"
+
+
 def _fetch_financials(screener_url: str) -> str:
     """
     Fetch financial page HTML from Screener.
@@ -449,20 +464,33 @@ def _fetch_financials(screener_url: str) -> str:
     base = screener_url.rstrip("/")
     base = re.sub(r"/(consolidated|standalone)$", "", base)
     urls_to_try = [f"{base}/consolidated/", f"{base}/standalone/", f"{base}/"]
+    expected_label = _expected_quarter_label()
 
+    first_useful: str = ""
+
+    # Pass 1: prefer a page that includes the expected quarter label
     for url in urls_to_try:
-        # Primary: Chrome CDP
         text = _fetch_financial_text_via_cdp(url)
         if text and _looks_like_useful_financial_text(text):
-            print(f"    [{SKILL_NAME}] Using CDP(DOM) → {url}")
-            return text
+            if not first_useful:
+                first_useful = text
+            if expected_label in text:
+                print(f"    [{SKILL_NAME}] Using CDP(DOM) → {url}")
+                return text
 
         html = _fetch_page_via_cdp(url)
         if html and _looks_like_financial_page(html):
-            print(f"    [{SKILL_NAME}] Using CDP → {url}")
             parsed = _parse_financials(html)
             if _looks_like_useful_financial_text(parsed):
-                return parsed
+                if not first_useful:
+                    first_useful = parsed
+                if expected_label in parsed:
+                    print(f"    [{SKILL_NAME}] Using CDP → {url}")
+                    return parsed
+
+    # Pass 2: fall back to the first useful page found
+    if first_useful:
+        return first_useful
 
     return ""
 

@@ -1,5 +1,5 @@
 {
-  "last_run": "2026-04-13",
+  "last_run": "2026-04-15",
   "companies": {
     "NAMOEWASTE": {
       "transcripts": {
@@ -16,7 +16,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776086637.5
+        "latest_mtime": 1776188566.8
       },
       "insights": {
         "count": 3,
@@ -60,7 +60,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776086655.0
+        "latest_mtime": 1776188582.0
       },
       "insights": {
         "count": 3,
@@ -104,7 +104,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776086667.9
+        "latest_mtime": 1776188598.8
       },
       "insights": {
         "count": 0,
@@ -126,7 +126,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776086681.0
+        "latest_mtime": 1776188617.4
       },
       "insights": {
         "count": 3,
@@ -148,7 +148,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776086693.3
+        "latest_mtime": 1776188631.2
       },
       "insights": {
         "count": 0,
@@ -192,7 +192,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776086707.3
+        "latest_mtime": 1776188645.4
       },
       "insights": {
         "count": 3,
@@ -214,7 +214,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776086720.6
+        "latest_mtime": 1776188662.0
       },
       "insights": {
         "count": 3,
@@ -236,7 +236,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776086732.4
+        "latest_mtime": 1776188678.9
       },
       "insights": {
         "count": 3,
@@ -258,7 +258,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776086746.1
+        "latest_mtime": 1776188696.4
       },
       "insights": {
         "count": 3,
@@ -280,7 +280,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776086757.8
+        "latest_mtime": 1776188709.4
       },
       "insights": {
         "count": 3,
@@ -302,7 +302,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776086770.3
+        "latest_mtime": 1776188724.7
       },
       "insights": {
         "count": 3,
@@ -346,7 +346,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776086785.1
+        "latest_mtime": 1776188740.3
       },
       "insights": {
         "count": 3,
@@ -368,7 +368,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776086798.8
+        "latest_mtime": 1776188755.9
       },
       "insights": {
         "count": 3,
@@ -390,7 +390,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776086813.1
+        "latest_mtime": 1776188772.0
       },
       "insights": {
         "count": 3,
@@ -412,7 +412,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776086824.9
+        "latest_mtime": 1776188785.0
       },
       "insights": {
         "count": 3,
@@ -478,7 +478,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776086839.1
+        "latest_mtime": 1776188801.4
       },
       "insights": {
         "count": 3,
@@ -522,7 +522,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776086851.8
+        "latest_mtime": 1776188816.4
       },
       "insights": {
         "count": 3,
@@ -566,7 +566,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776086864.9
+        "latest_mtime": 1776188832.8
       },
       "insights": {
         "count": 3,
@@ -588,7 +588,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776086879.1
+        "latest_mtime": 1776188847.0
       },
       "insights": {
         "count": 3,
@@ -610,7 +610,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776086890.4
+        "latest_mtime": 1776188860.9
       },
       "insights": {
         "count": 3,
@@ -654,7 +654,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776086903.9
+        "latest_mtime": 1776188874.9
       },
       "insights": {
         "count": 3,
@@ -676,7 +676,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776086916.2
+        "latest_mtime": 1776188891.0
       },
       "insights": {
         "count": 3,
@@ -698,7 +698,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776086929.9
+        "latest_mtime": 1776188904.0
       },
       "insights": {
         "count": 4,
@@ -742,7 +742,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776086942.9
+        "latest_mtime": 1776188919.5
       },
       "insights": {
         "count": 2,
@@ -764,7 +764,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776086955.2
+        "latest_mtime": 1776188935.3
       },
       "insights": {
         "count": 3,
@@ -786,7 +786,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776086967.4
+        "latest_mtime": 1776188949.8
       },
       "insights": {
         "count": 4,
@@ -808,7 +808,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776086981.5
+        "latest_mtime": 1776188961.8
       },
       "insights": {
         "count": 3,
@@ -830,7 +830,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776086993.2
+        "latest_mtime": 1776188976.1
       },
       "insights": {
         "count": 4,
@@ -874,7 +874,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087007.7
+        "latest_mtime": 1776188990.1
       },
       "insights": {
         "count": 4,
@@ -896,7 +896,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087021.4
+        "latest_mtime": 1776189003.4
       },
       "insights": {
         "count": 4,
@@ -918,7 +918,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087034.9
+        "latest_mtime": 1776189016.4
       },
       "insights": {
         "count": 3,
@@ -940,7 +940,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087050.9
+        "latest_mtime": 1776189039.7
       },
       "insights": {
         "count": 3,
@@ -984,7 +984,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087065.7
+        "latest_mtime": 1776189052.8
       },
       "insights": {
         "count": 3,
@@ -1028,7 +1028,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087079.3
+        "latest_mtime": 1776189065.4
       },
       "insights": {
         "count": 2,
@@ -1072,7 +1072,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087092.6
+        "latest_mtime": 1776189078.4
       },
       "insights": {
         "count": 3,
@@ -1138,7 +1138,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087104.4
+        "latest_mtime": 1776189090.4
       },
       "insights": {
         "count": 3,
@@ -1182,7 +1182,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087118.0
+        "latest_mtime": 1776189103.6
       },
       "insights": {
         "count": 3,
@@ -1204,7 +1204,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087128.0
+        "latest_mtime": 1776189115.5
       },
       "insights": {
         "count": 2,
@@ -1248,7 +1248,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087142.2
+        "latest_mtime": 1776189129.7
       },
       "insights": {
         "count": 3,
@@ -1270,7 +1270,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087154.1
+        "latest_mtime": 1776189143.6
       },
       "insights": {
         "count": 3,
@@ -1292,7 +1292,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087167.2
+        "latest_mtime": 1776189157.2
       },
       "insights": {
         "count": 3,
@@ -1314,7 +1314,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087180.8
+        "latest_mtime": 1776189171.9
       },
       "insights": {
         "count": 3,
@@ -1336,7 +1336,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087193.9
+        "latest_mtime": 1776189184.9
       },
       "insights": {
         "count": 4,
@@ -1358,7 +1358,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087205.4
+        "latest_mtime": 1776189200.3
       },
       "insights": {
         "count": 3,
@@ -1380,7 +1380,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087218.6
+        "latest_mtime": 1776189213.6
       },
       "insights": {
         "count": 3,
@@ -1424,7 +1424,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087243.4
+        "latest_mtime": 1776189237.7
       },
       "insights": {
         "count": 3,
@@ -1446,7 +1446,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087256.6
+        "latest_mtime": 1776189251.6
       },
       "insights": {
         "count": 3,
@@ -1468,7 +1468,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087267.8
+        "latest_mtime": 1776189266.1
       },
       "insights": {
         "count": 3,
@@ -1490,7 +1490,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087280.3
+        "latest_mtime": 1776189283.4
       },
       "insights": {
         "count": 2,
@@ -1534,7 +1534,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087291.9
+        "latest_mtime": 1776189296.5
       },
       "insights": {
         "count": 1,
@@ -1578,7 +1578,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087314.3
+        "latest_mtime": 1776189322.1
       },
       "insights": {
         "count": 2,
@@ -1644,7 +1644,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087339.6
+        "latest_mtime": 1776189347.3
       },
       "insights": {
         "count": 3,
@@ -1666,7 +1666,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087351.3
+        "latest_mtime": 1776189362.2
       },
       "insights": {
         "count": 3,
@@ -1705,8 +1705,8 @@
         "latest_mtime": 1772804841.9
       },
       "financials": {
-        "count": 2,
-        "latest_mtime": 1773658477.9
+        "count": 3,
+        "latest_mtime": 1776216872.8
       },
       "shareholding": {
         "count": 1,
@@ -1754,7 +1754,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087373.9
+        "latest_mtime": 1776189385.5
       },
       "insights": {
         "count": 3,
@@ -1776,7 +1776,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087385.1
+        "latest_mtime": 1776189399.8
       },
       "insights": {
         "count": 3,
@@ -1798,7 +1798,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087397.0
+        "latest_mtime": 1776189412.3
       },
       "insights": {
         "count": 3,
@@ -1842,7 +1842,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087409.2
+        "latest_mtime": 1776189426.6
       },
       "insights": {
         "count": 3,
@@ -1886,7 +1886,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087421.2
+        "latest_mtime": 1776189439.8
       },
       "insights": {
         "count": 3,
@@ -1908,7 +1908,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087433.6
+        "latest_mtime": 1776189453.1
       },
       "insights": {
         "count": 3,
@@ -1952,7 +1952,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087453.6
+        "latest_mtime": 1776189465.2
       },
       "insights": {
         "count": 3,
@@ -1974,7 +1974,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087475.0
+        "latest_mtime": 1776189477.5
       },
       "insights": {
         "count": 3,
@@ -1996,7 +1996,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087487.1
+        "latest_mtime": 1776189489.5
       },
       "insights": {
         "count": 3,
@@ -2040,7 +2040,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087498.9
+        "latest_mtime": 1776189504.7
       },
       "insights": {
         "count": 2,
@@ -2062,7 +2062,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087511.7
+        "latest_mtime": 1776189518.8
       },
       "insights": {
         "count": 3,
@@ -2128,7 +2128,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087534.6
+        "latest_mtime": 1776189543.3
       },
       "insights": {
         "count": 4,
@@ -2172,7 +2172,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087547.7
+        "latest_mtime": 1776189558.2
       },
       "insights": {
         "count": 3,
@@ -2194,7 +2194,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087562.4
+        "latest_mtime": 1776189571.4
       },
       "insights": {
         "count": 3,
@@ -2216,7 +2216,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087574.4
+        "latest_mtime": 1776189584.4
       },
       "insights": {
         "count": 3,
@@ -2238,7 +2238,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087586.7
+        "latest_mtime": 1776189596.1
       },
       "insights": {
         "count": 3,
@@ -2260,7 +2260,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087600.6
+        "latest_mtime": 1776189608.1
       },
       "insights": {
         "count": 3,
@@ -2282,7 +2282,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087615.1
+        "latest_mtime": 1776189621.7
       },
       "insights": {
         "count": 3,
@@ -2304,7 +2304,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087629.3
+        "latest_mtime": 1776189634.5
       },
       "insights": {
         "count": 3,
@@ -2348,7 +2348,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087641.3
+        "latest_mtime": 1776189647.9
       },
       "insights": {
         "count": 3,
@@ -2370,7 +2370,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087652.9
+        "latest_mtime": 1776189662.0
       },
       "insights": {
         "count": 3,
@@ -2436,7 +2436,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087670.5
+        "latest_mtime": 1776189674.9
       },
       "insights": {
         "count": 3,
@@ -2458,7 +2458,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087684.5
+        "latest_mtime": 1776189689.3
       },
       "insights": {
         "count": 3,
@@ -2480,7 +2480,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087699.1
+        "latest_mtime": 1776189701.9
       },
       "insights": {
         "count": 4,
@@ -2524,7 +2524,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087715.6
+        "latest_mtime": 1776189716.0
       },
       "insights": {
         "count": 3,
@@ -2546,7 +2546,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087732.6
+        "latest_mtime": 1776189729.8
       },
       "insights": {
         "count": 2,
@@ -2590,7 +2590,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087747.6
+        "latest_mtime": 1776189742.7
       },
       "insights": {
         "count": 4,
@@ -2612,7 +2612,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087759.5
+        "latest_mtime": 1776189755.4
       },
       "insights": {
         "count": 4,
@@ -2634,7 +2634,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087772.7
+        "latest_mtime": 1776189767.8
       },
       "insights": {
         "count": 3,
@@ -2656,7 +2656,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087785.9
+        "latest_mtime": 1776189781.7
       },
       "insights": {
         "count": 3,
@@ -2722,7 +2722,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087812.8
+        "latest_mtime": 1776189806.9
       },
       "insights": {
         "count": 3,
@@ -2744,7 +2744,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087827.1
+        "latest_mtime": 1776189821.1
       },
       "insights": {
         "count": 3,
@@ -2766,7 +2766,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087842.7
+        "latest_mtime": 1776189834.3
       },
       "insights": {
         "count": 3,
@@ -2788,7 +2788,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087857.3
+        "latest_mtime": 1776189847.7
       },
       "insights": {
         "count": 4,
@@ -2810,7 +2810,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087874.6
+        "latest_mtime": 1776189859.8
       },
       "insights": {
         "count": 3,
@@ -2832,7 +2832,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087889.3
+        "latest_mtime": 1776189874.5
       },
       "insights": {
         "count": 3,
@@ -2876,7 +2876,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087903.9
+        "latest_mtime": 1776189887.0
       },
       "insights": {
         "count": 3,
@@ -2920,7 +2920,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087921.0
+        "latest_mtime": 1776189902.1
       },
       "insights": {
         "count": 3,
@@ -2942,7 +2942,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087937.0
+        "latest_mtime": 1776189914.6
       },
       "insights": {
         "count": 3,
@@ -2964,7 +2964,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087951.9
+        "latest_mtime": 1776189929.7
       },
       "insights": {
         "count": 3,
@@ -3030,7 +3030,7 @@
       },
       "shareholding": {
         "count": 1,
-        "latest_mtime": 1776087978.3
+        "latest_mtime": 1776189954.5
       },
       "insights": {
         "count": 3,

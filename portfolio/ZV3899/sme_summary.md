@@ -1,29 +1,29 @@
-*Updated: 2026-04-13*
+*Updated: 2026-04-15*
 ## 🏷️ SME Holdings Summary
 *23 SME stocks · total allocation: 16.4%*
 
 | Stock | Alloc% | P&L% | LTP | Trend |
 |---|---|---|---|---|
-| INFINIUM-SM | 1.3% | -14.4% | ₹210.0 | 🟠 Bearish Rally |
-| SUBAHOTELS-SM | 1.3% | -17.5% | ₹131.0 | ⚪ No data |
-| TBI-SM | 1.2% | -6.9% | ₹73.8 | 🟠 Bearish Rally |
-| TECHERA-SM | 1.2% | -25.1% | ₹193.2 | ⚪ No data |
-| RADIOWALLA-SM | 1.2% | -33.3% | ₹30.6 | 🔴 Bearish |
-| C2C-SM | 1.1% | +20.9% | ₹464.0 | ⚪ No data |
-| VMARCIND-SM | 0.8% | +28.7% | ₹756.5 | 🟢 Strong Bullish |
-| DENTALKART-SM | 0.8% | -41.4% | ₹370.0 | 🔴 Bearish |
-| MEGATHERM-SM | 0.7% | -27.9% | ₹228.4 | 🟡 Neutral |
-| PARTYCRUS-SM | 0.7% | +9.4% | ₹89.0 | 🟢 Strong Bullish |
-| EFFWA-SM | 0.7% | -4.3% | ₹213.1 | 🟡 Neutral |
-| BEWLTD-SM | 0.7% | -50.2% | ₹83.5 | 🔴 Bearish |
-| ZTECH-SM | 0.7% | -6.9% | ₹554.2 | 🟡 Neutral |
-| SHREEOSFM-SM | 0.7% | -16.8% | ₹82.1 | 🟡 Neutral |
-| YAAP-SM | 0.6% | +3.5% | ₹157.5 | ⚪ No data |
-| FAZE3Q-BE | 0.6% | -8.2% | ₹440.0 | 🔴 Bearish |
-| SAHASRA-SM | 0.4% | -35.5% | ₹237.3 | ⚪ No data |
-| DUGLOBAL-SM | 0.4% | -8.6% | ₹37.0 | 🟢 Strong Bullish |
-| VISHNUINFR-SM | 0.3% | -4.8% | ₹172.8 | 🟡 Neutral |
-| SONAMAC-SM | 0.3% | -54.0% | ₹41.0 | 🟠 Bearish Rally |
-| EMMIL-SM | 0.3% | -20.8% | ₹142.5 | 🟠 Bearish Rally |
-| PRATHAM-SM | 0.2% | -7.1% | ₹131.0 | 🟠 Bearish Rally |
-| NEWJAISA-SM | 0.1% | +33.1% | ₹24.9 | 🟡 Neutral |
+| SUBAHOTELS-SM | 1.3% | -12.8% | ₹138.5 | ⚪ No data |
+| TECHERA-SM | 1.3% | -21.7% | ₹202.0 | ⚪ No data |
+| INFINIUM-SM | 1.2% | -15.2% | ₹207.9 | 🔴 Bearish |
+| RADIOWALLA-SM | 1.2% | -30.0% | ₹32.1 | 🔴 Bearish |
+| TBI-SM | 1.2% | -10.4% | ₹71.0 | 🟠 Bearish Rally |
+| C2C-SM | 1.1% | +22.7% | ₹470.8 | ⚪ No data |
+| VMARCIND-SM | 0.8% | +44.7% | ₹851.0 | 🟢 Strong Bullish |
+| MEGATHERM-SM | 0.8% | -23.0% | ₹244.0 | 🟡 Neutral |
+| DENTALKART-SM | 0.8% | -39.1% | ₹384.0 | 🔴 Bearish |
+| EFFWA-SM | 0.7% | -0.1% | ₹222.5 | 🟡 Neutral |
+| PARTYCRUS-SM | 0.7% | +5.7% | ₹86.0 | 🟢 Strong Bullish |
+| SHREEOSFM-SM | 0.7% | -13.0% | ₹85.8 | 🟡 Neutral |
+| BEWLTD-SM | 0.7% | -49.6% | ₹84.5 | 🔴 Bearish |
+| ZTECH-SM | 0.7% | -5.9% | ₹560.0 | 🟡 Neutral |
+| FAZE3Q-BE | 0.6% | -3.7% | ₹461.6 | 🔵 Bullish Pullback |
+| YAAP-SM | 0.6% | +5.8% | ₹161.0 | ⚪ No data |
+| SAHASRA-SM | 0.4% | -32.3% | ₹249.0 | ⚪ No data |
+| DUGLOBAL-SM | 0.4% | -8.9% | ₹36.9 | 🟢 Strong Bullish |
+| SONAMAC-SM | 0.3% | -49.3% | ₹45.1 | 🟡 Neutral |
+| VISHNUINFR-SM | 0.3% | -7.9% | ₹167.0 | 🟡 Neutral |
+| EMMIL-SM | 0.3% | -8.6% | ₹164.5 | 🟡 Neutral |
+| PRATHAM-SM | 0.2% | -2.1% | ₹138.0 | 🟡 Neutral |
+| NEWJAISA-SM | 0.1% | +39.5% | ₹26.1 | 🟡 Neutral |

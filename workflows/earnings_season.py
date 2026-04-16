@@ -958,8 +958,8 @@ def _build_company_results_table(
         col_labels = [yoy_q, prev_q, expected_q, "QoQ", "YoY"]
         comp_q = prev_q  # QoQ comparison
 
-    # Check if we have any data for at least one comparison quarter
-    has_data = any(q in financial_data and financial_data[q] for q in col_qs[:2])
+    # Show a section if we have any quarterly data at all (even if prev/yoy are missing)
+    has_data = bool(financial_data)
     if not has_data:
         return []
 
@@ -1011,7 +1011,7 @@ def _build_company_results_table(
             row.append(_fmt(v, is_pct))
         row += [qoq_str, yoy_str]
         lines.append("| " + " | ".join(row) + " |")
-
+ 
     lines.append("")
     return lines
 
@@ -1039,6 +1039,7 @@ def _abbreviate_investor(name: str) -> str:
 def _build_investor_matrix(
     sh_results: dict[str, dict],
     company_map: dict[str, dict],
+    expected_q: str,
 ) -> list[str]:
     """Build tracked investor matrix: companies as rows, investors as columns.
     Cell = latest% with trend arrow."""
@@ -1074,19 +1075,31 @@ def _build_investor_matrix(
         "|" + "---|" * len(headers),
     ]
 
+    # Filter to rows that have at least one value for the expected quarter
+    filtered_syms = []
     for sym in sorted(matrix.keys()):
         c = company_map.get(sym, {})
         name = c.get("name", sym)[:20]
         row = [f"{name} ({sym})"]
+        any_val = False
         for inv in sorted_investors:
             alert = matrix[sym].get(inv)
             if not alert:
                 row.append("—")
             else:
-                arrow = {"NEW": "🆕", "UP": "↑", "DOWN": "↓", "STABLE": "→"}.get(alert["trend"], "?")
-                row.append(f"{alert['latest_pct']:.1f}%{arrow}")
-        lines.append("| " + " | ".join(row) + " |")
+                # Only show value if the alert corresponds to the expected quarter; otherwise blank
+                if alert.get("latest_q") != expected_q:
+                    row.append("—")
+                else:
+                    arrow = {"NEW": "🆕", "UP": "↑", "DOWN": "↓", "STABLE": "→"}.get(alert["trend"], "?")
+                    row.append(f"{alert['latest_pct']:.2f}%{arrow}")
+                    any_val = True
+        if any_val:
+            filtered_syms.append(sym)
+            lines.append("| " + " | ".join(row) + " |")
 
+    if len(lines) >= 2:
+        lines[1] = f"*{len(filtered_syms)} companies × {len(sorted_investors)} tracked investors*\n"
     lines.append("")
     return lines
 
@@ -1117,7 +1130,7 @@ def _write_shareholding_quarterly(
         if not m:
             return rows
         start = m.end()
-        # Find next section or EOF
+        # Find next H2 section or EOF — stop ONLY at H2 (##), not H3 subsections
         m2 = re.search(r"^## ", text[start:], re.MULTILINE)
         end = start + m2.start() if m2 else len(text)
         block = text[start:end]
@@ -1130,14 +1143,14 @@ def _write_shareholding_quarterly(
                 continue
             if line.strip().startswith("| Company "):
                 continue
-            # extract symbol in parentheses
+            # Accept only rows that have exactly 7 data cells (our table: Company, Quarter, Promoter, FII, DII, Public, Alert)
+            cells = [c.strip() for c in line.strip().split("|")[1:-1]]
+            if len(cells) != 7:
+                continue
+            # extract symbol in parentheses for stable key
             m_sym = re.search(r"\(([^)]+)\)", line)
             key = m_sym.group(1).strip().upper() if m_sym else line
-            if line.count("|") >= 7:  # already with Alert column
-                rows[key] = line
-            else:
-                # normalize to 7 columns by appending empty Alert
-                rows[key] = line[:-1] + " |  |"
+            rows[key] = line
         return rows
 
     out_text_old = out.read_text(encoding="utf-8") if out.exists() else ""
@@ -1149,21 +1162,8 @@ def _write_shareholding_quarterly(
     }
     any_tracked = any(len(r.get("tracked_alerts", [])) for r in sh_results.values())
 
-    if not sh_changed and not any_tracked:
-        # No new info — keep previous content, only bump the Updated date if file exists
-        if out_text_old:
-            new_text = re.sub(r"^\*Updated: .*\*$", f"*Updated: {today}*", out_text_old, flags=re.MULTILINE)
-            out.write_text(new_text, encoding="utf-8")
-            return out
-        # No previous content — write minimal skeleton
-        lines = [
-            f"# Shareholding — {expected_q}",
-            f"*Updated: {today}*\n",
-            "## Shareholding Changes",
-            "*No shareholding changes detected yet.*\n",
-        ]
-        out.write_text("\n".join(lines), encoding="utf-8")
-        return out
+    # Note: even if there are no new changes/alerts, we will still rebuild the file below
+    # so that the Pending section is always up to date.
 
     # Build new rows for changed companies in 7-column format (with Alert)
     def _build_row(sym: str, r: dict) -> str:
@@ -1180,10 +1180,11 @@ def _write_shareholding_quarterly(
                 delta = ch.get("delta")
                 if delta is not None:
                     arrow = "▲" if delta > 0 else "▼"
-                    return f"{ch['new']:.1f}% {arrow}{abs(delta):.1f}pp"
-                return f"{ch['new']:.1f}%"
+                    return f"{ch['new']:.2f}% {arrow}{abs(delta):.2f}pp"
+                return f"{ch['new']:.2f}%"
             val = latest.get(cat)
-            return f"{val:.1f}%" if val is not None else "—"
+            # For companies where expected_q isn't the latest, leave blank for this quarter-level report
+            return f"{val:.2f}%" if val is not None and comp.get("latest_quarter") == expected_q else "—"
 
         alloc_str = f" ({holdings_map[sym]['pct_of_portfolio']:.1f}%)" if sym in holdings_map and "pct_of_portfolio" in holdings_map[sym] else ""
         # Alert column: first tracked investor with trend, if any
@@ -1223,9 +1224,29 @@ def _write_shareholding_quarterly(
         lines.append("*No shareholding changes detected yet.*\n")
 
     # Tracked investor matrix — only if we have fresh alerts; otherwise keep previous content by not rewriting it above
-    matrix_lines = _build_investor_matrix(sh_results, company_map)
+    matrix_lines = _build_investor_matrix(sh_results, company_map, expected_q)
     if matrix_lines:
         lines.extend(matrix_lines)
+
+    # Pending table — companies missing expected quarter shareholding
+    pending: list[tuple[str, str, float]] = []  # (symbol, last_q, alloc%)
+    for sym in sorted(company_map.keys()):
+        parsed = _parse_existing_shareholding(sym)
+        last_q = (parsed.get("quarters", []) or [""])[-1] if parsed else ""
+        if last_q != expected_q:
+            alloc = holdings_map.get(sym, {}).get("pct_of_portfolio", 0.0)
+            pending.append((sym, last_q or "—", alloc))
+    if pending:
+        lines.append("### ⏳ Pending — Missing latest quarter")
+        lines.append(f"*{len(pending)} companies still missing {expected_q} shareholding*\n")
+        lines.append("| Company | Last Available | Alloc% |")
+        lines.append("|---|---|---|")
+        for sym, last_q, alloc in sorted(pending, key=lambda x: (-1 if x[0] in holdings_map else 0, x[0])):
+            c = company_map.get(sym, {})
+            name = c.get("name", sym)
+            alloc_str = f"{alloc:.2f}%" if alloc else "—"
+            lines.append(f"| {name} ({sym}) | {last_q} | {alloc_str} |")
+        lines.append("")
 
     out.write_text("\n".join(lines), encoding="utf-8")
     return out
@@ -1450,6 +1471,46 @@ def run(
             qdir.mkdir(parents=True, exist_ok=True)
             flag_path.write_text(f"# Transcripts Fetch Flag — {expected_q_for_flag}\nUpdated: {date.today().isoformat()}\n", encoding="utf-8")
 
+        # Additionally: if financial results for expected_q are missing, fetch financials only
+        print("\n── Ensuring quarterly financials for expected quarter ──")
+        expected_q_fin = expected_q_for_flag
+        # Preflight CDP
+        try:
+            from skills.cdp_helper import is_available as _cdp_avail  # noqa: PLC0415
+        except Exception:
+            _cdp_avail = lambda: False  # type: ignore
+        missing_fin = []
+        for c in target_companies:
+            sym = c.get("symbol", "").upper()
+            fin = _parse_quarterly_financials(sym)
+            has_latest = expected_q_fin in fin and any(v is not None for v in fin.get(expected_q_fin, {}).values())
+            if not has_latest:
+                missing_fin.append(sym)
+        if missing_fin and (_cdp_avail()):
+            print(f"  Fetching financials for {len(missing_fin)} companies…")
+            try:
+                from workflows.data_fetch import run as data_fetch_run  # noqa: PLC0415
+                for i, sym in enumerate(missing_fin, 1):
+                    print(f"    [{i}/{len(missing_fin)}] {sym} — financials")
+                    data_fetch_run(
+                        symbol=sym,
+                        fetch_transcripts=False,
+                        fetch_news=False,
+                        fetch_shareholding=False,
+                        fetch_financials=True,
+                        fetch_insights=False,
+                        fetch_valuepickr=False,
+                        refresh_financials=False,
+                        interactive=False,
+                    )
+            except Exception as e:
+                print(f"  ⚠️ Financials fetch error: {e}")
+        else:
+            if not missing_fin:
+                print("  All companies already have expected quarter financials.")
+            else:
+                print("  ⚠️ Chrome CDP not available — skipping financials fetch.")
+
     # Phase 2: Snapshot current state & detect file-level deltas
     print("\n── Scanning for file-level changes ──")
     current_snapshots: dict[str, dict] = {}
@@ -1478,6 +1539,85 @@ def run(
     company_map: dict[str, dict] = {c.get("symbol", "").upper(): c for c in all_companies}
 
     print(f"\n── Writing quarterly files → data/earnings_season/{expected_q.replace(' ', '')}/ ──")
+
+    # Process all existing shareholding files to detect quarter-over-quarter changes
+    # even if we didn't fetch in this run
+    if not sh_results:
+        sh_results = {}
+    for c in target_companies:
+        sym = c.get("symbol", "").upper()
+        if sym in sh_results:
+            continue  # Already processed from fetch
+        # Parse existing shareholding file and detect changes between latest two quarters
+        data = _parse_existing_shareholding(sym)
+        if not data:
+            continue
+        quarters = data.get("quarters", [])
+        categories = data.get("categories", {})
+        if len(quarters) < 2:
+            continue  # Need at least 2 quarters to compare
+        
+        # Compare last two quarters within the same file
+        latest_q = quarters[-1]
+        prev_q = quarters[-2]
+        if latest_q != expected_q:
+            continue  # Only process if latest quarter matches expected
+        
+        KEY_CATS = ["Promoters+", "FIIs+", "DIIs+", "Public+"]
+        changes: dict[str, dict] = {}
+        latest: dict[str, float | None] = {}
+        
+        for cat in KEY_CATS:
+            vals = categories.get(cat, [])
+            if len(vals) < 2:
+                continue
+            prev_val = vals[-2]
+            latest_val = vals[-1]
+            latest[cat] = latest_val
+            
+            if prev_val is not None and latest_val is not None:
+                delta = latest_val - prev_val
+                if abs(delta) > 0.01:  # Significant change threshold
+                    changes[cat] = {"old": prev_val, "new": latest_val, "delta": delta}
+        
+        if changes:
+            # Detect tracked investors
+            tracked_alerts = []
+            individual = data.get("individual", {})
+            for inv_name in tracked_names:
+                for section, investors in individual.items():
+                    for investor_row in investors:
+                        if inv_name.lower() in investor_row.get("name", "").lower():
+                            values = investor_row.get("values", {})
+                            if latest_q in values and prev_q in values:
+                                try:
+                                    lv = float(values[latest_q])
+                                    pv = float(values[prev_q])
+                                    trend = "UP" if lv > pv + 0.01 else "DOWN" if lv < pv - 0.01 else "STABLE"
+                                    if pv == 0:
+                                        trend = "NEW"
+                                    tracked_alerts.append({
+                                        "investor": inv_name,
+                                        "matched_name": investor_row.get("name"),
+                                        "trend": trend,
+                                        "latest_pct": lv,
+                                        "prev_pct": pv,
+                                        "latest_q": latest_q,
+                                    })
+                                except ValueError:
+                                    pass
+            
+            sh_results[sym] = {
+                "comparison": {
+                    "type": "new_quarter",
+                    "new_quarter": latest_q,
+                    "old_quarter": prev_q,
+                    "latest_quarter": latest_q,
+                    "latest": latest,
+                    "changes": changes,
+                },
+                "tracked_alerts": tracked_alerts,
+            }
 
     # Shareholding evolving file (shareholding changes + investor matrix)
     sh_path = _write_shareholding_quarterly(expected_q, sh_results, company_map, holdings_map)

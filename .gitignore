@@ -29,8 +29,10 @@ holdings/
 data/companies/
 
 # Generated reports (optional — remove these lines if you want to commit reports)
-#data/companies/*/reports/*.md
-#data/companies/*/reports/*.json
+data/companies/*/reports/*.md
+data/companies/*/reports/*.json
+
+portfolio/.cache/
 
 # Downloaded PDFs (large files — store locally, don't commit)
 data/companies/*/transcripts/*.pdf

@@ -1,23 +1,26 @@
-*Updated: 2026-04-13*
+*Updated: 2026-04-15*
 ## 🎯 Deployment Candidates
 *Bullish trend + allocation < 2% — consider increasing position*
 
 | Stock | Trend | Alloc% | LTP | DMA40 | DMA100 | Sector | SME |
 |---|---|---|---|---|---|---|---|
-| ATULAUTO | 🟢 Strong Bullish | 0.3% | ₹481.5 | ₹448 | ₹443 | Automobiles - Three Wheel |  |
-| AYMSYNTEX | 🟢 Strong Bullish | 0.3% | ₹192.0 | ₹189 | ₹174 | Textiles - Synthetic Yarn |  |
-| DUGLOBAL-SM | 🟢 Strong Bullish | 0.4% | ₹37.0 | ₹36 | ₹33 | — | 🏷️ |
-| JYOTISTRUC | 🟢 Strong Bullish | 0.4% | ₹12.1 | ₹11 | ₹11 | Power Transmission - EPC |  |
-| ACUTAAS | 🟢 Strong Bullish | 0.5% | ₹2393.8 | ₹2225 | ₹1939 | Specialty Chemicals |  |
-| HIRECT | 🟢 Strong Bullish | 0.5% | ₹833.0 | ₹711 | ₹711 | Power Electronics - Recti |  |
-| SGFIN | 🟢 Strong Bullish | 0.5% | ₹466.5 | ₹408 | ₹399 | Financial Services - NBFC |  |
-| ABB | 🟢 Strong Bullish | 0.6% | ₹6828.9 | ₹6138 | ₹5562 | Heavy Electricals - Indus |  |
-| PARTYCRUS-SM | 🟢 Strong Bullish | 0.7% | ₹89.0 | ₹82 | ₹82 | Events & Hospitality | 🏷️ |
-| VMARCIND-SM | 🟢 Strong Bullish | 0.8% | ₹756.5 | ₹673 | ₹670 | Consumer Electricals | 🏷️ |
-| HFCL | 🟢 Strong Bullish | 0.9% | ₹85.8 | ₹72 | ₹69 | Telecom Infrastructure |  |
-| APEX | 🟢 Strong Bullish | 1.0% | ₹422.0 | ₹389 | ₹330 | Food Processing - Seafood |  |
-| APOLLOPIPE | 🟢 Strong Bullish | 1.1% | ₹453.0 | ₹382 | ₹328 | Pipes & Fittings |  |
-| KRN | 🟢 Strong Bullish | 1.2% | ₹1053.0 | ₹887 | ₹796 | Industrial Equipment - He |  |
-| ADVAIT | 🟢 Strong Bullish | 1.4% | ₹1868.0 | ₹1685 | ₹1589 | Power Infrastructure |  |
-| MAHLOG | 🟢 Strong Bullish | 1.6% | ₹387.5 | ₹386 | ₹348 | Logistics & Supply Chain |  |
-| SYRMA | 🟢 Strong Bullish | 1.9% | ₹860.1 | ₹806 | ₹779 | Electronics Manufacturing |  |
+| ATULAUTO | 🟢 Strong Bullish | 0.3% | ₹470.8 | ₹447 | ₹443 | Automobiles - Three Wheel |  |
+| AYMSYNTEX | 🟢 Strong Bullish | 0.3% | ₹193.3 | ₹189 | ₹174 | Textiles - Synthetic Yarn |  |
+| DUGLOBAL-SM | 🟢 Strong Bullish | 0.4% | ₹36.9 | ₹37 | ₹33 | — | 🏷️ |
+| JYOTISTRUC | 🟢 Strong Bullish | 0.4% | ₹12.9 | ₹11 | ₹11 | Power Transmission - EPC |  |
+| ACUTAAS | 🟢 Strong Bullish | 0.4% | ₹2299.0 | ₹2232 | ₹1944 | Specialty Chemicals |  |
+| SGFIN | 🟢 Strong Bullish | 0.5% | ₹465.4 | ₹410 | ₹399 | Financial Services - NBFC |  |
+| HIRECT | 🟢 Strong Bullish | 0.5% | ₹846.0 | ₹715 | ₹711 | Power Electronics - Recti |  |
+| ABB | 🟢 Strong Bullish | 0.5% | ₹6867.2 | ₹6164 | ₹5581 | Heavy Electricals - Indus |  |
+| FAZE3Q-BE | 🔵 Bullish Pullback | 0.6% | ₹461.6 | ₹464 | ₹455 | Textiles - Home Furnishin | 🏷️ |
+| PARTYCRUS-SM | 🟢 Strong Bullish | 0.7% | ₹86.0 | ₹83 | ₹82 | Events & Hospitality | 🏷️ |
+| VMARCIND-SM | 🟢 Strong Bullish | 0.8% | ₹851.0 | ₹676 | ₹670 | Consumer Electricals | 🏷️ |
+| HFCL | 🟢 Strong Bullish | 0.9% | ₹88.2 | ₹72 | ₹69 | Telecom Infrastructure |  |
+| APEX | 🟢 Strong Bullish | 1.0% | ₹425.1 | ₹390 | ₹332 | Food Processing - Seafood |  |
+| APOLLOPIPE | 🟢 Strong Bullish | 1.1% | ₹453.0 | ₹386 | ₹329 | Pipes & Fittings |  |
+| KRN | 🟢 Strong Bullish | 1.2% | ₹1124.0 | ₹897 | ₹799 | Industrial Equipment - He |  |
+| ADVAIT | 🟢 Strong Bullish | 1.4% | ₹1874.0 | ₹1687 | ₹1590 | Power Infrastructure |  |
+| MAHLOG | 🟢 Strong Bullish | 1.6% | ₹410.6 | ₹386 | ₹349 | Logistics & Supply Chain |  |
+| YASHO | 🟢 Strong Bullish | 2.0% | ₹1494.0 | ₹1443 | ₹1443 | Specialty Chemicals |  |
+| SYRMA | 🟢 Strong Bullish | 2.0% | ₹893.4 | ₹806 | ₹779 | Electronics Manufacturing |  |
+| JAINREC | 🔵 Bullish Pullback | 2.0% | ₹418.0 | ₹418 | ₹409 | Recycling - Non-Ferrous M |  |

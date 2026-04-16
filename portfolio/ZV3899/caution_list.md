@@ -1,31 +1,23 @@
-*Updated: 2026-04-13*
+*Updated: 2026-04-15*
 ## ⚠️ Caution List
 *Bearish trend + allocation ≥ 0.5% — consider reducing*
 
 | Stock | Trend | Alloc% | LTP | DMA100 | P&L% | Sector |
 |---|---|---|---|---|---|---|
-| MBEL | 🟠 Bearish Rally | 1.3% | ₹311.0 | ₹337 | -17.6% | Engineering - Industrial  |
-| INFINIUM-SM | 🟠 Bearish Rally | 1.3% | ₹210.0 | ₹220 | -14.4% | Pharmaceuticals |
-| TBI-SM | 🟠 Bearish Rally | 1.2% | ₹73.8 | ₹77 | -6.9% | Agri Processing |
-| RADIOWALLA-SM | 🔴 Bearish | 1.2% | ₹30.6 | ₹52 | -33.3% | Media - Radio |
-| INFLAME | 🔴 Bearish | 1.2% | ₹287.8 | ₹302 | +15.9% | Consumer Durables - Gas A |
-| ZAGGLE | 🟠 Bearish Rally | 1.1% | ₹249.9 | ₹295 | +0.5% | Fintech - Prepaid Cards |
-| COSMICCRF | 🔴 Bearish | 1.0% | ₹832.0 | ₹1052 | +2.3% | Specialty Chemicals |
-| GANESHCP | 🟠 Bearish Rally | 0.8% | ₹191.2 | ₹208 | -20.8% | Consumer Products - Perso |
-| PVRINOX | 🔴 Bearish | 0.8% | ₹935.8 | ₹1022 | -5.9% | Entertainment - Multiplex |
-| ADCOUNTY | 🟠 Bearish Rally | 0.8% | ₹117.7 | ₹126 | -3.2% | Digital Advertising |
-| DENTALKART-SM | 🔴 Bearish | 0.8% | ₹370.0 | ₹521 | -41.4% | Healthcare - Dental Produ |
-| VIKRAN | 🔴 Bearish | 0.7% | ₹65.5 | ₹84 | -10.3% | Engineering - Forgings |
-| DHABRIYA | 🔴 Bearish | 0.7% | ₹335.0 | ₹348 | -6.9% | Building Materials |
-| BEWLTD-SM | 🔴 Bearish | 0.7% | ₹83.5 | ₹105 | -50.2% | Engineering - Defence |
-| NORTHARC | 🔴 Bearish | 0.7% | ₹234.9 | ₹250 | -9.3% | NBFC - Inclusive Finance |
-| DEEPAKFERT | 🟠 Bearish Rally | 0.7% | ₹1070.0 | ₹1133 | -7.5% | Fertilisers & Chemicals |
-| HCC | 🟠 Bearish Rally | 0.7% | ₹17.3 | ₹19 | -6.4% | Construction - Infrastruc |
-| SANJIVIN | 🔴 Bearish | 0.6% | ₹167.0 | ₹191 | -23.4% | Pharma - Parenterals |
-| FAZE3Q-BE | 🔴 Bearish | 0.6% | ₹440.0 | ₹456 | -8.2% | Textiles - Home Furnishin |
-| CARYSIL | 🔴 Bearish | 0.6% | ₹842.5 | ₹881 | -9.2% | Building Products - Kitch |
-| UNIECOM | 🔴 Bearish | 0.6% | ₹92.5 | ₹109 | -21.1% | E-commerce SaaS |
-| NUVAMA | 🟠 Bearish Rally | 0.6% | ₹1300.2 | ₹1347 | -1.0% | Financial Services - Weal |
-| SHAILY | 🔴 Bearish | 0.5% | ₹1941.0 | ₹2197 | -16.9% | Industrial Plastics & Eng |
-| CHTR | 🔴 Bearish | 0.5% | ₹51.0 | ₹74 | -15.7% | Technology |
-| GRAVITA | 🟠 Bearish Rally | 0.5% | ₹1552.8 | ₹1644 | -2.1% | Recycling - Lead & Alumin |
+| MBEL | 🟠 Bearish Rally | 1.3% | ₹321.0 | ₹336 | -15.0% | Engineering - Industrial  |
+| INFINIUM-SM | 🔴 Bearish | 1.2% | ₹207.9 | ₹219 | -15.2% | Pharmaceuticals |
+| RADIOWALLA-SM | 🔴 Bearish | 1.2% | ₹32.1 | ₹51 | -30.0% | Media - Radio |
+| TBI-SM | 🟠 Bearish Rally | 1.2% | ₹71.0 | ₹77 | -10.4% | Agri Processing |
+| ZAGGLE | 🟠 Bearish Rally | 1.1% | ₹261.0 | ₹294 | +4.9% | Fintech - Prepaid Cards |
+| INFLAME | 🔴 Bearish | 1.1% | ₹274.2 | ₹302 | +10.4% | Consumer Durables - Gas A |
+| COSMICCRF | 🟠 Bearish Rally | 1.0% | ₹873.5 | ₹1048 | +7.4% | Specialty Chemicals |
+| GANESHCP | 🟠 Bearish Rally | 0.8% | ₹197.0 | ₹207 | -18.4% | Consumer Products - Perso |
+| PVRINOX | 🔴 Bearish | 0.8% | ₹941.6 | ₹1020 | -5.3% | Entertainment - Multiplex |
+| VIKRAN | 🟠 Bearish Rally | 0.8% | ₹69.7 | ₹83 | -4.5% | Engineering - Forgings |
+| DENTALKART-SM | 🔴 Bearish | 0.8% | ₹384.0 | ₹519 | -39.1% | Healthcare - Dental Produ |
+| ADCOUNTY | 🟠 Bearish Rally | 0.8% | ₹119.3 | ₹125 | -1.8% | Digital Advertising |
+| SANJIVIN | 🟠 Bearish Rally | 0.7% | ₹181.8 | ₹191 | -16.6% | Pharma - Parenterals |
+| BEWLTD-SM | 🔴 Bearish | 0.7% | ₹84.5 | ₹105 | -49.6% | Engineering - Defence |
+| NORTHARC | 🟠 Bearish Rally | 0.7% | ₹239.0 | ₹250 | -7.7% | NBFC - Inclusive Finance |
+| UNIECOM | 🔴 Bearish | 0.6% | ₹97.8 | ₹109 | -16.6% | E-commerce SaaS |
+| CHTR | 🟠 Bearish Rally | 0.5% | ₹57.9 | ₹73 | -4.3% | Technology |
