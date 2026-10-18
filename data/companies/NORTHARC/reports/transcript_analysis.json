@@ -1,0 +1,228 @@
+{
+  "executive_summary": "Across the last six quarters, Northern Arc Capital has demonstrated a steady recovery and strengthening trajectory after FY25 stress, with AUM growth re-accelerating to 20%+ run-rate, improving ROA (2.4% → 2.7%), and stabilising credit costs around 2.6–3.0%. Management has been consistent in prioritising risk-adjusted returns over headline growth, evidenced by calibrated MFI exposure, conservative provisioning, and disciplined MSME expansion. Fee-based and technology-led credit solutions remain a structural differentiator, though monetisation is still early-stage. Overall, execution credibility has improved as guidance on growth, margins, and credit costs has largely aligned with delivery by Q3FY26.",
+  "management_tone": {
+    "rating": "improving",
+    "evidence": [
+      "Q1FY26: Management acknowledged FY25 headwinds and stated that 'residual impact of FY25 stress will linger through the first half of the year' but set clear recovery expectations for H2.",
+      "Q2FY26: Management explicitly reiterated credit cost guidance of 2.6–2.8% and AUM growth of 20–22%, signalling confidence without over-promising.",
+      "Q3FY26: CEO stated 'incremental PAR 0+ accretion has reverted to pre-stress level' and backed it with vintage and guardrail data, reflecting higher specificity.",
+      "Q4FY25: Management openly discussed one-time DLG provisioning and management overlay, clearly separating accounting prudence from underlying business performance."
+    ]
+  },
+  "guidance_vs_delivery": [
+    {
+      "quarter": "Q1FY26",
+      "what_was_promised": "H2FY26 credit cost to moderate to 2.7–2.9% and AUM growth to re-accelerate",
+      "what_was_delivered": "By Q2FY26, credit cost improved to 2.7% and AUM growth reached 15% YoY with momentum picking up",
+      "verdict": "delivered"
+    },
+    {
+      "quarter": "Q2FY26",
+      "what_was_promised": "Full-year FY26 credit cost of ~2.6–2.8% and ROA ~2.8%",
+      "what_was_delivered": "Q3FY26 exit credit cost guided at 2.7–3.0% and ROA improved to 2.7%",
+      "verdict": "on_track"
+    }
+  ],
+  "guidance_evolution": {
+    "topics": [
+      {
+        "topic": "Credit cost normalisation",
+        "timeline": [
+          {
+            "quarter": "Q2FY25",
+            "what_was_said": "Credit costs elevated due to MFI stress; provisioning increased prudently."
+          },
+          {
+            "quarter": "Q4FY25",
+            "what_was_said": "Ex-DLG credit cost would have been ~2.6%."
+          },
+          {
+            "quarter": "Q1FY26",
+            "what_was_said": "H2 credit cost expected at 2.7–2.9%."
+          },
+          {
+            "quarter": "Q3FY26",
+            "what_was_said": "Exit credit cost expected to remain within 2.7–3.0%."
+          }
+        ],
+        "consistency": "consistent",
+        "assessment": "Management steadily guided and delivered a normalisation path without sharp reversals."
+      },
+      {
+        "topic": "D2C mix expansion",
+        "timeline": [
+          {
+            "quarter": "Q2FY25",
+            "what_was_said": "Target to increase D2C mix to ~70% by FY28."
+          },
+          {
+            "quarter": "Q1FY26",
+            "what_was_said": "D2C at 53%; strategy unchanged."
+          },
+          {
+            "quarter": "Q3FY26",
+            "what_was_said": "D2C reached 56%, growing ~30% YoY."
+          }
+        ],
+        "consistency": "consistent",
+        "assessment": "Clear execution against a multi-year stated objective."
+      }
+    ],
+    "pattern_summary": "Management guidance has been realistic, conservative, and largely unchanged over time, with delivery improving visibility and credibility."
+  },
+  "margin_commentary": "Margins have been discussed primarily through a risk-adjusted lens rather than headline NIM. Management consistently cited mix shift towards D2C, declining cost of funds, and fee income as key levers. NIM improved from ~9.1% in FY25 to ~9.9% in Q3FY26, supported by ~90 bps YoY reduction in cost of funds. Margin guidance has remained credible, with no abrupt reversals.",
+  "revenue_growth_narrative": "Revenue growth has been positioned as a combination of balance-sheet-led lending (MSME, consumer) and capital-light fee income (placements, funds, tech platforms). While FY25 growth was muted by MFI stress, FY26 saw revival led by MSME (+40%+ YoY) and consumer finance. The narrative around growth drivers has remained consistent, with no sudden pivots.",
+  "key_risks_flagged_by_management": [
+    "MFI over-leveraging and borrower stress (Q2FY25, Q4FY25)",
+    "Stress in unsecured small-ticket MSME loans (Q3FY26)",
+    "Lag in transmission of repo rate cuts to MCLR affecting liquidity (Q1FY26, Q3FY26)",
+    "Muted offshore funding participation (Q3FY26)"
+  ],
+  "positive_signals": [
+    "AUM crossed ₹15,000 crore milestone (Q3FY26)",
+    "Highest-ever quarterly PAT of ₹101 crore (Q3FY26)",
+    "PAR 0+ accretion in MFI turned negative sequentially (Q3FY26)",
+    "Cost of funds declined ~90 bps YoY to 8.5% (Q3FY26)",
+    "Fee income grew ~50% YoY driven by placements (Q3FY26)"
+  ],
+  "red_flags": [
+    "Repeated need for management overlays and one-time provisions in FY25 raised questions on initial risk calibration.",
+    "Intermediate retail credit cost volatility attributed to 'prudence' rather than specific asset issues, limiting transparency."
+  ],
+  "business_problems_and_challenges": [
+    {
+      "problem": "Delayed transmission of policy rate cuts into effective borrowing costs, impacting near-term margin expansion.",
+      "evidence": "Management noted that despite 125 bps repo cuts, MCLR reduction was only ~25–30 bps (Q3FY26).",
+      "severity": "significant",
+      "recurring": true,
+      "opportunity_type": "financial_services"
+    },
+    {
+      "problem": "High operational intensity required for MSME collections and underwriting due to physical branch-led model.",
+      "evidence": "Management highlighted addition of sales and collection staff and branch expansion to support MSME growth (Q2FY26, Q3FY26).",
+      "severity": "moderate",
+      "recurring": true,
+      "opportunity_type": "technology_and_automation"
+    }
+  ],
+  "overall_investment_signal": "positive: Improving execution, stabilised asset quality, and credible delivery against guidance outweigh residual sectoral risks.",
+  "forward_estimates": {
+    "revenue_targets": [
+      {
+        "period": "FY26",
+        "estimate": "20–22% AUM growth",
+        "basis": "D2C growth momentum and MSME expansion",
+        "quarter_source": "Q2FY26"
+      }
+    ],
+    "earnings_guidance": [
+      {
+        "metric": "ROA",
+        "target": "2.8%",
+        "basis": "Margin expansion and stabilised credit cost",
+        "quarter_source": "Q2FY26"
+      }
+    ],
+    "capex_plans": [
+      {
+        "item": "Branch expansion (MSME)",
+        "amount_cr": "not disclosed",
+        "timeline": "FY26–FY27",
+        "quarter_source": "Q2FY26"
+      }
+    ],
+    "confidence_level": "medium"
+  },
+  "new_facilities_and_products": [],
+  "mergers_and_acquisitions": [],
+  "market_landscape": {
+    "addressable_market": "Indian retail credit market ~₹75 trillion growing at 16–18% CAGR (Q2FY25)",
+    "company_market_share": "Not disclosed",
+    "competitive_position": "Differentiated by integrated credit solutions, proprietary tech, and fee franchise",
+    "key_competitors_mentioned": [],
+    "export_opportunity": "Not applicable",
+    "government_policy_tailwinds": "RBI rate cuts, GST reductions, MFIN guardrails",
+    "government_policy_headwinds": "Digital lending and MFI regulatory tightening (FY25)",
+    "industry_growth_rate": "15–17% for NBFC sector (Q3FY26)",
+    "demand_drivers": [
+      "MSME under-penetration",
+      "Consumption recovery",
+      "Financial inclusion"
+    ]
+  },
+  "cyclicality_and_macro_factors": {
+    "cyclicality_assessment": "mixed",
+    "raw_material_sensitivity": "Not applicable",
+    "interest_rate_impact": "Declining rates improve margins with lag (Q1FY26–Q3FY26)",
+    "currency_exposure": "Limited; offshore borrowings hedged",
+    "global_competition_threats": "None highlighted",
+    "regulatory_dependencies": "MFIN guardrails, CGFMU coverage",
+    "supply_chain_risks": "Not highlighted"
+  },
+  "sector_specific_kpis": [
+    {
+      "metric": "AUM",
+      "latest_value": "₹15,121 crore",
+      "previous_value": "₹14,166 crore",
+      "trend": "improving",
+      "management_comment": "Outpaced industry growth",
+      "quarter_source": "Q3FY26"
+    },
+    {
+      "metric": "Credit cost",
+      "latest_value": "2.9%",
+      "previous_value": "3.0%",
+      "trend": "improving",
+      "management_comment": "Within guided range",
+      "quarter_source": "Q3FY26"
+    }
+  ],
+  "transcripts_used": [
+    {
+      "quarter": "Q2FY25",
+      "type": "earnings_call",
+      "key_topics_discussed": [
+        "MFI stress",
+        "Provisioning",
+        "Growth moderation"
+      ],
+      "management_sentiment_this_quarter": "cautious"
+    },
+    {
+      "quarter": "Q4FY25",
+      "type": "earnings_call",
+      "key_topics_discussed": [
+        "DLG provisions",
+        "Strategic recalibration"
+      ],
+      "management_sentiment_this_quarter": "cautious"
+    },
+    {
+      "quarter": "Q1FY26",
+      "type": "earnings_call",
+      "key_topics_discussed": [
+        "Recovery signs",
+        "Guidance"
+      ],
+      "management_sentiment_this_quarter": "confident"
+    },
+    {
+      "quarter": "Q2FY26",
+      "type": "earnings_call",
+      "key_topics_discussed": [
+        "Margin expansion",
+        "Credit cost stabilisation"
+      ],
+      "management_sentiment_this_quarter": "confident"
+    },
+    {
+      "quarter": "Q3FY26",
+      "type": "earnings_call",
+      "key_topics_discussed": [
+        "Record profitability",
+        "AUM milestone"
+      ],
+      "management_sentiment_this_quarter": "bullish"
+    }
+  ]
+}

@@ -1,0 +1,252 @@
+{
+  "executive_summary": "Across Q1–Q4 FY26, MPS delivered margin-led earnings growth despite uneven revenue, with FY26 becoming its most profitable year ever (30.7% EBITDA margin). Management executed a deliberate reset—pruning AJE revenues, restructuring Corporate Learning, and doubling down on AI-first workflows—culminating in strong Q4 momentum and confident FY27 EBITDA guidance (>₹300 cr). The Unbound Medicine acquisition marks a strategic expansion into recurring, regulated healthcare knowledge platforms. Overall, management credibility is supported by consistent margin delivery, transparent acknowledgement of missteps (AJE, Corporate Learning), and increasingly specific forward commitments.",
+  "management_tone": {
+    "rating": "improving",
+    "evidence": [
+      "Q1FY26: Management acknowledged a 'soft start' and explicitly called out AJE as an overhang rather than masking weakness.",
+      "Q2FY26: Rahul Arora stated Corporate Learning had been a 'soft year' and framed FY26 as a restructuring/reset year.",
+      "Q4FY26: Management gave explicit EBITDA guidance for FY27 (>₹300 cr) and stated it was 'built bottom-up' and already in execution.",
+      "Feb2026 (Unbound call): Clear, quantified margin ramp guidance for Unbound (14% to MPS average by FY27 exit), showing confidence and specificity.",
+      "Q4FY26: Capital allocation explanation (no final dividend due to deployment cycle) was candid and principle-based."
+    ]
+  },
+  "guidance_vs_delivery": [
+    {
+      "quarter": "Q1FY26",
+      "what_was_promised": "Margins to expand through FY26 despite revenue softness; AJE margins to improve materially.",
+      "what_was_delivered": "FY26 EBITDA margin expanded to 30.7%; AJE margins improved from ~23% to ~30% by Q2/Q4 commentary.",
+      "verdict": "delivered"
+    },
+    {
+      "quarter": "Q2FY26",
+      "what_was_promised": "H2 stronger than H1; Corporate Learning margins to improve post restructuring.",
+      "what_was_delivered": "Q4FY26 saw Corporate Learning EBITDA up 55% sequentially with first positive revenue print of the year.",
+      "verdict": "delivered"
+    },
+    {
+      "quarter": "Q4FY26",
+      "what_was_promised": "FY27 EBITDA to comfortably cross ₹300 cr at ~30–35% margin.",
+      "what_was_delivered": "FY27 results pending; operating plans stated to already be in flight.",
+      "verdict": "pending"
+    }
+  ],
+  "guidance_evolution": {
+    "topics": [
+      {
+        "topic": "AJE margin and reset",
+        "timeline": [
+          {
+            "quarter": "Q1FY26",
+            "what_was_said": "Revenue intentionally cut; focus on profitability over growth."
+          },
+          {
+            "quarter": "Q2FY26",
+            "what_was_said": "AJE margins expanded from ~23% to ~30%."
+          },
+          {
+            "quarter": "Q4FY26",
+            "what_was_said": "Pruning complete; base now margin-accretive and positioned for growth in FY27."
+          }
+        ],
+        "consistency": "consistent",
+        "assessment": "Management executed a painful but successful reset, with margins improving as promised."
+      },
+      {
+        "topic": "Corporate Learning turnaround",
+        "timeline": [
+          {
+            "quarter": "Q1FY26",
+            "what_was_said": "Turnaround planned; margins improving ahead of revenue."
+          },
+          {
+            "quarter": "Q2FY26",
+            "what_was_said": "FY26 acknowledged as a soft year; consolidation underway."
+          },
+          {
+            "quarter": "Q4FY26",
+            "what_was_said": "Q4 inflection achieved; FY27 positioned for recovery."
+          }
+        ],
+        "consistency": "gradually_revised",
+        "assessment": "Initial optimism gave way to realism, but execution improved by Q4."
+      },
+      {
+        "topic": "Unbound Medicine integration and margins",
+        "timeline": [
+          {
+            "quarter": "Feb2026",
+            "what_was_said": "14% EBITDA at entry; ramp to MPS average by FY27 exit."
+          },
+          {
+            "quarter": "Q4FY26",
+            "what_was_said": "50-day contribution delivered ~19% margin; ramp on track."
+          }
+        ],
+        "consistency": "consistent",
+        "assessment": "Early delivery supports credibility of margin ramp claims."
+      }
+    ],
+    "pattern_summary": "Management generally sets conservative-to-realistic targets, openly resets narratives when needed (AJE, Corporate Learning), and then delivers on revised expectations rather than silently deferring."
+  },
+  "margin_commentary": "Margins were the central management focus across quarters. Management consistently cited AI-driven automation, workflow redesign, offshoring, and portfolio pruning as margin levers. Credibility is high: EBITDA margins expanded from ~28–31% in early FY26 to 32.9% in Q4 and 30.7% for FY26, validating repeated claims that AI and operating leverage would structurally lift margins.",
+  "revenue_growth_narrative": "Revenue growth in FY26 was uneven and largely margin-sacrificed in AJE and Corporate Learning, while Education saw strong organic growth (28–60%). The narrative shifted from acquisition-led scale to disciplined, AI-enabled organic expansion plus selective, higher-quality M&A (Unbound). This shift has been consistent since mid-FY26.",
+  "key_risks_flagged_by_management": [
+    "Corporate Learning softness and restructuring risk (Q1FY26, Q2FY26).",
+    "AJE revenue volatility during margin reset (Q1FY26, Q2FY26).",
+    "Execution risk in integrating acquisitions and scaling AI responsibly in regulated workflows (Q4FY26, Feb2026)."
+  ],
+  "positive_signals": [
+    "FY26 highest-ever EBITDA (₹236 cr) and EPS (₹102) – Q4FY26.",
+    "Education segment delivered 36%+ organic growth with ~39% EBITDA margin – Q4FY26.",
+    "Unbound Medicine added recurring revenue and new healthcare vertical – Feb2026.",
+    "DSO improvement from ~60 days to ~37–45 days – Q1–Q2FY26.",
+    "Clear FY27 EBITDA guidance (>₹300 cr) – Q4FY26."
+  ],
+  "red_flags": [
+    "Repeated deferral of revenue growth recovery at AJE until FY27 (Q1–Q4FY26).",
+    "Corporate Learning turnaround took longer than initially suggested (Q1 vs Q2FY26).",
+    "Limited revenue disclosure on Unbound initially, citing account closure timing (Feb2026)."
+  ],
+  "business_problems_and_challenges": [
+    {
+      "problem": "Difficulty scaling Corporate Learning profitably due to commoditized compliance content and fragmented delivery.",
+      "evidence": "Management described FY26 as a 'reset year' and exited low-margin compliance work (Q2FY26, Q4FY26).",
+      "severity": "significant",
+      "recurring": true,
+      "opportunity_type": "technology_and_automation"
+    },
+    {
+      "problem": "Need for reliable AI verification and integrity checks in scholarly publishing workflows.",
+      "evidence": "Repeated emphasis that the bottleneck has shifted from content generation to verification (Q4FY26).",
+      "severity": "critical",
+      "recurring": true,
+      "opportunity_type": "testing_and_certification"
+    }
+  ],
+  "overall_investment_signal": "positive: Margin execution, AI monetisation, and disciplined capital allocation underpin confidence, though revenue acceleration still needs to prove consistency post-FY26 reset.",
+  "forward_estimates": {
+    "revenue_targets": [
+      {
+        "period": "FY27",
+        "estimate": "Implied ₹900–1,000 cr",
+        "basis": "₹300+ cr EBITDA at 30–35% margin",
+        "quarter_source": "Q4FY26"
+      },
+      {
+        "period": "FY28",
+        "estimate": "₹1,500 cr",
+        "basis": "Vision 2027 reiterated as intact",
+        "quarter_source": "Q2FY26, Q4FY26"
+      }
+    ],
+    "earnings_guidance": [
+      {
+        "metric": "EBITDA",
+        "target": ">₹300 cr",
+        "basis": "Bottom-up operating plans; organic plus Unbound",
+        "quarter_source": "Q4FY26"
+      }
+    ],
+    "capex_plans": [],
+    "confidence_level": "high"
+  },
+  "new_facilities_and_products": [
+    {
+      "name": "Unbound Intelligence Platform",
+      "status": "operational",
+      "expected_timeline": "Already contributing from Feb 2026",
+      "revenue_impact": "₹11–12 cr in 50 days (Q4FY26)",
+      "quarter_source": "Feb2026, Q4FY26"
+    }
+  ],
+  "mergers_and_acquisitions": [
+    {
+      "target": "Unbound Medicine, Inc., USA",
+      "type": "acquisition",
+      "status": "completed",
+      "strategic_rationale": "Expand into healthcare knowledge platforms with recurring revenue and AI-led moat.",
+      "financial_impact": "$8.9m revenue run-rate; margin ramp to ~30%",
+      "quarter_source": "Feb2026, Q4FY26"
+    }
+  ],
+  "market_landscape": {
+    "addressable_market": "$188bn global healthcare/knowledge AI market by 2030",
+    "company_market_share": "~0.5% serviceable market",
+    "competitive_position": "AI-first, trusted knowledge workflows where errors are unacceptable",
+    "key_competitors_mentioned": [
+      "UpToDate",
+      "AMBOSS"
+    ],
+    "export_opportunity": "Europe, APAC, Middle East expansion via Unbound and Education",
+    "government_policy_tailwinds": "Accessibility mandates in education (US/EU)",
+    "government_policy_headwinds": "Regulated healthcare workflows",
+    "industry_growth_rate": "AI knowledge subsegment cited at 42% CAGR",
+    "demand_drivers": [
+      "AI-driven efficiency",
+      "Healthcare talent shortages",
+      "Education accessibility",
+      "Research integrity"
+    ]
+  },
+  "cyclicality_and_macro_factors": {
+    "cyclicality_assessment": "mixed",
+    "raw_material_sensitivity": "Not applicable",
+    "interest_rate_impact": "Minimal; strong cash generation",
+    "currency_exposure": "USD-linked revenues; not flagged as material risk",
+    "global_competition_threats": "Generic AI commoditisation risk acknowledged",
+    "regulatory_dependencies": "Healthcare and research compliance standards",
+    "supply_chain_risks": "None material"
+  },
+  "sector_specific_kpis": [
+    {
+      "metric": "EBITDA margin",
+      "latest_value": "30.7%",
+      "previous_value": "~28–31%",
+      "trend": "improving",
+      "management_comment": "AI and operating leverage driving expansion",
+      "quarter_source": "Q4FY26"
+    }
+  ],
+  "transcripts_used": [
+    {
+      "quarter": "Q1FY26",
+      "type": "earnings_call",
+      "key_topics_discussed": [
+        "AJE reset",
+        "Education growth",
+        "Soft start"
+      ],
+      "management_sentiment_this_quarter": "cautious"
+    },
+    {
+      "quarter": "Q2FY26",
+      "type": "earnings_call",
+      "key_topics_discussed": [
+        "Margin expansion",
+        "Corporate Learning restructuring",
+        "AI automation"
+      ],
+      "management_sentiment_this_quarter": "confident"
+    },
+    {
+      "quarter": "Q4FY26",
+      "type": "earnings_call",
+      "key_topics_discussed": [
+        "FY27 guidance",
+        "Record profitability",
+        "AI-first strategy"
+      ],
+      "management_sentiment_this_quarter": "bullish"
+    },
+    {
+      "quarter": "Feb2026",
+      "type": "earnings_call",
+      "key_topics_discussed": [
+        "Unbound acquisition",
+        "Healthcare AI platform",
+        "Margin ramp"
+      ],
+      "management_sentiment_this_quarter": "bullish"
+    }
+  ]
+}

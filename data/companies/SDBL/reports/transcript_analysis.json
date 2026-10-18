@@ -1,0 +1,301 @@
+{
+  "executive_summary": "Across the eight quarters analysed (Q1FY23 to Q2FY26), Som Distilleries delivered strong multi‑year revenue and volume growth driven by beer-led expansion, capacity additions, and market share gains in MP, Karnataka, Odisha and newer states. Management consistently highlighted operational execution, distribution strength, and portfolio breadth as key levers, while margins oscillated within a 12–15% EBITDA band amid raw material volatility and regulatory shocks. However, guidance quality weakened in FY25–FY26, with repeated regulatory disruptions (notably Karnataka excise) and visible slippage between volume/revenue guidance and delivery. Overall, execution capability is evident, but guidance credibility and regulatory exposure have become more pronounced risks.",
+  "management_tone": {
+    "rating": "gradually_revised",
+    "evidence": [
+      {
+        "quarter": "Q1FY23",
+        "statement": "“We recorded best-ever quarter in volumes, revenue, EBITDA and PAT… we expect to continue the growth momentum.”"
+      },
+      {
+        "quarter": "Q4FY23",
+        "statement": "“We are confident in our ability to sustain the growth momentum… expected to further drive better capacity utilization.”"
+      },
+      {
+        "quarter": "Q4FY24",
+        "statement": "“We expect to maintain our margins in the range of 12% to 13%… let Q1 pan out before revisiting guidance.”"
+      },
+      {
+        "quarter": "Q4FY25",
+        "statement": "Management attributed weak Q4 to Karnataka excise hikes, while reiterating confidence in medium-term growth."
+      },
+      {
+        "quarter": "Q2FY26",
+        "statement": "“Guidance is based on expectations, but some things are beyond our control, including government regulations.”"
+      }
+    ]
+  },
+  "guidance_vs_delivery": [
+    {
+      "quarter": "Q1FY23",
+      "what_was_promised": "Sustain growth momentum post-capex; margins near historical 14–15%",
+      "what_was_delivered": "FY23 ended with EBITDA margin ~12.8% and strong volume growth",
+      "verdict": "partially_delivered"
+    },
+    {
+      "quarter": "Q4FY23",
+      "what_was_promised": "20–25% sales growth in FY24; better utilization to lift margins",
+      "what_was_delivered": "FY24 revenue grew ~59% YoY; EBITDA margin ~12%",
+      "verdict": "exceeded"
+    },
+    {
+      "quarter": "Q2FY24",
+      "what_was_promised": "FY24 revenue ₹1,100–1,200 Cr; EBITDA margin 12–12.5%",
+      "what_was_delivered": "FY24 revenue ₹1,286 Cr; EBITDA margin ~12%",
+      "verdict": "exceeded"
+    },
+    {
+      "quarter": "Q4FY25",
+      "what_was_promised": "FY26 volume/revenue growth of ~18–22%",
+      "what_was_delivered": "H1FY26 revenue declined YoY; volumes down due to Karnataka issues",
+      "verdict": "missed"
+    },
+    {
+      "quarter": "Q2FY26",
+      "what_was_promised": "H2FY26 revenue addition of ~₹800 Cr",
+      "what_was_delivered": "Pending",
+      "verdict": "pending"
+    }
+  ],
+  "guidance_evolution": {
+    "topics": [
+      {
+        "topic": "EBITDA margin target",
+        "timeline": [
+          {
+            "quarter": "Q1FY23",
+            "what_was_said": "Comfortable margin range of 14–15% over medium term"
+          },
+          {
+            "quarter": "Q4FY23",
+            "what_was_said": "Margins to improve with utilization; 12–13% realistic"
+          },
+          {
+            "quarter": "Q4FY24",
+            "what_was_said": "Maintain 12–13% EBITDA margin"
+          },
+          {
+            "quarter": "Q2FY26",
+            "what_was_said": "15% margin achieved due to glass management and mix"
+          }
+        ],
+        "consistency": "gradually_revised",
+        "assessment": "Targets were revised downward from aspirational 14–15% to a more conservative 12–13%, though occasional upside quarters were achieved."
+      },
+      {
+        "topic": "Capacity expansion (UP greenfield)",
+        "timeline": [
+          {
+            "quarter": "Q4FY25",
+            "what_was_said": "₹600 Cr UP greenfield announced, Phase 1 ₹350 Cr"
+          },
+          {
+            "quarter": "Q2FY26",
+            "what_was_said": "Phase 1 on track; commissioning expected by June 2026"
+          }
+        ],
+        "consistency": "consistent",
+        "assessment": "Execution appears on schedule with phased funding clarity."
+      },
+      {
+        "topic": "Market expansion beyond core states",
+        "timeline": [
+          {
+            "quarter": "Q1FY23",
+            "what_was_said": "Plans to expand into UP and Delhi"
+          },
+          {
+            "quarter": "Q4FY24",
+            "what_was_said": "Dispatches started to Rajasthan, Jharkhand, UP"
+          },
+          {
+            "quarter": "Q2FY26",
+            "what_was_said": "Tamil Nadu entry achieved; Andhra tender awaited"
+          }
+        ],
+        "consistency": "consistent",
+        "assessment": "Gradual but steady geographic diversification delivered."
+      }
+    ],
+    "pattern_summary": "Management sets directional guidance and usually delivers over multi‑year periods, but near‑term guidance has increasingly been revised or caveated due to regulatory volatility, weakening short‑term credibility."
+  },
+  "margin_commentary": "Across quarters, management consistently cited raw material inflation (barley, glass, sugar) and packaging mix as key margin drivers. FY23–FY24 saw margin compression due to heavy use of new glass bottles amid rapid growth, with partial offsets from price hikes and mix improvement. From FY25 onward, margins benefited from stabilized raw material prices, higher returnable glass usage, and can mix, enabling occasional upside to 14–15%. Margin guidance has been cautious and broadly credible, though sensitive to regulatory and volume swings.",
+  "revenue_growth_narrative": "Revenue growth has been predominantly organic, driven by beer volumes, brand scaling (Hunter, Power Cool, Black Fort), and geographic expansion. Management consistently emphasized distribution reach and value-for-money positioning rather than aggressive advertising. IMFL remained a secondary contributor (~10–11%), with recent attempts at premiumization (Mahavat, single malt plans). The growth narrative has remained largely consistent, though FY26 saw disruption-led slowdown versus earlier hyper-growth.",
+  "key_risks_flagged_by_management": [
+    "Regulatory and excise duty volatility, especially in Karnataka (Q4FY25, Q2FY26)",
+    "Raw material price inflation and dependence on glass bottles (Q1FY23, Q4FY23, Q4FY24)",
+    "Working capital strain due to duty-paid state structures (Q1FY23, Q4FY24)",
+    "Seasonality and monsoon impact on volumes (multiple quarters)"
+  ],
+  "positive_signals": [
+    "Consistent market share gains in MP, Karnataka and Odisha (Q1FY23, Q2FY24)",
+    "Successful capacity expansions at Hassan and Odisha plants (Q4FY23, Q4FY25)",
+    "Strong debt reduction and credit rating upgrade to A- (Q2FY25)",
+    "Entry into new markets like Rajasthan, Jharkhand, Tamil Nadu (Q4FY24, Q2FY26)"
+  ],
+  "red_flags": [
+    "Repeated refusal to provide granular guidance or data, citing prudence (multiple quarters)",
+    "Visible tension and defensive tone in Q4FY25 regarding funding and equity questions",
+    "Guidance slippage in FY26 due to regulatory shocks after optimistic growth commentary"
+  ],
+  "business_problems_and_challenges": [
+    {
+      "problem": "High working capital requirement due to duty-paid excise structures requiring upfront cash before dispatch.",
+      "evidence": "Management repeatedly highlighted the need to pay excise duty before dispatch, stressing working capital usage (Q1FY23, Q4FY24).",
+      "severity": "significant",
+      "recurring": true,
+      "opportunity_type": "financial_services"
+    },
+    {
+      "problem": "Dependence on new glass bottles during high growth phases, limiting margin expansion.",
+      "evidence": "“Our dependence on new glass bottles continues to be high because we are in a growth phase” (Q4FY24).",
+      "severity": "moderate",
+      "recurring": true,
+      "opportunity_type": "cost_engineering"
+    },
+    {
+      "problem": "Regulatory unpredictability at state level causing abrupt volume disruptions.",
+      "evidence": "Steep excise hikes in Karnataka led to volume decline and missed guidance (Q4FY25, Q2FY26).",
+      "severity": "critical",
+      "recurring": true,
+      "opportunity_type": "compliance_and_regulatory"
+    }
+  ],
+  "overall_investment_signal": "cautious: Strong long-term execution and brand momentum are evident, but increasing regulatory volatility and weakened near-term guidance credibility warrant caution.",
+  "forward_estimates": {
+    "revenue_targets": [
+      {
+        "period": "FY26",
+        "estimate": "₹1,600 Cr (management commentary)",
+        "basis": "H2 recovery and UP ramp expectations",
+        "quarter_source": "Q2FY26"
+      }
+    ],
+    "earnings_guidance": [
+      {
+        "metric": "EBITDA margin",
+        "target": "12–13%",
+        "basis": "Stable RM prices and mix management",
+        "quarter_source": "Q4FY24"
+      }
+    ],
+    "capex_plans": [
+      {
+        "item": "UP greenfield brewery (Phase 1)",
+        "amount_cr": 350,
+        "timeline": "Completion by June 2026",
+        "quarter_source": "Q4FY25, Q2FY26"
+      }
+    ],
+    "confidence_level": "medium"
+  },
+  "new_facilities_and_products": [
+    {
+      "name": "Farrukhabad UP Greenfield Brewery",
+      "status": "under_construction",
+      "expected_timeline": "Commissioning by June 2026",
+      "revenue_impact": "Not quantified",
+      "quarter_source": "Q4FY25, Q2FY26"
+    },
+    {
+      "name": "Woodpecker Premium Beer",
+      "status": "operational",
+      "expected_timeline": "Scaling across Karnataka and metros",
+      "revenue_impact": "Not quantified",
+      "quarter_source": "Q2FY25, Q2FY26"
+    }
+  ],
+  "mergers_and_acquisitions": [],
+  "market_landscape": {
+    "addressable_market": "India beer market ~350–400 million cases annually (management references to state markets)",
+    "company_market_share": "High share in MP (~35–40%), mid-teens in Karnataka and Odisha",
+    "competitive_position": "Value-for-money strong beer portfolio with strong distribution execution",
+    "key_competitors_mentioned": [
+      "United Breweries",
+      "AB InBev",
+      "Carlsberg"
+    ],
+    "export_opportunity": "Limited; focus remains domestic",
+    "government_policy_tailwinds": "Expanded retail points in MP; state-level price hikes",
+    "government_policy_headwinds": "Excise duty hikes, policy uncertainty",
+    "industry_growth_rate": "Industry growth cited at ~8–9%",
+    "demand_drivers": [
+      "Urbanization",
+      "Young demographic",
+      "Distribution expansion",
+      "Premiumization pockets"
+    ]
+  },
+  "cyclicality_and_macro_factors": {
+    "cyclicality_assessment": "moderately_cyclical",
+    "raw_material_sensitivity": "Barley, glass, sugar; partial pass-through via price hikes (Q1FY23, Q4FY24)",
+    "interest_rate_impact": "Higher rates affect working capital financing (Q4FY24)",
+    "currency_exposure": "Minimal",
+    "global_competition_threats": "Multinational brewers dominate premium segment",
+    "regulatory_dependencies": "State excise approvals, price revisions",
+    "supply_chain_risks": "Glass bottle availability during growth phases"
+  },
+  "sector_specific_kpis": [
+    {
+      "metric": "Capacity utilization",
+      "latest_value": "70–80% overall",
+      "previous_value": "Near peak in Karnataka",
+      "trend": "stable",
+      "management_comment": "Scope for utilization-led growth",
+      "quarter_source": "Q4FY25, Q2FY26"
+    }
+  ],
+  "transcripts_used": [
+    {
+      "quarter": "Q1FY23",
+      "type": "earnings_call",
+      "key_topics_discussed": [
+        "Best-ever performance",
+        "Margins",
+        "Debt reduction",
+        "Market expansion"
+      ],
+      "management_sentiment_this_quarter": "bullish"
+    },
+    {
+      "quarter": "Q4FY23",
+      "type": "earnings_call",
+      "key_topics_discussed": [
+        "Capacity expansion",
+        "Volume growth",
+        "Margin outlook"
+      ],
+      "management_sentiment_this_quarter": "confident"
+    },
+    {
+      "quarter": "Q4FY24",
+      "type": "earnings_call",
+      "key_topics_discussed": [
+        "Strong FY24 growth",
+        "Margins",
+        "New state entries"
+      ],
+      "management_sentiment_this_quarter": "confident"
+    },
+    {
+      "quarter": "Q4FY25",
+      "type": "earnings_call",
+      "key_topics_discussed": [
+        "Karnataka excise shock",
+        "UP capex",
+        "Growth guidance"
+      ],
+      "management_sentiment_this_quarter": "cautious"
+    },
+    {
+      "quarter": "Q2FY26",
+      "type": "earnings_call",
+      "key_topics_discussed": [
+        "Volume decline",
+        "Margin resilience",
+        "UP project progress"
+      ],
+      "management_sentiment_this_quarter": "defensive"
+    }
+  ]
+}
