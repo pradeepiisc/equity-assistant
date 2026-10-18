@@ -1,0 +1,90 @@
+# Stock tracker settings — uncomment a line to override the default shown.
+# (defaults live in tracker/config.py)
+
+# accounts: [ZV3899, WN5759]          # Kite accounts whose holdings.json define the portfolio
+
+technicals:
+  # phase_fast: 40                    # phase = price vs DMA40 vs DMA100 (same rule as the daily report)
+  # phase_slow: 100
+  # neutral_band_pct: 3               # within ±3% of DMA100 → Neutral
+  # cross_lines: [40, 200]            # alert when the close crosses these DMAs
+  # golden_cross: [50, 200]           # golden / death cross pair
+  # cross_confirm_pct: 0.5            # close must clear the line by 0.5% (stops whipsaw alerts)
+  # volume_spike_x: 3                 # volume ≥ 3× 20-day average …
+  # volume_spike_min_move_pct: 3      # … with a ≥3% price move
+
+alerts:
+  # notify_macos: true
+  # min_push_severity: high           # pushed as macOS notifications: high
+  # min_inbox_severity: medium        # shown in the dashboard inbox: medium and high
+  # quiet_hours: ["23:00", "07:00"]   # held, then sent as one summary
+  # max_push_per_run: 4               # more than this → a single summary notification
+
+orders:
+  # high_pct_of_revenue: 5            # order win ≥ 5% of trailing-12M revenue → high
+  # usd_inr: 88                       # converts USD order values
+
+shareholding:
+  # promoter_change_pp: 1.0           # quarter-on-quarter change that raises an event
+  # institution_change_pp: 1.5
+  # anchor_change_pp: 0.5             # a named anchor investor moving this much raises an event
+
+schedule:
+  # feeds_from: "07:00"               # NSE filing feeds polled in this window
+  # feeds_to: "23:30"
+  # feeds_every_min: 10               # all NSE feeds…
+  # market_from: "09:00"              # …except announcements, every 3 min on weekdays 09:00–18:00
+  # market_to: "18:00"                #    (decided 2026-10-18)
+  # announcements_every_min: 3
+  # deals_after: "17:15"              # NSE bulk/block deals file
+  # eod_after: "18:15"                # bhavcopy prices
+  # server_poll: true                 # `serve` ticks at start-up, then every server_every_min
+  # server_every_min: 3
+  # launchd_every_min: 3              # used by the Install button on the Status page
+
+# ── Phase 2 ─────────────────────────────────────────────────────────────────
+documents:                            # filings → PDFs → LLM extraction (the only LLM use)
+  # enabled: true
+  # kinds: [results, concall_transcript, concall, order_win, capacity, acquisition, update]
+  # max_seconds_per_tick: 60
+  # backfill: true                    # also read the PDFs already under data/companies/*/ (newest first)
+  # backfill_since: "2023-01-01"
+
+llm:
+  # enabled: true
+  # client: client_gpt41_itam         # gpt-4.1 via llm/client.py (decided 2026-10-18)
+  # daily_token_budget: 500000        # ≈ ₹130/day if fully used (decided 2026-10-18)
+  # backfill_share: 0.6               # back-fill may use 60% of it; the rest stays free for new filings
+  # max_input_tokens: 12000           # per document, relevant pages only
+  # max_output_tokens: 3000
+
+screener_fallback:                    # BSE-only stocks, through the Chrome debug session only
+  # enabled: true
+  # daily_cap: 30                     # companies per day
+  # min_gap_s: 9                      # between any two Screener requests
+  # window: ["08:00", "22:00"]        # spread across this window
+  # stale_days: 30
+  # results_refresh_days: 7
+
+score:                                # Add / Hold / Trim / Exit / Watch — rule-based, no LLM
+  # add_at: 4.0
+  # trim_at: -1.5
+  # exit_at: -4.0
+  # watch_add_at: 3.0
+  # min_components: 4
+  # default_execution_months: 24
+  # weights:                          # each component scores −2…+2 × weight
+  #   order_book_growth: 1.0
+  #   book_to_revenue: 0.75
+  #   guidance_delivery: 1.0
+  #   margin_trend: 0.75
+  #   eps_vs_pe: 1.0
+  #   technical: 1.0
+  #   promoter_flow: 1.0
+  #   institution_flow: 0.5
+  #   anchor_flow: 0.5
+  #   pledge: 1.0
+  #   valuation: 0.75
+
+# dashboard:
+#   port: 7788
