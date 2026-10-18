@@ -296,10 +296,47 @@ def _download_pdf(url: str, dest_path: Path) -> None:
         dest_path.write_bytes(response.content)
 
 
+MAX_KEEP_TRANSCRIPTS = 4  # keep only the latest N transcripts per company
+MAX_KEEP_PPTS = 4         # keep only the latest N PPTs per company
+
+
+def _date_key_from_filename(filename: str) -> tuple[int, int]:
+    """Extract (year, month_index) from a transcript/PPT filename for chronological sort.
+    Returns (0, 0) if no date found (will be pruned first)."""
+    import re as _re
+    _MONTH_MAP = {
+        "jan": 1, "feb": 2, "mar": 3, "apr": 4, "may": 5, "jun": 6,
+        "jul": 7, "aug": 8, "sep": 9, "oct": 10, "nov": 11, "dec": 12,
+    }
+    m = _re.search(r"(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s*(\d{4})", filename, _re.IGNORECASE)
+    if m:
+        return (int(m.group(2)), _MONTH_MAP.get(m.group(1).lower(), 0))
+    return (0, 0)
+
+
+def _prune_old_files(directory: Path, max_keep: int, label: str, symbol: str) -> list[str]:
+    """Remove oldest PDF files if count exceeds max_keep (chronological order). Returns list of removed filenames."""
+    if not directory.exists():
+        return []
+    pdf_files = list(directory.glob("*.pdf"))
+    if len(pdf_files) <= max_keep:
+        return []
+    # Sort newest first by parsed date
+    pdf_files.sort(key=lambda f: _date_key_from_filename(f.name), reverse=True)
+    to_remove = pdf_files[max_keep:]
+    removed = []
+    for f in to_remove:
+        print(f"[{SKILL_NAME}][{symbol}] Pruning old {label}: {f.name}")
+        f.unlink()
+        removed.append(f.name)
+    return removed
+
+
 def run(company: dict, config: dict, limit: int = 999) -> dict:
     """
     Fetch concall PDFs from Screener for a company.
     Downloads up to `limit` transcripts → transcripts/ and up to `limit` PPTs → ppt/.
+    After download, prunes to keep only the latest MAX_KEEP_TRANSCRIPTS/MAX_KEEP_PPTS files.
 
     Args:
         company: Entry from watchlist/portfolio YAML (must have screener_url)
@@ -309,7 +346,7 @@ def run(company: dict, config: dict, limit: int = 999) -> dict:
     Returns:
         dict with: skill_name, symbol, status, data, error
         data keys: transcripts_downloaded, transcripts_skipped, ppts_downloaded,
-                   ppts_skipped, failed
+                   ppts_skipped, failed, pruned_transcripts, pruned_ppts
     """
     symbol = company["symbol"]
     screener_url = company.get("screener_url", "")
@@ -381,13 +418,20 @@ def run(company: dict, config: dict, limit: int = 999) -> dict:
                 print(f"[{SKILL_NAME}][{symbol}] Failed {filename}: {exc}")
                 result["data"]["failed"].append({"filename": filename, "error": str(exc)})
 
+        # ── Prune old files to keep only latest N ──────────────────────
+        pruned_t = _prune_old_files(transcripts_dir, MAX_KEEP_TRANSCRIPTS, "transcript", symbol)
+        pruned_p = _prune_old_files(ppt_dir, MAX_KEEP_PPTS, "PPT", symbol)
+        result["data"]["pruned_transcripts"] = pruned_t
+        result["data"]["pruned_ppts"] = pruned_p
+
         n_t = len(result["data"]["transcripts_downloaded"])
         n_p = len(result["data"]["ppts_downloaded"])
         n_sk = len(result["data"]["transcripts_skipped"]) + len(result["data"]["ppts_skipped"])
         n_f = len(result["data"]["failed"])
+        n_pr = len(pruned_t) + len(pruned_p)
         print(
             f"[{SKILL_NAME}][{symbol}] Done. "
-            f"Transcripts={n_t}, PPTs={n_p}, Skipped={n_sk}, Failed={n_f}"
+            f"Transcripts={n_t}, PPTs={n_p}, Skipped={n_sk}, Failed={n_f}, Pruned={n_pr}"
         )
 
     except Exception as exc:

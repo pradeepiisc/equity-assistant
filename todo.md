@@ -7,6 +7,10 @@ Priority = impact on daily decision-making vs effort to build.
 
 ## 🔴 High Value
 
+1. Daily reports in append mode 
+2. Valuation of other companies like it was done for QPower
+3. 
+
 - Calculating the valuation of the company that uses expertise skills like below, order book visibility, expansion plans, management quality, any moats, lumpsum or SIP
 - Sector specific skills with expertise in 
     hospitals, pharma, fintech, chemicals, textile retail, agri commodities, infra, shrimps and fisheries, animal feeds, consumer durables, entertainment, electrical equipmemts, gems and jewellery non-gold and non-silver, 

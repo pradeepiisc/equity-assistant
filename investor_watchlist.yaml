@@ -21,13 +21,12 @@ tracked_investors:
     - "Param Capital"
 
   anchor_public:
-    - "Rakesh Jhunjhunwala"
     - "Radhakishan Damani"
     - "Dolly Khanna"
     - "Vijay Kedia"
     - "Ashish Kacholia"
     - "Porinju Veliyath"
-    - "Mukul Mahavir Agrawal"
+    - "Mukul Mahavir Agarwal"
     - "Kedia Securities Private Limited"
     - "Bengal Finance And Investment Pvt Ltd"
     - "Suryavanshi Commotrade Private Limited"
@@ -37,6 +36,27 @@ tracked_investors:
     - "Madhuri Madhusudan Kela"
     - "Ajay Kumar Aggarwal"
     - "Vanaja Sundar Iyer"
+
+  anchor_links:
+    "Ashish Kacholia": "https://www.screener.in/people/127736/ashish-kacholia/"
+    "Mukul Agarwal": "https://www.screener.in/people/127829/mukul-mahavir-agrawal/"
+    "Mukul Agarwal": "https://www.screener.in/people/850/madhulika-agarwal/"
+    "Param Capital": "https://www.screener.in/people/98555/param-value-investments/"
+    "Param Capital": "https://www.screener.in/people/98486/ms-param-capital/"
+    "Madhuri Madhusudan Kela": "https://www.screener.in/people/30960/madhuri-madhusudan-kela/"
+    "Massachusetts Institute Of Technology": "https://www.screener.in/people/149987/massachusetts-institute-of-techno/"
+    "Massachusetts Institute Of Technology": "https://www.screener.in/people/195229/massachusetts-ins-of-technology/"
+    "Malabar India Fund Limited": "https://www.screener.in/people/126875/malabar-india-fund-limited/"
+    "Dar'S Business Finance Pvt Ltd": "https://www.screener.in/people/27134/dars-business-finance-pvt-ltd/"
+    "Kedia Securities Private Limited": "https://www.screener.in/people/7379/kedia-secuirities-private-limited/"
+    "Kedia Securities Private Limited": "https://www.screener.in/people/169286/kedia-securities-private-limited/"
+    "Vijay Kedia": "https://www.screener.in/people/7377/vijay-krishanlal-kedia/"
+    "Bengal Finance And Investment Pvt Ltd": "https://www.screener.in/people/64/bengal-finance-and-ninvestment-private-limited/"
+    "Vanaja Sundar Iyer": "https://www.screener.in/people/392/vanjana-sundar-iyer/"
+    "Sanshi Fund-I": "https://www.screener.in/people/168570/sanshi-fund-i/"
+    "Suryavanshi Commotrade Private Limited": "https://www.screener.in/people/19205/suryavanshi-commotrade-private-limited/"
+
+
 
 # Alert thresholds
 alerts:

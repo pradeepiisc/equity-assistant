@@ -27,15 +27,14 @@ bash scripts/run_<workflow>.sh [args]
 
 **What you get:**
 1. **Overview** — Invested vs. current value, total P&L
-2. **Position Sizing** — Alerts if any stock ≥5% of portfolio (you should reduce)
+2. **Position Sizing** — Alerts if any stock >5% of portfolio (invested allocation). Alerts yellow if present value >15%, and red (book profit) if >20%.
 3. **DMA Status** — Which stocks are below 200 DMA (reduce signal) or >+10% above (avg-up candidate)
 4. **Top 20 Holdings** — Your biggest positions with 50+200 DMA and vs-200% column
 5. **Portfolio Concentration** — Cumulative table: how many stocks = 50% / 70% / 90% of your money
 6. **SIP Signals** — 🟢 Entry / 🔵 Accumulate / 🟡 Hold / ⚠️ Overextended for high-conviction stocks
 7. **Sector Concentration** — Which sectors dominate
 8. **Top 10 Daily Movers** — What moved most today
-9. **Tax Loss Harvest** — All stocks in loss, harvestable ₹ amount, ranked
-10. **Watchlist Overlap** — Which watchlist stocks you already hold
+9. **Watchlist Overlap** — Which watchlist stocks you already hold
 
 ```bash
 bash scripts/run_daily_report.sh
@@ -132,24 +131,28 @@ Output: `portfolio/ZV3899/watchlist_gaps/{today}/watchlist_gap_analysis.md`
 ## Quarterly / Results Season Workflows
 
 ### `earnings_season.py`  ·  `scripts/run_earnings_season.sh`
-**What it does:** All-in-one quarterly results season workflow. Fetches fresh shareholding data from Screener.in via Chrome CDP (real browser, auto-launches), compares with existing data, detects tracked investor movements, fetches new transcripts, and generates a comprehensive earnings season report.
+**What it does:** All-in-one quarterly results season workflow. Fetches fresh shareholding data and quarterly financials from Screener.in via Chrome CDP (real browser, auto-launches in parallel tabs), compares with existing data, detects tracked investor movements, fetches new transcripts, and generates comprehensive evolving quarterly reports.
 
 **Key features:**
+- **Parallel CDP (3 tabs)** — shareholding batch uses 3 concurrent browser tabs, cutting ~20 min → ~7 min
 - **Shareholding delta detection** — actual QoQ changes (e.g., Promoter +2.6pp, FII -0.7pp)
 - **Tracked investor alerts** — cross-references holders against `investor_watchlist.yaml`
-- **DMA deployment map** — DMA40/DMA100 trend for all holdings
-- **Sector allocation** — allocation % per sector with trend mix
+- **Split subcommands** — run only what you need (`--fetch-sh`, `--fetch-fin`, `--fetch-transcripts`)
+- **Quarterly results comparison** — per-company tables with previous year, previous quarter, current quarter, QoQ and YoY changes
 - **Smart skip logic** — companies already at current quarter are skipped
-- **Stop-on-block** — aborts after 5 consecutive failures; jittered 3-6s delays
+- **Stop-on-block** — aborts after 10 consecutive failures
 
 ```bash
 bash scripts/run_earnings_season.sh                                    # report only (fast)
-bash scripts/run_earnings_season.sh --fetch                           # fetch shareholding + transcripts (CDP)
+bash scripts/run_earnings_season.sh --fetch-sh                         # fetch shareholding only (CDP)
+bash scripts/run_earnings_season.sh --fetch-fin                        # fetch financials only (CDP)
+bash scripts/run_earnings_season.sh --fetch-transcripts                # fetch transcripts only (no browser)
+bash scripts/run_earnings_season.sh --fetch                           # fetch all three (shorthand)
 bash scripts/run_earnings_season.sh --fetch --symbols QPOWER BETA     # specific stocks
 bash scripts/run_earnings_season.sh --onboard "SYM:Company Name:URL"  # onboard inline
 ```
 
-Output: `portfolio/ZV3899/holdings/{date}/earnings_season.md`
+Output: `data/earnings_season/{Quarter}/` (shareholding.md, results.md, concalls.md)
 
 ---
 
@@ -223,19 +226,31 @@ Output: `data/companies/{SYMBOL}/reports/valuation_agent.md`
 ---
 
 ### `batch_company_analysis.py`  ·  `scripts/run_batch_analysis.sh`
-**What it does:** Runs `data_fetch` + `full_company_analysis` for **every company in `watchlist.yaml`**.
+**What it does:** Runs `data_fetch` + `full_company_analysis` for **every company in `watchlist.yaml`** or **all companies in data/**.
 Use `--skip-existing` to only process companies that don't yet have a `master_report.md`.
 
 ```bash
 bash scripts/run_batch_analysis.sh --skip-existing     # only new/missing reports
 bash scripts/run_batch_analysis.sh                     # re-run all (overwrites)
+python -m workflows.batch_company_analysis --all       # all companies in data/companies/
 bash scripts/run_batch_analysis.sh --data-only         # data fetch only, no LLM
 bash scripts/run_batch_analysis.sh --analysis-only     # LLM only (data already fetched)
 bash scripts/run_batch_analysis.sh --symbols ZENTEC TARIL  # specific companies
 ```
 
 Output: `data/companies/{SYMBOL}/reports/master_report.md` for each company.
-Runtime: ~5–10 min per company. Full 23-company batch ≈ 2–4 hours.
+Runtime: ~5–10 min per company. Full 160-company batch ≈ 2–4 hours.
+
+---
+
+### `consolidated_exit_strategy.py`
+**What it does:** Consolidates the **Decision Framework** (entry, exit, trim triggers) and fair value data from all `master_report.json` files across all companies into a single Master Dashboard.
+
+```bash
+python -m workflows.consolidated_exit_strategy
+```
+
+Output: `portfolio/consolidated_exit_strategy.md`
 
 ---
 

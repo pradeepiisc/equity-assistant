@@ -21,11 +21,23 @@ DEPLOY_ALLOC_THRESH = 2.0
 CAUTION_ALLOC_THRESH = 0.5
 
 
+EXPLICIT_SMES = {
+    "ADCOUNTY", "AFCOM", "ANAWIL", "AVIENCE", "BEWLTD", "BRANDMAN", "C2C", "CNCRD", 
+    "COSMICCRF", "DENTALKART", "DUGLOBAL", "E2ERAIL", "EFFWA", "EMMIL", "EXATO", "FAZE3Q", 
+    "FINBUD", "ICELCO", "INDOSMC", "INFINIUM", "IWARE", "MAHALIFE", "MEGATHERM", "MRTX", "NAMAN", 
+    "NAMOEWASTE", "NEOCHEM", "NEWJAISA", "NOVUS", "PARTYCRUS", "PATELCHEM", "PPEL", "PRATHAM", "QLL", 
+    "RADIOWALLA", "RECODE", "SAAKSHI", "SAHASRA", "SCDL", "SHREEOSFM", "SHREEREF", 
+    "SIYARAM", "SONAMAC", "SUBAHOTELS", "SUNLITE", "SUPREMEPWR", "TBI", "TECHERA", "VINYAS", "VISHNUINFR", 
+    "VMARCIND", "ZTECH"
+}
+
 # ── Helpers ──────────────────────────────────────────────────────────────────
 
 def is_sme(symbol: str, exchange: str = "") -> bool:
-    """Heuristic: SME if symbol has -SM/-BE suffix or BSE-only numeric code."""
+    """Heuristic: SME if symbol has -SM/-BE suffix, is in explicit list, or BSE-only numeric code."""
     sym_upper = symbol.upper()
+    if sym_upper in EXPLICIT_SMES or sym_upper.replace("-SM", "").replace("-BE", "").replace("-SME", "") in EXPLICIT_SMES:
+        return True
     if any(sym_upper.endswith(s) for s in SME_SUFFIXES):
         return True
     if exchange.upper() == "BSE" and symbol.isdigit():

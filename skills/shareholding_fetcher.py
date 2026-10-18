@@ -93,6 +93,12 @@ def _fetch_company_id(soup: BeautifulSoup) -> str | None:
     return None
 
 
+AJAX_DELAY = 1.0        # seconds between AJAX requests to avoid Screener rate limits
+AJAX_MAX_RETRIES = 2    # retry on failure (429/5xx/timeout)
+AJAX_RETRY_BACKOFF = 3  # seconds to wait before retry
+INTER_COMPANY_DELAY = 2.0  # seconds to pause between consecutive company fetches (batch mode)
+
+
 def _fetch_individual_holders(
     company_id: str,
     quarters: list[str],
@@ -101,6 +107,8 @@ def _fetch_individual_holders(
     Call the Screener AJAX endpoint for each classification and return
     a dict keyed by classification label with a list of
     { name, values: { quarter: pct } } investor records.
+
+    Includes rate limiting and retry logic to avoid Screener's "too fast" errors.
     """
     results: dict[str, list] = {}
     client = _get_screener_client()
@@ -108,14 +116,28 @@ def _fetch_individual_holders(
         "X-Requested-With": "XMLHttpRequest",
         "Accept": "application/json, text/javascript, */*; q=0.01",
     }
-    for cls, label in _CLASSIFICATIONS.items():
+    for i, (cls, label) in enumerate(_CLASSIFICATIONS.items()):
+        if i > 0:
+            time.sleep(AJAX_DELAY)
         url = f"https://www.screener.in/api/3/{company_id}/investors/{cls}/quarterly/"
-        try:
-            resp = client.get(url, headers=ajax_headers)
-            if resp.status_code != 200:
+        raw = None
+        for attempt in range(1 + AJAX_MAX_RETRIES):
+            try:
+                resp = client.get(url, headers=ajax_headers)
+                if resp.status_code == 429 or resp.status_code >= 500:
+                    if attempt < AJAX_MAX_RETRIES:
+                        time.sleep(AJAX_RETRY_BACKOFF * (attempt + 1))
+                        continue
+                if resp.status_code != 200:
+                    break
+                raw = resp.json()
+                break
+            except Exception:
+                if attempt < AJAX_MAX_RETRIES:
+                    time.sleep(AJAX_RETRY_BACKOFF * (attempt + 1))
                 continue
-            raw: dict = resp.json()
-        except Exception:
+
+        if not raw:
             continue
 
         investors = []
@@ -128,8 +150,108 @@ def _fetch_individual_holders(
             if holder_vals:
                 investors.append({"name": name, "values": holder_vals})
         if investors:
-            results[label] = investors
+            results[label] = _merge_similar_investors(investors)
     return results
+
+
+def _merge_similar_investors(investors: list[dict]) -> list[dict]:
+    """
+    Merge investor rows that are spelling variants of the same entity.
+
+    Screener sometimes changes name spellings across quarters (e.g.,
+    "Massachusetts Ins. Of Technology" vs "Massachusetts institute of Techno").
+    This creates split rows with non-overlapping quarter data.
+
+    Strategy:
+      1. Normalize names using _normalize_investor_name.
+      2. Also check prefix overlap (first N chars) for truncated names.
+      3. Merge values dicts, keeping the higher value when both quarters exist.
+      4. Use the longer name as the canonical display name.
+    """
+    import re
+
+    def _norm(n: str) -> str:
+        """Aggressive normalization for grouping: lowercase, expand abbrevs, split camelCase."""
+        # Split camelCase BEFORE lowering (e.g., "KotakInfrastructure" → "Kotak Infrastructure")
+        s = re.sub(r"([a-z])([A-Z])", r"\1 \2", n)
+        s = s.lower().strip()
+        s = re.sub(r"\bpvt\b\.?", "private", s)
+        s = re.sub(r"\bltd\b\.?", "limited", s)
+        s = re.sub(r"\bco\b\.?", "company", s)
+        s = re.sub(r"\bcorp\b\.?", "corporation", s)
+        s = re.sub(r"\bins\b\.?", "institute", s)
+        s = re.sub(r"\btechno\b", "technology", s)
+        s = re.sub(r"['\"\.\-,\(\)&]", " ", s)
+        s = re.sub(r"\s+", " ", s).strip()
+        return s
+
+    def _prefix_key(s: str, length: int = 20) -> str:
+        """First N chars of normalized name, for catching truncated variants."""
+        return _norm(s)[:length]
+
+    # Group by normalized name or prefix
+    groups: dict[str, list[int]] = {}  # key -> list of investor indices
+    for idx, inv in enumerate(investors):
+        norm = _norm(inv["name"])
+        prefix = _prefix_key(inv["name"])
+        # Check if this investor matches an existing group by norm or prefix
+        matched_key = None
+        for key in groups:
+            if norm == key or _norm_match(norm, key) or _prefix_key(inv["name"]) == _prefix_key(investors[groups[key][0]]["name"]):
+                matched_key = key
+                break
+        if matched_key:
+            groups[matched_key].append(idx)
+        else:
+            groups[norm] = [idx]
+
+    merged = []
+    for key, indices in groups.items():
+        if len(indices) == 1:
+            merged.append(investors[indices[0]])
+            continue
+        # Merge: prefer name from the variant with the most recent quarter data, fallback to longest
+        # (the latest data's name is more likely to be the current/correct spelling)
+        _MONTH_ORDER = {"jan": 1, "feb": 2, "mar": 3, "apr": 4, "may": 5, "jun": 6,
+                        "jul": 7, "aug": 8, "sep": 9, "oct": 10, "nov": 11, "dec": 12}
+
+        def _quarter_sort_key(q: str) -> tuple:
+            parts = q.strip().split()
+            if len(parts) == 2:
+                return (int(parts[1]), _MONTH_ORDER.get(parts[0].lower()[:3], 0))
+            return (0, 0)
+
+        latest_q_name = max(
+            (investors[i] for i in indices),
+            key=lambda inv: max((_quarter_sort_key(q) for q in inv["values"]), default=(0, 0)),
+        )["name"]
+        canonical_name = latest_q_name if latest_q_name else max((investors[i]["name"] for i in indices), key=len)
+        merged_vals: dict = {}
+        for i in indices:
+            for q, v in investors[i]["values"].items():
+                existing = merged_vals.get(q)
+                if existing is None or (not existing and v) or (v and float(v or 0) > float(existing or 0)):
+                    merged_vals[q] = v
+        merged.append({"name": canonical_name, "values": merged_vals})
+    return merged
+
+
+def _norm_match(a: str, b: str) -> bool:
+    """Check if two normalized names are likely the same entity."""
+    if a == b:
+        return True
+    # One contains the other (handles truncation)
+    if a in b or b in a:
+        return True
+    # Check word overlap: if 70%+ of words match
+    wa, wb = set(a.split()), set(b.split())
+    if not wa or not wb:
+        return False
+    overlap = len(wa & wb)
+    return overlap / min(len(wa), len(wb)) >= 0.7
+
+
+CDP_RETRY_DELAY = 3.0   # seconds to wait before retrying CDP fetch
 
 
 def _fetch_shareholding(screener_url: str) -> dict:
@@ -140,21 +262,32 @@ def _fetch_shareholding(screener_url: str) -> dict:
         quarters: list of quarter labels (e.g. ["Sep 2025", "Jun 2025", ...])
         rows: list of { category: str, values: list[str] }
         raw_text: plain-text table representation
+
+    Retries once if CDP returns HTML but the shareholding section is missing
+    (handles transient page-load failures / Screener rate-limit pages).
     """
     base_url = screener_url.rstrip("/")
 
-    # Chrome CDP only — httpx bulk scraping causes IP bans
-    html = _fetch_page_via_cdp(base_url)
-    if not html:
-        raise RuntimeError(
-            f"Chrome CDP not available or failed to fetch {base_url}. "
-            "Launch Chrome debug session before running batch."
-        )
-    soup = BeautifulSoup(html, "lxml")
-    company_id = _fetch_company_id(soup)
+    for attempt in range(2):
+        # Chrome CDP only — httpx bulk scraping causes IP bans
+        html = _fetch_page_via_cdp(base_url)
+        if not html:
+            raise RuntimeError(
+                f"Chrome CDP not available or failed to fetch {base_url}. "
+                "Launch Chrome debug session before running batch."
+            )
+        soup = BeautifulSoup(html, "lxml")
+        company_id = _fetch_company_id(soup)
 
-    # Screener renders shareholding in section with id="shareholding"
-    section = soup.find(id="shareholding")
+        # Screener renders shareholding in section with id="shareholding"
+        section = soup.find(id="shareholding")
+        if section:
+            break
+        # Retry once — may have hit a rate-limit/error page
+        if attempt == 0:
+            print(f"    [shareholding_fetcher] No shareholding section on first attempt — retrying in {CDP_RETRY_DELAY}s...")
+            time.sleep(CDP_RETRY_DELAY)
+
     if not section:
         return {}
 
@@ -213,6 +346,27 @@ def _load_tracked_investors() -> dict:
     return data.get("tracked_investors", data)
 
 
+def _normalize_investor_name(name: str) -> str:
+    """Normalize investor name for fuzzy matching.
+    Handles: Pvt/Private, Ltd/Limited, Ins/Institute, camelCase, punctuation, extra whitespace."""
+    import re
+    # Split camelCase before lowering (e.g., "KotakInfrastructure" → "Kotak Infrastructure")
+    s = re.sub(r"([a-z])([A-Z])", r"\1 \2", name)
+    s = s.lower().strip()
+    # Normalize common abbreviations
+    s = re.sub(r"\bpvt\b\.?", "private", s)
+    s = re.sub(r"\bltd\b\.?", "limited", s)
+    s = re.sub(r"\bco\b\.?", "company", s)
+    s = re.sub(r"\bcorp\b\.?", "corporation", s)
+    s = re.sub(r"\bins\b\.?", "institute", s)
+    s = re.sub(r"\btechno\b", "technology", s)
+    s = re.sub(r"\bllp\b", "llp", s)
+    # Remove extra punctuation and whitespace
+    s = re.sub(r"['\"\.\-,&\(\)]", " ", s)
+    s = re.sub(r"\s+", " ", s).strip()
+    return s
+
+
 def _match_tracked_investors(rows: list[dict], quarters: list[str]) -> list[dict]:
     """
     Check if any row category matches a tracked investor.
@@ -224,10 +378,28 @@ def _match_tracked_investors(rows: list[dict], quarters: list[str]) -> list[dict
         if isinstance(group, list):
             all_names.extend(group)
 
+    # Pre-normalize all tracked names
+    normalized_map = {_normalize_investor_name(n): n for n in all_names}
+
+    from difflib import SequenceMatcher
+
+    def _fuzzy_match(cat_norm: str, normalized_map: dict) -> str | None:
+        """Match by substring, then by character-level similarity (≥0.85 ratio)."""
+        # Exact/substring match first
+        for norm, orig in normalized_map.items():
+            if norm in cat_norm or cat_norm in norm:
+                return orig
+        # Fuzzy fallback for minor spelling variants (Agarwal/Agrawal etc.)
+        for norm, orig in normalized_map.items():
+            if SequenceMatcher(None, cat_norm, norm).ratio() >= 0.85:
+                return orig
+        return None
+
     alerts = []
     for row in rows:
         cat = row.get("category", "")
-        matched = next((n for n in all_names if n.lower() in cat.lower()), None)
+        cat_norm = _normalize_investor_name(cat)
+        matched = _fuzzy_match(cat_norm, normalized_map)
         if matched:
             vals = row.get("values", [])
             latest = vals[-1] if vals else "N/A"

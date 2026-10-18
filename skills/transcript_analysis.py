@@ -74,6 +74,109 @@ def _build_markdown(symbol: str, company_name: str, data: dict) -> str:
     if ois := data.get("overall_investment_signal"):
         lines += ["## Overall Investment Signal", f"**{ois}**", ""]
 
+    # ── New deep-analysis sections ──────────────────────────────────────
+
+    if fe := data.get("forward_estimates"):
+        lines += ["## Forward Estimates"]
+        if fe.get("confidence_level"):
+            lines.append(f"*Management guidance confidence: **{fe['confidence_level'].upper()}***\n")
+        if rev_targets := fe.get("revenue_targets"):
+            lines.append("### Revenue Targets")
+            for rt in rev_targets:
+                lines.append(f"- **{rt.get('period', '?')}:** {rt.get('estimate', '?')} — {rt.get('basis', '')} *(Source: {rt.get('quarter_source', '?')})*")
+            lines.append("")
+        if eg := fe.get("earnings_guidance"):
+            lines.append("### Earnings Guidance")
+            for e in eg:
+                lines.append(f"- **{e.get('metric', '?')}:** {e.get('target', '?')} — {e.get('basis', '')} *(Source: {e.get('quarter_source', '?')})*")
+            lines.append("")
+        if capex := fe.get("capex_plans"):
+            lines.append("### Capex Plans")
+            for c in capex:
+                lines.append(f"- **{c.get('item', '?')}:** ₹{c.get('amount_cr', '?')} Cr | Timeline: {c.get('timeline', '?')} *(Source: {c.get('quarter_source', '?')})*")
+            lines.append("")
+
+    if nfp := data.get("new_facilities_and_products"):
+        lines += ["## New Facilities & Products"]
+        lines.append("| Facility/Product | Status | Timeline | Revenue Impact | Source |")
+        lines.append("|---|---|---|---|---|")
+        for item in nfp:
+            lines.append(f"| {item.get('name', '?')} | {item.get('status', '?')} | {item.get('expected_timeline', '?')} | {item.get('revenue_impact', '?')} | {item.get('quarter_source', '?')} |")
+        lines.append("")
+
+    if ma := data.get("mergers_and_acquisitions"):
+        lines += ["## Mergers, Acquisitions & Partnerships"]
+        for item in ma:
+            lines.append(f"### {item.get('target', '?')} ({item.get('type', '?')})")
+            lines.append(f"- **Status:** {item.get('status', '?')}")
+            lines.append(f"- **Rationale:** {item.get('strategic_rationale', '?')}")
+            lines.append(f"- **Financial Impact:** {item.get('financial_impact', '?')}")
+            lines.append(f"- *Source: {item.get('quarter_source', '?')}*")
+            lines.append("")
+
+    if ml := data.get("market_landscape"):
+        lines += ["## Market Landscape"]
+        for key, label in [
+            ("addressable_market", "Addressable Market"),
+            ("company_market_share", "Company Market Share"),
+            ("competitive_position", "Competitive Position"),
+            ("export_opportunity", "Export Opportunity"),
+            ("government_policy_tailwinds", "Policy Tailwinds"),
+            ("government_policy_headwinds", "Policy Headwinds"),
+            ("industry_growth_rate", "Industry Growth Rate"),
+        ]:
+            if val := ml.get(key):
+                lines.append(f"- **{label}:** {val}")
+        if competitors := ml.get("key_competitors_mentioned"):
+            lines.append(f"- **Key Competitors:** {', '.join(competitors)}")
+        if drivers := ml.get("demand_drivers"):
+            lines.append(f"- **Demand Drivers:** {'; '.join(drivers)}")
+        lines.append("")
+
+    if cmf := data.get("cyclicality_and_macro_factors"):
+        lines += ["## Cyclicality & Macro Factors"]
+        for key, label in [
+            ("cyclicality_assessment", "Business Cyclicality"),
+            ("raw_material_sensitivity", "Raw Material Sensitivity"),
+            ("interest_rate_impact", "Interest Rate Impact"),
+            ("currency_exposure", "Currency Exposure"),
+            ("global_competition_threats", "Global Competition Threats"),
+            ("regulatory_dependencies", "Regulatory Dependencies"),
+            ("supply_chain_risks", "Supply Chain Risks"),
+        ]:
+            if val := cmf.get(key):
+                lines.append(f"- **{label}:** {val}")
+        lines.append("")
+
+    if kpis := data.get("sector_specific_kpis"):
+        lines += ["## Sector-Specific KPIs"]
+        lines.append("| Metric | Latest Value | Previous | Trend | Source |")
+        lines.append("|---|---|---|---|---|")
+        for kpi in kpis:
+            lines.append(
+                f"| {kpi.get('metric', '?')} | {kpi.get('latest_value', '?')} "
+                f"| {kpi.get('previous_value', '—')} | {kpi.get('trend', '?')} "
+                f"| {kpi.get('quarter_source', '?')} |"
+            )
+        lines.append("")
+        for kpi in kpis:
+            if comment := kpi.get("management_comment"):
+                lines.append(f"- **{kpi.get('metric', '?')}:** {comment}")
+        if any(kpi.get("management_comment") for kpi in kpis):
+            lines.append("")
+
+    if tu := data.get("transcripts_used"):
+        lines += ["## Transcripts Analysed"]
+        lines.append("| Quarter | Type | Sentiment | Key Topics |")
+        lines.append("|---|---|---|---|")
+        for t in tu:
+            topics = ", ".join(t.get("key_topics_discussed", [])[:5])
+            lines.append(
+                f"| {t.get('quarter', '?')} | {t.get('type', '?')} "
+                f"| {t.get('management_sentiment_this_quarter', '?')} | {topics} |"
+            )
+        lines.append("")
+
     return "\n".join(lines)
 
 

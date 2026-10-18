@@ -359,7 +359,7 @@ stocks:
     name: WPIL Ltd
     exchange: NSE
     sector: Industrial Equipment - Pumps
-    screener_url: https://www.screener.in/company/WPIL/
+    screener_url: https://www.screener.in/company/505872/
 
   - symbol: BLS
     screener_symbol: BLS
@@ -408,7 +408,7 @@ stocks:
     name: Dhabriya Polywood Ltd
     exchange: NSE
     sector: Building Materials
-    screener_url: https://www.screener.in/company/DHABRIYA/
+    screener_url: https://www.screener.in/company/538715/
 
   - symbol: GUJAPOLLO
     screener_symbol: GUJAPOLLO
@@ -429,7 +429,7 @@ stocks:
     name: BPL Pharma Ltd
     exchange: NSE
     sector: Pharmaceuticals
-    screener_url: https://www.screener.in/company/BPLPHARMA/
+    screener_url: https://www.screener.in/company/541096/
 
   - symbol: DEEPAKFERT
     screener_symbol: DEEPAKFERT
@@ -450,7 +450,7 @@ stocks:
     name: Sanjivani Parentals Ltd
     exchange: NSE
     sector: Pharma - Parenterals
-    screener_url: https://www.screener.in/company/SANJIVIN/
+    screener_url: https://www.screener.in/company/531569/
 
   - symbol: EIMCOELECO
     screener_symbol: EIMCOELECO
@@ -576,7 +576,7 @@ stocks:
     name: AdCounty Media Ltd
     exchange: NSE
     sector: Digital Advertising
-    screener_url: https://www.screener.in/company/ADCOUNTY/
+    screener_url: https://www.screener.in/company/544435/
 
   - symbol: BAJAJCON
     screener_symbol: BAJAJCON
@@ -819,7 +819,7 @@ stocks:
     name: Siyaram Silk Mills Ltd
     exchange: BSE
     sector: Textiles - Blended Fabrics
-    screener_url: https://www.screener.in/company/SIYARAM/
+    screener_url: https://www.screener.in/company/544047/
 
   - symbol: LOTUSDEV
     screener_symbol: LOTUSDEV
@@ -910,7 +910,7 @@ stocks:
     name: Texel Industries Ltd
     exchange: BSE
     sector: Textiles - Technical Fabrics
-    screener_url: https://www.screener.in/company/TEXELIN/
+    screener_url: https://www.screener.in/company/526638/
 
   - symbol: HIRECT
     screener_symbol: HIRECT

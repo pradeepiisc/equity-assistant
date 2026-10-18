@@ -5,11 +5,9 @@ Reads the latest Kite portfolio snapshot and produces a daily health report:
 
   1. Overview — invested, current value, total P&L
   2. Trades Today — buys and sells from positions.json
-  3. Position-sizing alerts — any single stock ≥ 5% of portfolio
-  4. DMA status — below 99 DMA (reduce signal) / above 99 DMA (avg-up candidates)
-  5. Portfolio Concentration — all stocks sorted by value with 50/70/90% milestones
-  6. Top 10 Daily Movers — day % change vs previous session close
-  7. Watchlist stocks currently held
+  3. Portfolio Concentration — all stocks sorted by value with 50/70/90% milestones
+  4. Top 10 Daily Movers — day % change vs previous session close
+  5. Watchlist stocks currently held
 
 Usage:
     python -m workflows.portfolio_daily_report              # full run with 99 DMA
@@ -34,8 +32,6 @@ PORTFOLIO_DIR = PROJECT_ROOT / "portfolio"
 CACHE_DIR = PORTFOLIO_DIR / ".cache"
 CACHE_DIR.mkdir(parents=True, exist_ok=True)
 
-MAX_POSITION_PCT = 5.0   # alert if any stock ≥ this %
-WARN_POSITION_PCT = 4.0  # yellow zone
 DMA_STRONG_ABOVE_PCT = 10.0  # flag averaging-up if >10% above 99 DMA
 MAX_DAY_MOVER_GAP_DAYS = 3   # allow Fri->Mon, block older stale comparisons
 MULTIDAY_LOOKBACK = 5        # days of snapshots to use in multi-day movement section
@@ -63,54 +59,80 @@ def _load_latest_holdings(user_dir: Path) -> tuple[list[dict], str]:
     holdings_dir = user_dir / "holdings"
     if not holdings_dir.exists():
         raise FileNotFoundError(f"No holdings/ directory found under {user_dir}. Run: python -m integrations.kite_connect --save-portfolio")
-    date_dirs = sorted(
-        [d for d in holdings_dir.iterdir() if d.is_dir()],
-        key=lambda d: d.name,
-        reverse=True,
-    )
-    if not date_dirs:
-        raise FileNotFoundError(f"No dated snapshots found under {holdings_dir}")
-    latest = date_dirs[0]
-    holdings_file = latest / "holdings.json"
+        
+    holdings_file = holdings_dir / "holdings.json"
     if not holdings_file.exists():
-        raise FileNotFoundError(f"holdings.json missing in {latest}")
+        raise FileNotFoundError(f"holdings.json missing in {holdings_dir}")
+
+    # Get date from running_holdings.csv
+    running_csv = holdings_dir / "running_holdings.csv"
+    latest_date = "unknown"
+    if running_csv.exists():
+        import pandas as pd
+        df = pd.read_csv(running_csv, nrows=0) # just read header
+        date_cols = [c for c in df.columns if c not in ('symbol', 'quantity', 'avg_price')]
+        if date_cols:
+            latest_date = date_cols[-1]
+            
     with open(holdings_file) as f:
-        return json.load(f), latest.name
+        data = json.load(f)
+        import re
+        for h in data:
+            if "symbol" in h:
+                h["symbol"] = re.sub(r'-[A-Z]{2}$', '', h["symbol"], flags=re.IGNORECASE)
+        return [h for h in data if h.get("quantity", 0) > 0], latest_date
 
 
 def _load_prev_day_prices(user_dir: Path, current_date: str) -> dict[str, float]:
     """Load last_price from the most recent snapshot BEFORE current_date.
     Returns {symbol: last_price} or empty dict if no previous snapshot exists."""
     holdings_dir = user_dir / "holdings"
-    if not holdings_dir.exists():
+    running_csv = holdings_dir / "running_holdings.csv"
+    if not running_csv.exists():
         return {}
-    date_dirs = sorted(
-        [d for d in holdings_dir.iterdir() if d.is_dir() and d.name < current_date],
-        key=lambda d: d.name,
-        reverse=True,
-    )
+        
+    import pandas as pd
+    df = pd.read_csv(running_csv)
+    date_cols = [c for c in df.columns if c not in ('symbol', 'quantity', 'avg_price')]
+    
+    if current_date == "unknown":
+        return {}
+        
     current_dt = date.fromisoformat(current_date)
-    for prev in date_dirs:
-        prev_dt = date.fromisoformat(prev.name)
-        if (current_dt - prev_dt).days > MAX_DAY_MOVER_GAP_DAYS:
-            return {}
-        hf = prev / "holdings.json"
-        if hf.exists():
-            with open(hf) as f:
-                prev_holdings = json.load(f)
-            return {h["symbol"]: h["last_price"] for h in prev_holdings if "last_price" in h}
-    return {}
+    prev_date = None
+    
+    for c in reversed(date_cols):
+        if c < current_date:
+            try:
+                dt = date.fromisoformat(c)
+                if (current_dt - dt).days <= MAX_DAY_MOVER_GAP_DAYS:
+                    prev_date = c
+                break
+            except ValueError:
+                continue
+                
+    if not prev_date:
+        return {}
+        
+    return {row['symbol']: row[prev_date] for _, row in df.iterrows() if pd.notnull(row.get(prev_date)) and row[prev_date] > 0}
 
 
 def _load_day_positions(user_dir: Path, snapshot_date: str) -> list[dict]:
-    """Load day-trade positions from positions.json for the given snapshot date.
+    """Load day-trade positions from positions.json.
     Returns the 'day' list filtered to entries with non-zero quantity."""
-    pos_file = user_dir / "holdings" / snapshot_date / "positions.json"
+    pos_file = user_dir / "holdings" / "positions.json"
     if not pos_file.exists():
         return []
     with open(pos_file) as f:
         data = json.load(f)
-    return [p for p in data.get("day", []) if p.get("quantity", 0) != 0]
+    
+    import re
+    day_positions = data.get("day", [])
+    for p in day_positions:
+        if "symbol" in p:
+            p["symbol"] = re.sub(r'-[A-Z]{2}$', '', p["symbol"], flags=re.IGNORECASE)
+            
+    return [p for p in day_positions if p.get("quantity", 0) != 0]
 
 
 def _load_multiday_prices(
@@ -122,25 +144,151 @@ def _load_multiday_prices(
     Returns {date_str: {symbol: last_price}} sorted chronologically.
     """
     holdings_dir = user_dir / "holdings"
-    if not holdings_dir.exists():
+    running_csv = holdings_dir / "running_holdings.csv"
+    if not running_csv.exists() or current_date == "unknown":
         return {}
-    all_dirs = sorted(
-        [d for d in holdings_dir.iterdir() if d.is_dir() and d.name <= current_date],
-        key=lambda d: d.name,
-        reverse=True,
-    )
-    selected = []
-    for d in all_dirs:
-        if len(selected) >= lookback:
-            break
-        if (d / "holdings.json").exists():
-            selected.append(d)
+        
+    import pandas as pd
+    df = pd.read_csv(running_csv)
+    date_cols = [c for c in df.columns if c not in ('symbol', 'quantity', 'avg_price')]
+    
+    valid_dates = [c for c in date_cols if c <= current_date]
+    selected_dates = valid_dates[-lookback:]
+    
     result = {}
-    for d in sorted(selected, key=lambda d: d.name):
-        with open(d / "holdings.json") as f:
-            h_list = json.load(f)
-        result[d.name] = {h["symbol"]: h["last_price"] for h in h_list if "last_price" in h}
+    for d in selected_dates:
+        result[d] = {row['symbol']: row[d] for _, row in df.iterrows() if pd.notnull(row.get(d)) and row[d] > 0}
     return result
+
+
+def _detect_mth_stocks(
+    user_dir: Path,
+    current_date: str,
+    holdings: list[dict],
+) -> list[dict]:
+    """
+    Detect MTH (Mid-Time High) stocks - stocks hitting new highs based on historical data.
+    Returns list of stocks with new MTH status, enriched with allocation and P&L info.
+    """
+    holdings_dir = user_dir / "holdings"
+    running_csv = holdings_dir / "running_holdings.csv"
+    if not running_csv.exists() or current_date == "unknown":
+        return []
+        
+    import pandas as pd
+    df = pd.read_csv(running_csv)
+    date_cols = [c for c in df.columns if c not in ('symbol', 'quantity', 'avg_price')]
+    
+    # Get all historical dates up to current date (excluding today for comparison)
+    historical_dates = [c for c in date_cols if c < current_date]
+    if not historical_dates:
+        return []
+    
+    # Create symbol -> current price mapping
+    current_prices = {h["symbol"]: h["last_price"] for h in holdings}
+    
+    mth_stocks = []
+    
+    for _, row in df.iterrows():
+        symbol = row['symbol']
+        if symbol not in current_prices:
+            continue
+            
+        current_price = current_prices[symbol]
+        if current_price <= 0:
+            continue
+        
+        # Get historical prices for this symbol
+        historical_prices = []
+        for date in historical_dates:
+            price = row.get(date)
+            if pd.notnull(price) and price > 0:
+                historical_prices.append(price)
+        
+        if not historical_prices:
+            continue
+        
+        # Check if current price is the highest ever
+        historical_high = max(historical_prices)
+        if current_price > historical_high:
+            # Find the holding record to get allocation info
+            holding = next((h for h in holdings if h["symbol"] == symbol), None)
+            if holding:
+                mth_stocks.append({
+                    **holding,
+                    "historical_high": historical_high,
+                    "mth_pct_above": ((current_price - historical_high) / historical_high * 100) if historical_high > 0 else 0,
+                    "days_of_history": len(historical_prices),
+                })
+    
+    # Sort by percentage above historical high (descending)
+    mth_stocks.sort(key=lambda x: x["mth_pct_above"], reverse=True)
+    return mth_stocks
+
+
+def _detect_mtl_stocks(
+    user_dir: Path,
+    current_date: str,
+    holdings: list[dict],
+) -> list[dict]:
+    """
+    Detect MTL (Mid-Time Low) stocks - stocks hitting new lows based on historical data.
+    Returns list of stocks with new MTL status, enriched with allocation and P&L info.
+    """
+    holdings_dir = user_dir / "holdings"
+    running_csv = holdings_dir / "running_holdings.csv"
+    if not running_csv.exists() or current_date == "unknown":
+        return []
+        
+    import pandas as pd
+    df = pd.read_csv(running_csv)
+    date_cols = [c for c in df.columns if c not in ('symbol', 'quantity', 'avg_price')]
+    
+    # Get all historical dates up to current date (excluding today for comparison)
+    historical_dates = [c for c in date_cols if c < current_date]
+    if not historical_dates:
+        return []
+    
+    # Create symbol -> current price mapping
+    current_prices = {h["symbol"]: h["last_price"] for h in holdings}
+    
+    mtl_stocks = []
+    
+    for _, row in df.iterrows():
+        symbol = row['symbol']
+        if symbol not in current_prices:
+            continue
+            
+        current_price = current_prices[symbol]
+        if current_price <= 0:
+            continue
+        
+        # Get historical prices for this symbol
+        historical_prices = []
+        for date in historical_dates:
+            price = row.get(date)
+            if pd.notnull(price) and price > 0:
+                historical_prices.append(price)
+        
+        if not historical_prices:
+            continue
+        
+        # Check if current price is the lowest ever
+        historical_low = min(historical_prices)
+        if current_price < historical_low:
+            # Find the holding record to get allocation info
+            holding = next((h for h in holdings if h["symbol"] == symbol), None)
+            if holding:
+                mtl_stocks.append({
+                    **holding,
+                    "historical_low": historical_low,
+                    "mtl_pct_below": ((historical_low - current_price) / historical_low * 100) if historical_low > 0 else 0,
+                    "days_of_history": len(historical_prices),
+                })
+    
+    # Sort by percentage below historical low (descending - worst first)
+    mtl_stocks.sort(key=lambda x: x["mtl_pct_below"], reverse=True)
+    return mtl_stocks
 
 
 def _load_sector_map() -> dict[str, str]:
@@ -349,6 +497,8 @@ def _build_multiday_movement_section(
     multiday_prices: dict[str, dict[str, float]],
 ) -> list[str]:
     """Build multi-day price movement table sorted by total % change (fallers first)."""
+    from workflows.shared_sections import is_sme
+    
     lines: list[str] = []
     dates = sorted(multiday_prices.keys())
     if len(dates) < 2:
@@ -363,27 +513,44 @@ def _build_multiday_movement_section(
     day_pairs = [(dates[i], dates[i + 1]) for i in range(len(dates) - 1)]
     col_headers = [f"{_md(a)}→{_md(b)}" for a, b in day_pairs]
 
-    rows = []
+    rows_mainboard = []
+    rows_sme = []
+    
+    total_portfolio_alloc = sum(h["pct_of_portfolio"] for h in holdings)
+    sme_alloc = 0.0
+    mainboard_alloc = 0.0
+
     for h in holdings:
         sym = h["symbol"]
+        is_curr_sme = is_sme(sym, h.get("exchange", ""))
+        
+        if is_curr_sme:
+            sme_alloc += h["pct_of_portfolio"]
+        else:
+            mainboard_alloc += h["pct_of_portfolio"]
+            
         day_changes = []
         for d_from, d_to in day_pairs:
             p0 = multiday_prices[d_from].get(sym)
             p1 = multiday_prices[d_to].get(sym)
             day_changes.append((p1 - p0) / p0 * 100 if p0 and p1 and p0 > 0 else None)
+            
         p_first = multiday_prices[dates[0]].get(sym)
         p_last  = multiday_prices[dates[-1]].get(sym)
         total_pct = (p_last - p_first) / p_first * 100 if p_first and p_last and p_first > 0 else None
-        rows.append({
+        
+        row_data = {
             "symbol": sym,
             "day_changes": day_changes,
             "total_pct": total_pct,
             "pct_of_portfolio": h["pct_of_portfolio"],
             "last_price": h["last_price"],
-        })
-
-    rows_with_total = sorted([r for r in rows if r["total_pct"] is not None], key=lambda x: x["total_pct"])
-    rows_no_data    = [r for r in rows if r["total_pct"] is None]
+        }
+        
+        if is_curr_sme:
+            rows_sme.append(row_data)
+        else:
+            rows_mainboard.append(row_data)
 
     def _cell(v: float | None) -> str:
         if v is None:
@@ -392,51 +559,55 @@ def _build_multiday_movement_section(
         return f"{arrow} {'+' if v >= 0 else ''}{v:.1f}%"
 
     n = len(dates)
-    lines.append(f"## Multi-Day Price Movement ({n} days: {_md(dates[0])} → {_md(dates[-1])})")
-    lines.append("*Day-over-day % change per session · sorted by total move (fallers first)*\n")
-    lines.append("| Stock | LTP | Alloc% | " + " | ".join(col_headers) + " | Total |")
-    lines.append("|---|---|---|" + "|".join(["---"] * len(col_headers)) + "|---|")
-    for r in rows_with_total + rows_no_data:
-        cells = " | ".join(_cell(c) for c in r["day_changes"])
-        lines.append(
-            f"| {r['symbol']} | ₹{r['last_price']:.1f} | {r['pct_of_portfolio']:.1f}% | {cells} | {_cell(r['total_pct'])} |"
-        )
+    
+    # Helper to render a section
+    def _render_table(title, rows, alloc_pct):
+        r_lines = []
+        r_lines.append(f"## {title} ({n} days: {_md(dates[0])} → {_md(dates[-1])})")
+        r_lines.append(f"*{alloc_pct:.1f}% of Portfolio Value · sorted by total move (fallers first)*\\n")
+        r_lines.append("| Stock | LTP | Alloc% | " + " | ".join(col_headers) + " | Total |")
+        r_lines.append("|---|---|---|" + "|".join(["---"] * len(col_headers)) + "|---|")
+        
+        r_with_total = sorted([r for r in rows if r["total_pct"] is not None], key=lambda x: x["total_pct"])
+        r_no_data    = [r for r in rows if r["total_pct"] is None]
+        
+        for r in r_with_total + r_no_data:
+            cells = " | ".join(_cell(c) for c in r["day_changes"])
+            r_lines.append(f"| {r['symbol']} | ₹{r['last_price']:.1f} | {r['pct_of_portfolio']:.1f}% | {cells} | {_cell(r['total_pct'])} |")
+        
+        r_lines.append("")
+        
+        c_falling = [r for r in r_with_total if all(c is not None and c < 0 for c in r["day_changes"])]
+        c_rising  = [r for r in r_with_total if all(c is not None and c > 0 for c in r["day_changes"])]
+        strict_syms = {r["symbol"] for r in c_rising + c_falling}
+        
+        s_rising = [r for r in r_with_total if r["symbol"] not in strict_syms and r["total_pct"] > 1.0 and all(c is not None and c > -1.0 for c in r["day_changes"])]
+        s_falling = [r for r in r_with_total if r["symbol"] not in strict_syms and r["total_pct"] < -1.0 and all(c is not None and c < 1.0 for c in r["day_changes"])]
+        
+        if c_falling or c_rising or s_rising or s_falling:
+            r_lines.append(f"### {title.split(' ')[0]} Trend Summary")
+            if c_falling:
+                r_lines.append(f"📉 **Consistently falling** ({len(c_falling)} stocks): {', '.join(r['symbol'] for r in c_falling)}")
+            if s_falling:
+                r_lines.append(f"🔻 **Soft falling** (trend down >1%, dips <1% bounce, {len(s_falling)} stocks): {', '.join(r['symbol'] for r in s_falling[:10])}{' …' if len(s_falling) > 10 else ''}")
+            if c_rising:
+                r_lines.append(f"📈 **Consistently rising** ({len(c_rising)} stocks): {', '.join(r['symbol'] for r in c_rising)}")
+            if s_rising:
+                r_lines.append(f"🔺 **Soft rising** (trend up >1%, dips <1%, {len(s_rising)} stocks): {', '.join(r['symbol'] for r in s_rising[:10])}{' …' if len(s_rising) > 10 else ''}")
+            r_lines.append("")
+            
+        return r_lines
+
+    lines.extend(_render_table("Mainboard Multi-Day Price Movement", rows_mainboard, mainboard_alloc))
+    lines.extend(_render_table("SME Multi-Day Price Movement", rows_sme, sme_alloc))
+    
+    # Bottom SME summary
+    lines.append("## SME Portfolio Exposure")
+    lines.append(f"**Total SME Allocation:** {sme_alloc:.2f}% of present value")
+    lines.append(f"**Total Mainboard Allocation:** {mainboard_alloc:.2f}% of present value")
     lines.append("")
 
-    consistently_falling = [r for r in rows_with_total if all(c is not None and c < 0 for c in r["day_changes"])]
-    consistently_rising  = [r for r in rows_with_total if all(c is not None and c > 0 for c in r["day_changes"])]
-    _strict_syms = {r["symbol"] for r in consistently_rising + consistently_falling}
-    soft_rising = [
-        r for r in rows_with_total
-        if r["symbol"] not in _strict_syms
-        and r["total_pct"] > 1.0
-        and all(c is not None and c > -1.0 for c in r["day_changes"])
-    ]
-    soft_falling = [
-        r for r in rows_with_total
-        if r["symbol"] not in _strict_syms
-        and r["total_pct"] < -1.0
-        and all(c is not None and c < 1.0 for c in r["day_changes"])
-    ]
-    if consistently_falling or consistently_rising or soft_rising or soft_falling:
-        lines.append("### Trend Summary")
-        if consistently_falling:
-            syms = ", ".join(r["symbol"] for r in consistently_falling[:10])
-            lines.append(f"📉 **Consistently falling** ({len(consistently_falling)} stocks): {syms}{'  …' if len(consistently_falling) > 10 else ''}")
-        if soft_falling:
-            syms = ", ".join(r["symbol"] for r in sorted(soft_falling, key=lambda x: x["total_pct"])[:10])
-            lines.append(f"🔻 **Soft falling** (trend down >1%, dips <1% bounce, {len(soft_falling)} stocks): {syms}{'  …' if len(soft_falling) > 10 else ''}")
-        if consistently_rising:
-            syms = ", ".join(r["symbol"] for r in sorted(consistently_rising, key=lambda x: -x["total_pct"])[:10])
-            lines.append(f"📈 **Consistently rising** ({len(consistently_rising)} stocks): {syms}{'  …' if len(consistently_rising) > 10 else ''}")
-        if soft_rising:
-            syms = ", ".join(r["symbol"] for r in sorted(soft_rising, key=lambda x: -x["total_pct"])[:10])
-            lines.append(f"🔺 **Soft rising** (trend up >1%, dips <1%, {len(soft_rising)} stocks): {syms}{'  …' if len(soft_rising) > 10 else ''}")
-        lines.append("")
     return lines
-
-
-# ── report builder ────────────────────────────────────────────────────────────
 
 def build_report(
     user_id: str,
@@ -448,6 +619,8 @@ def build_report(
     positions: list[dict] | None = None,
     chart_dir: Path | None = None,
     multiday_prices: dict[str, dict[str, float]] | None = None,
+    mth_stocks: list[dict] | None = None,
+    mtl_stocks: list[dict] | None = None,
 ) -> str:
     lines: list[str] = []
     invested = sum(h["invested_value"] for h in holdings)
@@ -507,30 +680,12 @@ def build_report(
                 )
             lines.append("")
 
-    # ── Position sizing ───────────────────────────────────────────────────────
-    oversized = [h for h in holdings if h["pct_of_portfolio"] >= MAX_POSITION_PCT]
-    warn_zone = [h for h in holdings if WARN_POSITION_PCT <= h["pct_of_portfolio"] < MAX_POSITION_PCT]
-
-    lines.append("## Position Sizing")
-    if oversized:
-        lines.append(f"\n⛔ **Over {MAX_POSITION_PCT}% — reduce:**")
-        for h in sorted(oversized, key=lambda x: -x["pct_of_portfolio"]):
-            excess_inr = h["current_value"] - (total_value * MAX_POSITION_PCT / 100)
-            lines.append(
-                f"  - **{h['symbol']}**: {h['pct_of_portfolio']:.1f}%  "
-                f"({_inr(h['current_value'])})  — reduce by ~{_inr(excess_inr)} to reach 5%"
-            )
-    if warn_zone:
-        lines.append(f"\n🟡 Approaching limit ({WARN_POSITION_PCT}–{MAX_POSITION_PCT}%):")
-        for h in sorted(warn_zone, key=lambda x: -x["pct_of_portfolio"]):
-            lines.append(f"  - {h['symbol']}: {h['pct_of_portfolio']:.1f}%  ({_inr(h['current_value'])})")
-    if not oversized and not warn_zone:
-        lines.append("✅ All positions within 5% limit.")
-    lines.append("")
 
     # DMA status moved to evolving files (dma_deployment.md, caution_list.md, deployment_candidates.md)
 
-    # Portfolio concentration moved to evolving file (portfolio_concentration.md)
+    # ── Portfolio Concentration ─────────────────────────────────────────────────
+    from workflows.shared_sections import render_portfolio_concentration
+    lines.extend(render_portfolio_concentration(holdings, watchlist_symbols))
 
     # ── Top 10 Daily Movers (today's price vs previous session) ─────────────
     holdings_with_day = [h for h in holdings if h.get("day_change_pct") is not None]
@@ -571,6 +726,48 @@ def build_report(
         lines.append("## Top 10 Daily Movers")
         lines.append("*No previous-day snapshot available — run daily to build history.*\n")
 
+    # ── MTH (Mid-Time High) Stocks ───────────────────────────────────────────────
+    if mth_stocks:
+        lines.append("## 🏆 MTH (Mid-Time High) Stocks")
+        lines.append(f"*{len(mth_stocks)} stocks hitting new all-time highs based on historical data*\n")
+        
+        lines.append("| Stock | LTP | Historical High | % Above High | Total P&L% | Alloc% | Days of History |")
+        lines.append("|---|---|---|---|---|---|---|")
+        for stock in mth_stocks:
+            lines.append(
+                f"| {stock['symbol']} | ₹{stock['last_price']:.1f} "
+                f"| ₹{stock['historical_high']:.1f} "
+                f"| {_pct(stock['mth_pct_above'])} "
+                f"| {_pct(stock['pnl_pct'])} "
+                f"| {stock['pct_of_portfolio']:.1f}% "
+                f"| {stock['days_of_history']} |"
+            )
+        lines.append("")
+    else:
+        lines.append("## 🏆 MTH (Mid-Time High) Stocks")
+        lines.append("*No stocks hitting new all-time highs today.*\n")
+
+    # ── MTL (Mid-Time Low) Stocks ────────────────────────────────────────────────
+    if mtl_stocks:
+        lines.append("## 📉 MTL (Mid-Time Low) Stocks")
+        lines.append(f"*{len(mtl_stocks)} stocks hitting new all-time lows based on historical data*\n")
+        
+        lines.append("| Stock | LTP | Historical Low | % Below Low | Total P&L% | Alloc% | Days of History |")
+        lines.append("|---|---|---|---|---|---|---|")
+        for stock in mtl_stocks:
+            lines.append(
+                f"| {stock['symbol']} | ₹{stock['last_price']:.1f} "
+                f"| ₹{stock['historical_low']:.1f} "
+                f"| {_pct(-stock['mtl_pct_below'])} "
+                f"| {_pct(stock['pnl_pct'])} "
+                f"| {stock['pct_of_portfolio']:.1f}% "
+                f"| {stock['days_of_history']} |"
+            )
+        lines.append("")
+    else:
+        lines.append("## 📉 MTL (Mid-Time Low) Stocks")
+        lines.append("*No stocks hitting new all-time lows today.*\n")
+
     # ── Multi-day price movement ───────────────────────────────────────────────
     if multiday_prices:
         lines += _build_multiday_movement_section(holdings, multiday_prices)
@@ -604,6 +801,14 @@ def run(user_id: str | None = None, fetch_dma: bool = True, lookback: int = MULT
     day_positions = _load_day_positions(user_dir, snapshot_date)
     multiday_prices = _load_multiday_prices(user_dir, snapshot_date, lookback=lookback)
     holdings, total_value = _enrich(holdings_raw, prev_prices)
+    
+    # Detect MTH and MTL stocks
+    mth_stocks = _detect_mth_stocks(user_dir, snapshot_date, holdings)
+    mtl_stocks = _detect_mtl_stocks(user_dir, snapshot_date, holdings)
+    if mth_stocks:
+        print(f"  🏆 {len(mth_stocks)} MTH stocks detected")
+    if mtl_stocks:
+        print(f"  📉 {len(mtl_stocks)} MTL stocks detected")
 
     print(f"\n{'='*60}")
     print(f"  PORTFOLIO DAILY REPORT  —  {user_dir.name}  ·  {snapshot_date}")
@@ -628,7 +833,7 @@ def run(user_id: str | None = None, fetch_dma: bool = True, lookback: int = MULT
             wl_dma = _fetch_dma_batch(wl_only)
             dma_data.update(wl_dma)
 
-    chart_dir = user_dir / "holdings" / snapshot_date / "charts"
+    chart_dir = user_dir / "charts"
     report_md = build_report(
         user_id=user_dir.name,
         snapshot_date=snapshot_date,
@@ -639,9 +844,11 @@ def run(user_id: str | None = None, fetch_dma: bool = True, lookback: int = MULT
         positions=day_positions if day_positions else None,
         chart_dir=chart_dir,
         multiday_prices=multiday_prices if len(multiday_prices) >= 2 else None,
+        mth_stocks=mth_stocks,
+        mtl_stocks=mtl_stocks,
     )
 
-    out_file = user_dir / "holdings" / snapshot_date / "daily_report.md"
+    out_file = user_dir / "daily_report.md"
     out_file.write_text(report_md, encoding="utf-8")
     print(f"\n✓ Report saved → {out_file}")
 

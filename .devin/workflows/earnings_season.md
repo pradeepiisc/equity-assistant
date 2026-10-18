@@ -14,7 +14,8 @@ Run weekly or daily to catch new results, transcripts, and shareholding changes.
 
 Key features:
 - **Shareholding delta detection** — fetches fresh data from Screener.in via Chrome CDP (real browser, auto-launches if needed), compares with existing files, shows actual QoQ changes (e.g., Promoter +2.6pp, FII -0.7pp)
-- **Stop-on-block detection** — aborts batch after 5 consecutive failures (possible IP block); jittered 3-6s delay between page loads
+- **Parallel CDP (3 tabs)** — shareholding batch uses 3 concurrent browser tabs, cutting ~20 min → ~7 min
+- **Stop-on-block detection** — aborts batch after 10 consecutive failures (possible IP block)
 - **Tracked investor matrix** — companies as rows × tracked investors as columns, showing latest% with trend arrows (🆕/↑/↓/→)
 - **Quarterly results comparison** — per-company tables with previous year, previous quarter, current quarter, QoQ and YoY changes; SME companies show half-yearly numbers with HoH
 - **New company onboarding** — inline onboard via `--onboard` flag
@@ -30,18 +31,43 @@ cd /Users/pradeep.bansal1/Documents/learning/equity-assistant
 /Users/pradeep.bansal1/miniconda3/envs/equity-assistant/bin/python -m workflows.earnings_season
 ```
 
-### With shareholding fetch + transcripts (Chrome CDP auto-launches)
+### Fetch all (shareholding + financials + transcripts)
 
 ```bash
-/Users/pradeep.bansal1/miniconda3/envs/equity-assistant/bin/python -m workflows.earnings_season --fetch
+/Users/pradeep.bansal1/miniconda3/envs/equity-assistant/bin/python -m workflows.earnings_season --fetch --user ZV3899
 ```
 
-This fetches fresh shareholding from Screener.in via Chrome CDP (auto-launches Chrome debug session if not running). You'll see pages opening/closing in Chrome as it browses Screener for each company. Compares with existing data to show actual percentage-point changes. Companies already at the current quarter are automatically skipped.
+Shorthand for all 3 phases below. Chrome CDP auto-launches if needed.
+
+### Fetch shareholding only (~7 min with parallel CDP)
+
+```bash
+/Users/pradeep.bansal1/miniconda3/envs/equity-assistant/bin/python -m workflows.earnings_season --fetch-sh --user ZV3899
+```
+
+Best for **weeks 1-3** after quarter end when only shareholding data is available.
+Uses 3 concurrent CDP tabs. Companies already at current quarter are skipped.
+
+### Fetch financials only
+
+```bash
+/Users/pradeep.bansal1/miniconda3/envs/equity-assistant/bin/python -m workflows.earnings_season --fetch-fin --user ZV3899
+```
+
+Best for **weeks 3-8** when quarterly results start appearing. Needs Chrome CDP.
+
+### Fetch transcripts only (no CDP needed)
+
+```bash
+/Users/pradeep.bansal1/miniconda3/envs/equity-assistant/bin/python -m workflows.earnings_season --fetch-transcripts --user ZV3899
+```
+
+Best for **weeks 6-12** when concall transcripts get published. No browser needed.
 
 ### Full data refresh (Chrome CDP required)
 
 ```bash
-/Users/pradeep.bansal1/miniconda3/envs/equity-assistant/bin/python -m workflows.earnings_season --fetch-all
+/Users/pradeep.bansal1/miniconda3/envs/equity-assistant/bin/python -m workflows.earnings_season --fetch-all --user ZV3899
 ```
 
 Chrome will auto-launch if not running. For manual launch:
@@ -96,6 +122,15 @@ These are now written by the daily report to `portfolio/{user}/`:
 | **watchlist_not_held.md** | DMA status for watchlist stocks you don't own yet |
 | **caution_list.md** | Bearish + significant allocation — consider reducing |
 | **sme_summary.md** | All SME stocks with trend + allocation |
+
+### Recommended schedule
+
+| Weeks after quarter end | What to run | Frequency |
+|---|---|---|
+| **1-3** (Apr/Jul/Oct/Jan) | `--fetch-sh` | Daily or every other day |
+| **3-8** | `--fetch-sh --fetch-fin` | 2-3× per week |
+| **6-12** | `--fetch` (all 3) | 1-2× per week |
+| **Steady state** | (no flag) delta report | Weekly |
 
 ### Cron automation
 

@@ -33,6 +33,7 @@ import httpx
 
 CDP_URL = "http://127.0.0.1:9222"
 PAGE_LOAD_WAIT = 3.5   # seconds to wait after Page.navigate
+PARALLEL_CONCURRENCY = 3  # number of concurrent CDP tabs for batch fetches
 
 CHROME_LAUNCH_SCRIPT = Path(__file__).parent.parent / "scripts" / "launch_chrome_debug.sh"
 CHROME_START_TIMEOUT = 35   # seconds to wait for Chrome to be ready
@@ -206,6 +207,126 @@ def navigate_and_evaluate(
 
     except Exception:
         return None
+
+
+def fetch_pages_parallel(
+    urls: list[str],
+    wait: float = PAGE_LOAD_WAIT,
+    concurrency: int = PARALLEL_CONCURRENCY,
+    delay_between_batches: float = 2.0,
+) -> dict[str, str | None]:
+    """
+    Fetch multiple URLs in parallel using concurrent CDP tabs on the same
+    browser WebSocket connection.
+
+    Opens `concurrency` tabs at once, navigates them all, waits once for
+    the longest, then collects HTML from each.  This cuts per-batch wall
+    time from N*wait to roughly wait + overhead.
+
+    Args:
+        urls:        List of URLs to fetch.
+        wait:        Seconds to let each page render after navigation.
+        concurrency: Max tabs open simultaneously.
+        delay_between_batches: Pause between successive batches (rate-limit).
+
+    Returns:
+        {url: html_or_None} for every input URL.
+    """
+    try:
+        import websocket  # noqa: PLC0415
+    except ImportError:
+        return {u: None for u in urls}
+
+    results: dict[str, str | None] = {}
+
+    try:
+        ver_resp = httpx.get(f"{CDP_URL}/json/version", timeout=3)
+        if ver_resp.status_code != 200:
+            return {u: None for u in urls}
+        browser_ws_url = ver_resp.json().get("webSocketDebuggerUrl")
+        if not browser_ws_url:
+            return {u: None for u in urls}
+
+        ws = websocket.create_connection(browser_ws_url, timeout=30)
+        cid = [0]
+
+        def _send_browser(method, params=None):
+            cid[0] += 1
+            msg_id = cid[0]
+            ws.send(json.dumps({"id": msg_id, "method": method, "params": params or {}}))
+            for _ in range(500):
+                raw = json.loads(ws.recv())
+                if raw.get("id") == msg_id:
+                    return raw.get("result", {})
+            return {}
+
+        def _send_session(session_id, method, params=None):
+            cid[0] += 1
+            msg_id = cid[0]
+            ws.send(json.dumps({
+                "id": msg_id, "method": method,
+                "params": params or {}, "sessionId": session_id,
+            }))
+            for _ in range(500):
+                raw = json.loads(ws.recv())
+                if raw.get("id") == msg_id and raw.get("sessionId") == session_id:
+                    return raw.get("result", {})
+            return {}
+
+        # Process in batches of `concurrency`
+        for batch_start in range(0, len(urls), concurrency):
+            batch_urls = urls[batch_start : batch_start + concurrency]
+            tabs: list[tuple[str, str, str]] = []  # (url, target_id, session_id)
+
+            # Create tabs and navigate all of them
+            for url in batch_urls:
+                try:
+                    target_result = _send_browser("Target.createTarget", {"url": "about:blank"})
+                    target_id = target_result.get("targetId")
+                    if not target_id:
+                        results[url] = None
+                        continue
+                    attach_result = _send_browser("Target.attachToTarget", {"targetId": target_id, "flatten": True})
+                    session_id = attach_result.get("sessionId")
+                    if not session_id:
+                        results[url] = None
+                        continue
+                    _send_session(session_id, "Page.enable")
+                    _send_session(session_id, "Page.navigate", {"url": url})
+                    tabs.append((url, target_id, session_id))
+                except Exception:
+                    results[url] = None
+
+            # Single wait covers all tabs (they load concurrently)
+            if tabs:
+                time.sleep(wait + 1.0)  # slightly longer for parallel safety
+
+            # Collect HTML from all tabs and close them
+            for url, target_id, session_id in tabs:
+                try:
+                    eval_result = _send_session(session_id, "Runtime.evaluate", {
+                        "expression": "document.documentElement.outerHTML",
+                        "returnByValue": True,
+                    })
+                    html = eval_result.get("result", {}).get("value", "")
+                    results[url] = html if html else None
+                except Exception:
+                    results[url] = None
+                try:
+                    _send_browser("Target.closeTarget", {"targetId": target_id})
+                except Exception:
+                    pass
+
+            # Rate-limit between batches
+            if batch_start + concurrency < len(urls):
+                time.sleep(delay_between_batches)
+
+        ws.close()
+    except Exception:
+        for u in urls:
+            results.setdefault(u, None)
+
+    return results
 
 
 def fetch_page_html(url: str, wait: float = PAGE_LOAD_WAIT) -> str | None:

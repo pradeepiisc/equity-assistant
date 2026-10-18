@@ -10,6 +10,7 @@ Steps per company:
 
 Usage:
     python -m workflows.batch_company_analysis                   # all watchlist
+    python -m workflows.batch_company_analysis --all             # all companies in data/companies/
     python -m workflows.batch_company_analysis --symbols ZENTEC DCAL
     python -m workflows.batch_company_analysis --skip-existing   # skip if master_report.md exists
     python -m workflows.batch_company_analysis --data-only       # fetch data, no LLM analysis
@@ -30,10 +31,25 @@ PROJECT_ROOT = Path(__file__).parent.parent
 
 
 def _load_watchlist() -> list[dict]:
-    wl_path = PROJECT_ROOT / "watchlist.yaml"
-    with open(wl_path) as f:
-        data = yaml.safe_load(f)
-    return data.get("stocks", [])
+    # Import full_company_analysis's loader to get both watchlist and portfolio companies
+    from workflows.full_company_analysis import _load_all_companies
+    return _load_all_companies()
+
+
+def _get_all_symbols_with_data() -> list[str]:
+    """Get all symbols that have a directory in data/companies."""
+    config = get_config()
+    data_root = PROJECT_ROOT / config["paths"]["data_root"]
+    if not data_root.exists():
+        return []
+    
+    symbols = []
+    for item in data_root.iterdir():
+        if item.is_dir() and not item.name.startswith("."):
+            # Basic validation: symbols are usually uppercase or numeric
+            if item.name.isupper() or item.name.isdigit():
+                symbols.append(item.name)
+    return sorted(symbols)
 
 
 def _report_exists(symbol: str) -> bool:
@@ -45,6 +61,7 @@ def _report_exists(symbol: str) -> bool:
 
 def run(
     symbols: list[str] | None = None,
+    all_data: bool = False,
     skip_existing: bool = False,
     data_only: bool = False,
     analysis_only: bool = False,
@@ -53,17 +70,28 @@ def run(
 ) -> None:
     from workflows import data_fetch, full_company_analysis  # noqa: PLC0415
 
-    watchlist = _load_watchlist()
-    config = get_config()
-
+    all_known_companies = _load_watchlist()
+    companies_map = {c["symbol"].upper(): c for c in all_known_companies if "symbol" in c}
+    
     if symbols:
-        syms_upper = {s.upper() for s in symbols}
-        companies = [c for c in watchlist if c.get("symbol", "").upper() in syms_upper]
-        missing = syms_upper - {c["symbol"].upper() for c in companies}
-        if missing:
-            print(f"[WARN] Not found in watchlist.yaml: {sorted(missing)}")
+        syms_to_process = [s.upper() for s in symbols]
+    elif all_data:
+        syms_to_process = _get_all_symbols_with_data()
+        print(f"Found {len(syms_to_process)} symbols in data/companies/")
     else:
-        companies = watchlist
+        # Default to watchlist only (legacy behavior)
+        wl_path = PROJECT_ROOT / "watchlist.yaml"
+        with open(wl_path) as f:
+            wl_data = yaml.safe_load(f) or {}
+        syms_to_process = [c["symbol"].upper() for c in wl_data.get("stocks", []) if "symbol" in c]
+
+    companies = []
+    for sym in syms_to_process:
+        if sym in companies_map:
+            companies.append(companies_map[sym])
+        else:
+            # Create a minimal company dict if we have the folder but not the metadata
+            companies.append({"symbol": sym, "name": sym, "sector": "Unknown"})
 
     total = len(companies)
     print(f"\n{'='*60}")
@@ -161,6 +189,10 @@ if __name__ == "__main__":
         help="Process only these symbols (default: all watchlist)"
     )
     parser.add_argument(
+        "--all", action="store_true", dest="all_data",
+        help="Process all symbols found in data/companies/ folder"
+    )
+    parser.add_argument(
         "--skip-existing", action="store_true",
         help="Skip companies that already have a master_report.md"
     )
@@ -184,6 +216,7 @@ if __name__ == "__main__":
 
     run(
         symbols=args.symbols,
+        all_data=args.all_data,
         skip_existing=args.skip_existing,
         data_only=args.data_only,
         analysis_only=args.analysis_only,

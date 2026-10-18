@@ -80,6 +80,17 @@ Return ONLY a valid JSON object:
     {{"name": "Bear", "fair_value": Z, "probability": "20%", "description": "..."}}
   ],
   "key_risks_to_valuation": ["...", "..."],
+  "price_trend_reasoning": {{
+    "trend_classification": "increasing_trend" | "increasing_with_cap" | "decreasing_with_floor" | "decreasing_trend" | "range_bound",
+    "trend_summary": "<1-2 sentences on current price action pattern>",
+    "fundamental_drivers": [
+      {{"reason": "<fundamental cause for the trend>", "evidence": "<specific data>", "impact": "bullish | bearish | neutral"}}
+    ],
+    "sentiment_drivers": [
+      {{"reason": "<market/thematic cause>", "evidence": "<sector trend or flow data>", "impact": "bullish | bearish | neutral"}}
+    ],
+    "price_vs_fundamentals_gap": "<Is the market pricing AHEAD of or BEHIND the fundamentals?>"
+  }},
   "entry_exit_triggers": {{
     "buy": ["...", "..."],
     "exit": ["...", "..."]

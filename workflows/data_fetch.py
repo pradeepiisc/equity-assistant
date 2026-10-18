@@ -96,6 +96,15 @@ def run(symbol: str,
     company = _load_company(symbol)
     config = get_config()
 
+    # Sync meta.json with YAML (ensures screener_url stays current)
+    from skills.company_meta import store_company_meta  # noqa: PLC0415
+    store_company_meta(
+        symbol=symbol,
+        name=company.get("name", ""),
+        screener_url=company.get("screener_url", ""),
+        sector=company.get("sector", ""),
+    )
+
     print(f"\n{'=' * 60}")
     print(f"  DATA FETCH: {symbol}")
     print(f"{'=' * 60}")

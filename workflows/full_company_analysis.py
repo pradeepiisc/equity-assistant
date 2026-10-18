@@ -29,6 +29,27 @@ from skills import (
 from skills.company_meta import get_latest_price
 
 
+def _load_dma_for_symbol(symbol: str) -> dict:
+    """Load DMA data for a symbol from the portfolio .cache/ directory."""
+    from datetime import date as _date
+    cache_dir = Path(__file__).parent.parent / "portfolio" / ".cache"
+    if not cache_dir.exists():
+        return {}
+    today = _date.today().isoformat()
+    cache_file = cache_dir / f"dma_{today}.json"
+    if not cache_file.exists():
+        caches = sorted(cache_dir.glob("dma_*.json"), reverse=True)
+        if caches:
+            cache_file = caches[0]
+        else:
+            return {}
+    try:
+        all_dma = json.loads(cache_file.read_text())
+        return all_dma.get(symbol.upper(), {})
+    except Exception:
+        return {}
+
+
 def _load_all_companies() -> list[dict]:
     """Load companies from watchlist.yaml and portfolio_companies.yaml combined."""
     root = Path(__file__).parent.parent
@@ -62,9 +83,101 @@ def _build_master_markdown(symbol: str, company_name: str, data: dict) -> str:
         "",
     ]
 
+    # ── Investment Thesis ─────────────────────────────────────────────────
     if thesis := data.get("investment_thesis"):
         lines += ["## Investment Thesis", thesis, ""]
 
+    # ── Industry & Market Position ────────────────────────────────────────
+    if imp := data.get("industry_and_market_position"):
+        lines += ["## Industry & Market Position"]
+        if overview := imp.get("industry_overview"):
+            lines += ["### Industry Overview", overview, ""]
+        if position := imp.get("company_position"):
+            lines += ["### Company Position", position, ""]
+        if export_info := imp.get("export_and_global"):
+            lines += ["### Export & Global Opportunity", export_info, ""]
+        if threats := imp.get("competitive_threats"):
+            lines += ["### Competitive Threats", threats, ""]
+
+    # ── Forward Revenue Path ──────────────────────────────────────────────
+    if frp := data.get("forward_revenue_path"):
+        lines += ["## Forward Revenue Path"]
+        lines.append("| Period | Revenue (₹ Cr) | Basis |")
+        lines.append("|---|---|---|")
+        for key in ["fy_current", "fy_next", "fy_next2"]:
+            fy = frp.get(key)
+            if fy and isinstance(fy, dict):
+                lines.append(f"| {fy.get('period', '?')} | {fy.get('revenue_cr', '?')} | {fy.get('basis', '?')} |")
+        lines.append("")
+        if et := frp.get("earnings_trajectory"):
+            lines += ["### Earnings Trajectory", et, ""]
+        if assumptions := frp.get("key_assumptions"):
+            lines.append("### Key Assumptions")
+            for a in assumptions:
+                lines.append(f"- {a}")
+            lines.append("")
+        if risk := frp.get("risk_to_estimates"):
+            lines += ["### Risk to Estimates", risk, ""]
+
+    # ── Sector KPI Dashboard ──────────────────────────────────────────────
+    if kpis := data.get("sector_kpi_dashboard"):
+        lines += ["## Sector KPI Dashboard"]
+        lines.append("| KPI | Value | Assessment | Trend | Comment |")
+        lines.append("|---|---|---|---|---|")
+        for kpi in kpis:
+            assessment = kpi.get("assessment", "?")
+            emoji = {"strong": "🟢", "adequate": "🟡", "weak": "🔴"}.get(assessment, "⚪")
+            lines.append(
+                f"| {kpi.get('metric', '?')} | {kpi.get('value', '?')} "
+                f"| {emoji} {assessment} | {kpi.get('trend', '?')} "
+                f"| {kpi.get('comment', '')} |"
+            )
+        lines.append("")
+
+    # ── Technical Position ────────────────────────────────────────────────
+    if tp := data.get("technical_position"):
+        lines += ["## Technical Position"]
+        for key, label in [
+            ("price_vs_50dma", "Price vs 50 DMA"),
+            ("price_vs_200dma", "Price vs 200 DMA"),
+            ("dma_crossover", "DMA Crossover"),
+            ("price_vs_52w", "Price vs 52-Week Range"),
+        ]:
+            if val := tp.get(key):
+                lines.append(f"- **{label}:** {val}")
+        if momentum := tp.get("momentum_assessment"):
+            lines += ["", f"**Momentum:** {momentum}"]
+        lines.append("")
+
+    # ── Price Trend Reasoning ────────────────────────────────────────────
+    if ptr := data.get("price_trend_reasoning"):
+        trend_emoji = {
+            "increasing_trend": "📈", "increasing_with_cap": "📈🔒",
+            "decreasing_with_floor": "📉🛡️", "decreasing_trend": "📉",
+            "range_bound": "↔️",
+        }
+        tc = ptr.get("trend_classification", "?")
+        lines += [
+            "## Price Trend Reasoning",
+            f"**Trend:** {trend_emoji.get(tc, '📊')} {tc.replace('_', ' ').title()}",
+        ]
+        if ts := ptr.get("trend_summary"):
+            lines.append(f"\n{ts}")
+        if fd := ptr.get("fundamental_drivers"):
+            lines.append("\n**Fundamental Drivers:**")
+            for d in fd:
+                impact_icon = {"bullish": "🟢", "bearish": "🔴", "neutral": "⚪"}.get(d.get("impact", ""), "")
+                lines.append(f"- {impact_icon} **{d.get('reason', '?')}** — {d.get('evidence', '?')}")
+        if sd := ptr.get("sentiment_drivers"):
+            lines.append("\n**Sentiment Drivers:**")
+            for d in sd:
+                impact_icon = {"bullish": "🟢", "bearish": "🔴", "neutral": "⚪"}.get(d.get("impact", ""), "")
+                lines.append(f"- {impact_icon} **{d.get('reason', '?')}** — {d.get('evidence', '?')}")
+        if gap := ptr.get("price_vs_fundamentals_gap"):
+            lines.append(f"\n**Price vs Fundamentals:** {gap}")
+        lines.append("")
+
+    # ── Key Risks ─────────────────────────────────────────────────────────
     if risks := data.get("key_risks"):
         lines += ["## Key Risks"]
         for r in risks:
@@ -72,30 +185,77 @@ def _build_master_markdown(symbol: str, company_name: str, data: dict) -> str:
             lines += [
                 f"### [{severity}] {r.get('risk', '?')}",
                 f"{r.get('detail', '')}",
-                f"*Source: {r.get('source', 'N/A')}*",
-                "",
             ]
+            if mitigation := r.get("mitigation"):
+                lines.append(f"*Mitigation: {mitigation}*")
+            lines.append(f"*Source: {r.get('source', 'N/A')}*")
+            lines.append("")
 
+    # ── Key Catalysts ─────────────────────────────────────────────────────
     if catalysts := data.get("key_catalysts"):
         lines += ["## Key Catalysts"]
         for c in catalysts:
+            prob = c.get("probability", "")
+            prob_str = f" (probability: {prob})" if prob else ""
             lines += [
-                f"### {c.get('catalyst', '?')} — {c.get('timeline', 'N/A')}",
+                f"### {c.get('catalyst', '?')} — {c.get('timeline', 'N/A')}{prob_str}",
                 c.get("detail", ""),
-                "",
             ]
+            if source := c.get("source"):
+                lines.append(f"*Source: {source}*")
+            lines.append("")
 
+    # ── Decision Framework ────────────────────────────────────────────────
+    if df := data.get("decision_framework"):
+        lines += ["## Decision Framework"]
+        if invest := df.get("invest_more_triggers"):
+            lines.append("### 🟢 Triggers to Invest More")
+            for t in invest:
+                lines.append(f"- {t}")
+            lines.append("")
+        if stay := df.get("stay_invested_reasons"):
+            lines.append("### 🔵 Why Stay Invested (Thesis Intact)")
+            for t in stay:
+                lines.append(f"- {t}")
+            lines.append("")
+        if partial := df.get("partial_exit_triggers"):
+            lines.append("### 🟠 Partial Exit Triggers (Trim 25-50%)")
+            for t in partial:
+                lines.append(f"- {t}")
+            lines.append("")
+        if full := df.get("complete_exit_triggers"):
+            lines.append("### 🔴 Complete Exit Triggers (Sell All)")
+            for t in full:
+                lines.append(f"- {t}")
+            lines.append("")
+
+    # ── Monitoring Triggers ───────────────────────────────────────────────
     if triggers := data.get("monitoring_triggers"):
         lines += ["## Monitoring Triggers"]
         for t in triggers:
             lines.append(f"- {t}")
         lines.append("")
 
+    # ── Fair Value Summary ────────────────────────────────────────────────
     if fv := data.get("fair_value_summary"):
         lines += ["## Fair Value Summary", fv, ""]
 
+    # ── Action Recommendation ─────────────────────────────────────────────
     if action := data.get("action_recommendation"):
         lines += ["## Action Recommendation", action, ""]
+
+    # ── Transcript Evidence Map ───────────────────────────────────────────
+    if evidence := data.get("transcript_evidence_map"):
+        lines += ["## Evidence Trail"]
+        lines.append("| Conclusion | Supporting Evidence | Source |")
+        lines.append("|---|---|---|")
+        for e in evidence:
+            lines.append(
+                f"| {e.get('conclusion', '?')} "
+                f"| {e.get('supporting_evidence', '?')} "
+                f"| {e.get('quarter_source', '?')} |"
+            )
+        lines.append("")
 
     return "\n".join(lines)
 
@@ -144,15 +304,13 @@ def run(symbol: str) -> None:
     skill_results["transcript_analysis"] = ta_result
 
     if ta_result["status"] == "error":
-        print(f"\n[ABORT] transcript_analysis failed: {ta_result['error']}")
-        print("Ensure transcript PDFs exist in data/companies/{symbol}/transcripts/")
-        print("Or run: python -m skills.concall_fetcher {symbol}")
-        return
+        print(f"\n[WARN] transcript_analysis failed: {ta_result['error']}")
+        print("  → Continuing without transcript data.")
+        print("  → To add transcripts: python -m skills.concall_fetcher {symbol}")
 
     if ta_result["status"] == "no_data":
-        print(f"\n[ABORT] No transcripts found for {symbol}.")
-        print(f"Place PDF files in: data/companies/{symbol}/transcripts/")
-        return
+        print(f"\n[WARN] No transcripts found for {symbol}.")
+        print("  → Continuing with other available data (financials, shareholding, news).")
 
     # ── Optional Skills ───────────────────────────────────────────────────────
     optional_skills = [
@@ -207,6 +365,28 @@ def run(symbol: str) -> None:
         skill_outputs_for_prompt["insights_values"] = {"content": _iv_path.read_text(encoding="utf-8")[:2500]}
     # valuepickr_analysis is already in skill_results from optional_skills above
 
+    # ── Inject DMA / technical data ──────────────────────────────────────
+    dma_data = _load_dma_for_symbol(symbol)
+    if dma_data:
+        ltp = price_info["price"] if price_info else None
+        dma_context = {"available": True}
+        for key in ["dma50", "dma200", "dma40", "dma100"]:
+            if key in dma_data:
+                dma_context[key] = dma_data[key]
+        if ltp:
+            dma_context["current_price"] = ltp
+            if dma_data.get("dma50"):
+                pct50 = (ltp - dma_data["dma50"]) / dma_data["dma50"] * 100
+                dma_context["price_vs_50dma_pct"] = round(pct50, 1)
+            if dma_data.get("dma200"):
+                pct200 = (ltp - dma_data["dma200"]) / dma_data["dma200"] * 100
+                dma_context["price_vs_200dma_pct"] = round(pct200, 1)
+            if dma_data.get("dma50") and dma_data.get("dma200"):
+                dma_context["dma50_vs_dma200"] = "above" if dma_data["dma50"] > dma_data["dma200"] else "below"
+        skill_outputs_for_prompt["technical_dma_context"] = dma_context
+    else:
+        skill_outputs_for_prompt["technical_dma_context"] = {"available": False, "note": "DMA data not available — run daily portfolio report to compute"}
+
     skill_outputs_json = json.dumps(skill_outputs_for_prompt, indent=2, ensure_ascii=False)
 
     master_prompt = load_prompt(
@@ -231,8 +411,22 @@ def run(symbol: str) -> None:
     print(f"  Report:     data/companies/{symbol}/reports/master_report.md")
     print()
 
+    if df := master_data.get("decision_framework"):
+        if invest := df.get("invest_more_triggers"):
+            print("  🟢 Invest more when:")
+            for t in invest[:2]:
+                print(f"    • {t}")
+        if partial := df.get("partial_exit_triggers"):
+            print("  🟠 Trim when:")
+            for t in partial[:2]:
+                print(f"    • {t}")
+        if full := df.get("complete_exit_triggers"):
+            print("  🔴 Exit when:")
+            for t in full[:2]:
+                print(f"    • {t}")
+
     if triggers := master_data.get("monitoring_triggers"):
-        print("  Monitoring triggers:")
+        print("\n  Monitoring triggers:")
         for t in triggers[:3]:
             print(f"    • {t}")
     print()

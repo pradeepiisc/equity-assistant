@@ -96,7 +96,7 @@ def _load_analysis_artifacts(symbol: str) -> dict[str, dict]:
     reports_dir = COMPANIES_DIR / symbol / "reports"
     artifacts: dict[str, dict] = {}
     for skill in ["growth_signals", "financial_snapshot", "transcript_analysis",
-                  "valuation_agent", "shareholding_analysis"]:
+                  "valuation_agent", "shareholding_analysis", "master_report"]:
         json_path = reports_dir / f"{skill}.json"
         if json_path.exists():
             try:
@@ -198,8 +198,23 @@ def _build_analysis_context(symbol: str, artifacts: dict) -> tuple[str, str]:
         parts.append(f"FINANCIAL SNAPSHOT:\n{text}")
 
     if ta := artifacts.get("transcript_analysis"):
-        text = json.dumps(ta, ensure_ascii=False)[:MAX_ARTIFACT_CHARS]
-        parts.append(f"TRANSCRIPT ANALYSIS (management commentary):\n{text}")
+        # Include the new deep-analysis sections if available
+        ta_parts: list[str] = []
+        ta_text = json.dumps(ta, ensure_ascii=False)[:MAX_ARTIFACT_CHARS]
+        ta_parts.append(f"TRANSCRIPT ANALYSIS (management commentary):\n{ta_text}")
+        # Forward estimates
+        if fe := ta.get("forward_estimates"):
+            ta_parts.append(f"FORWARD ESTIMATES: {json.dumps(fe, ensure_ascii=False)[:800]}")
+        # Market landscape
+        if ml := ta.get("market_landscape"):
+            ta_parts.append(f"MARKET LANDSCAPE: {json.dumps(ml, ensure_ascii=False)[:600]}")
+        # Sector KPIs
+        if kpis := ta.get("sector_specific_kpis"):
+            ta_parts.append(f"SECTOR KPIs: {json.dumps(kpis, ensure_ascii=False)[:600]}")
+        # Cyclicality
+        if cmf := ta.get("cyclicality_and_macro_factors"):
+            ta_parts.append(f"CYCLICALITY/MACRO: {json.dumps(cmf, ensure_ascii=False)[:500]}")
+        parts.append("\n".join(ta_parts))
 
     if va := artifacts.get("valuation_agent"):
         fv_low = va.get("fair_value_low")
@@ -218,6 +233,17 @@ def _build_analysis_context(symbol: str, artifacts: dict) -> tuple[str, str]:
     if sa := artifacts.get("shareholding_analysis"):
         text = json.dumps(sa, ensure_ascii=False)[:1500]
         parts.append(f"SHAREHOLDING ANALYSIS:\n{text}")
+
+    if mr := artifacts.get("master_report"):
+        mr_parts: list[str] = ["MASTER REPORT DECISION FRAMEWORK:"]
+        if df := mr.get("decision_framework"):
+            mr_parts.append(json.dumps(df, ensure_ascii=False)[:1500])
+        if frp := mr.get("forward_revenue_path"):
+            mr_parts.append(f"FORWARD REVENUE PATH: {json.dumps(frp, ensure_ascii=False)[:500]}")
+        if imp := mr.get("industry_and_market_position"):
+            mr_parts.append(f"INDUSTRY POSITION: {json.dumps(imp, ensure_ascii=False)[:500]}")
+        if len(mr_parts) > 1:
+            parts.append("\n".join(mr_parts))
 
     enrichment_needed = len(artifacts) < 3
     hint = f"python -m workflows.full_company_analysis {symbol}" if enrichment_needed else ""

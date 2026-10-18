@@ -32,6 +32,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import sys
 import webbrowser
 from pathlib import Path
@@ -50,25 +51,31 @@ def _normalize_user_id(user_id: str | None) -> str | None:
 
 
 def _env_key(base: str, user_id: str | None = None) -> str:
-    suffix = f"_{_normalize_user_id(user_id)}" if user_id else ""
+    norm = _normalize_user_id(user_id)
+    suffix = f"_{norm}" if norm else ""
     return f"{base}{suffix}"
 
 
 def _env_value(base: str, user_id: str | None = None) -> str:
-    key = _env_key(base, user_id)
-    value = os.getenv(key, "")
-    if value:
-        return value
-    # If user_id was specified but user-specific key doesn't exist, FAIL
-    # Never fall back to default credentials - that would mix user data
-    if user_id:
-        raise RuntimeError(
-            f"{key} not found in .env\n"
-            f"When --user {user_id} is specified, you must set user-specific credentials.\n"
-            f"Add to .env: {key}=your_value"
-        )
-    # Only use default keys if no user_id was specified
-    return os.getenv(base, "")
+    norm_user = _normalize_user_id(user_id)
+    if norm_user:
+        # Check user-specific key first (e.g. KITE_API_KEY_WN5759 or KITE_ACCESS_TOKEN_ZV3899)
+        key = f"{base}_{norm_user}"
+        value = os.getenv(key, "").strip()
+        if value:
+            return value
+        # Fallback to default base key if user-specific key is not set
+        base_val = os.getenv(base, "").strip()
+        if base_val:
+            return base_val
+        # Also check ZV3899 as default suffix if base is empty
+        return os.getenv(f"{base}_ZV3899", "").strip()
+    
+    # If no user_id was specified
+    base_val = os.getenv(base, "").strip()
+    if base_val:
+        return base_val
+    return os.getenv(f"{base}_ZV3899", "").strip()
 
 
 def _get_kite_client(user_id: str | None = None):
@@ -229,31 +236,47 @@ def login(user_id: str | None = None) -> str:
     print(f"  Token captured. Exchanging for access_token...")
     data = kite.generate_session(request_token, api_secret=api_secret)
     access_token = data["access_token"]
+    logged_in_user = data.get("user_id")
+    eff_user = _normalize_user_id(user_id or logged_in_user)
 
     # Write directly to .env (set_key can silently fail on some dotenv versions)
-    _write_env_key("KITE_ACCESS_TOKEN", access_token, user_id=user_id)
+    _write_env_key("KITE_ACCESS_TOKEN", access_token, user_id=eff_user)
     print(f"\n✓ Logged in as: {data.get('user_name', '')}  [{data.get('user_id', '')}]")
     print(f"✓ Access token saved to .env")
-    print(f"\nRun: python -m integrations.kite_connect --save-portfolio\n")
+    print(f"\nRun: python -m integrations.kite_connect --save-portfolio --user {eff_user or 'ZV3899'}\n")
     return access_token
 
 
 def _write_env_key(key: str, value: str, user_id: str | None = None) -> None:
-    """Reliably write/update a key in the .env file."""
+    """Reliably write/update a key in the .env file and os.environ."""
     env_path = ENV_FILE
     lines = env_path.read_text(encoding="utf-8").splitlines() if env_path.exists() else []
-    found = False
-    new_lines = []
-    env_key = _env_key(key, user_id)
-    for line in lines:
-        if line.startswith(f"{env_key}=") or line.startswith(f"{env_key} ="):
-            new_lines.append(f"{env_key}={value}")
-            found = True
-        else:
-            new_lines.append(line)
-    if not found:
-        new_lines.append(f"{env_key}={value}")
-    env_path.write_text("\n".join(new_lines) + "\n", encoding="utf-8")
+    norm_user = _normalize_user_id(user_id)
+    
+    keys_to_set = []
+    if norm_user:
+        keys_to_set.append(f"{key}_{norm_user}")
+        if norm_user == "ZV3899":
+            keys_to_set.append(key)
+    else:
+        keys_to_set.append(key)
+        keys_to_set.append(f"{key}_ZV3899")
+
+    for k in keys_to_set:
+        found = False
+        new_lines = []
+        for line in lines:
+            if line.startswith(f"{k}=") or line.startswith(f"{k} ="):
+                new_lines.append(f"{k}={value}")
+                found = True
+            else:
+                new_lines.append(line)
+        if not found:
+            new_lines.append(f"{k}={value}")
+        lines = new_lines
+        os.environ[k] = value
+
+    env_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
 def get_holdings(user_id: str | None = None) -> list[dict]:
@@ -266,8 +289,12 @@ def get_holdings(user_id: str | None = None) -> list[dict]:
 
     holdings = []
     for h in raw:
+        # Normalize symbol: strip suffixes like -BE, -ST, -SM
+        raw_sym = h.get("tradingsymbol", "")
+        norm_sym = re.sub(r'-[A-Z]{2}$', '', raw_sym, flags=re.IGNORECASE) if raw_sym else ""
+        
         holdings.append({
-            "symbol": h.get("tradingsymbol", ""),
+            "symbol": norm_sym,
             "exchange": h.get("exchange", "NSE"),
             "quantity": h.get("quantity", 0),
             "avg_price": round(h.get("average_price", 0), 2),
@@ -295,8 +322,10 @@ def get_positions(user_id: str | None = None) -> dict:
     def _clean(pos_list):
         out = []
         for p in pos_list:
+            raw_sym = p.get("tradingsymbol", "")
+            norm_sym = re.sub(r'-[A-Z]{2}$', '', raw_sym, flags=re.IGNORECASE) if raw_sym else ""
             out.append({
-                "symbol": p.get("tradingsymbol", ""),
+                "symbol": norm_sym,
                 "exchange": p.get("exchange", "NSE"),
                 "quantity": p.get("quantity", 0),
                 "buy_price": round(p.get("buy_price", 0), 2),
@@ -341,21 +370,22 @@ def save_portfolio(
         from datetime import date
         date_str = date.today().isoformat()
 
+    norm_user = _normalize_user_id(user_id)
     if not folder_name:
         try:
-            profile = get_user_profile(user_id=user_id)
-            folder_name = profile.get("user_id", "pradeep")
+            profile = get_user_profile(user_id=norm_user)
+            folder_name = profile.get("user_id") or norm_user or "pradeep"
         except Exception:
-            folder_name = "pradeep"
-    if user_id and not folder_name:
-        folder_name = _normalize_user_id(user_id)
+            folder_name = norm_user or "pradeep"
+    if norm_user and not folder_name:
+        folder_name = norm_user
 
-    save_dir = PROJECT_ROOT / "portfolio" / folder_name / "holdings" / date_str
+    save_dir = PROJECT_ROOT / "portfolio" / folder_name / "holdings"
     save_dir.mkdir(parents=True, exist_ok=True)
 
-    holdings = get_holdings(user_id=user_id)
-    positions = get_positions(user_id=user_id)
-    summary = get_portfolio_summary(user_id=user_id)
+    holdings = get_holdings(user_id=norm_user)
+    positions = get_positions(user_id=norm_user)
+    summary = get_portfolio_summary(user_id=norm_user)
 
     # JSON
     (save_dir / "holdings.json").write_text(
@@ -372,6 +402,65 @@ def save_portfolio(
             writer = csv.DictWriter(f, fieldnames=holdings[0].keys())
             writer.writeheader()
             writer.writerows(holdings)
+
+        # Update running_holdings.csv
+        try:
+            import pandas as pd
+            running_csv = save_dir / "running_holdings.csv"
+            
+            # Create a dictionary for current holdings
+            current_data = {
+                (h.get("tradingsymbol") or h.get("symbol")): {
+                    "quantity": h.get("quantity", 0),
+                    "avg_price": h.get("avg_price", 0),
+                    date_str: h.get("last_price", 0)
+                } for h in holdings if (h.get("tradingsymbol") or h.get("symbol"))
+            }
+            
+            if running_csv.exists():
+                df = pd.read_csv(running_csv)
+                # Ensure date column exists
+                if date_str not in df.columns:
+                    df[date_str] = 0.0
+                
+                # Update existing rows
+                for idx, row in df.iterrows():
+                    sym = row['symbol']
+                    if sym in current_data:
+                        df.at[idx, 'quantity'] = current_data[sym]['quantity']
+                        df.at[idx, 'avg_price'] = current_data[sym]['avg_price']
+                        df.at[idx, date_str] = current_data[sym][date_str]
+                        del current_data[sym] # Remove from dict so we know what's new
+                    else:
+                        # Stock no longer held, qty=0
+                        df.at[idx, 'quantity'] = 0
+                        
+                # Add new symbols
+                if current_data:
+                    new_rows = []
+                    for sym, data in current_data.items():
+                        new_row = {col: 0.0 for col in df.columns}
+                        new_row['symbol'] = sym
+                        new_row['quantity'] = data['quantity']
+                        new_row['avg_price'] = data['avg_price']
+                        new_row[date_str] = data[date_str]
+                        new_rows.append(new_row)
+                    df = pd.concat([df, pd.DataFrame(new_rows)], ignore_index=True)
+            else:
+                # File doesn't exist, create it
+                rows = []
+                for sym, data in current_data.items():
+                    rows.append({
+                        "symbol": sym,
+                        "quantity": data["quantity"],
+                        "avg_price": data["avg_price"],
+                        date_str: data[date_str]
+                    })
+                df = pd.DataFrame(rows)
+                
+            df.to_csv(running_csv, index=False)
+        except Exception as e:
+            print(f"Failed to update running_holdings.csv: {e}")
 
     # Summary txt
     lines = [

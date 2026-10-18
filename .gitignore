@@ -21,18 +21,18 @@ env/
 .DS_Store
 
 # Portfolio holdings (per account) and personal exports
-**/holdings/
-**/holdings/*
-holdings/
+#**/holdings/
+#**/holdings/*
+#holdings/
 
 # Screener data that should stay local
-data/companies/
+#data/companies/
 
 # Generated reports (optional — remove these lines if you want to commit reports)
-data/companies/*/reports/*.md
-data/companies/*/reports/*.json
+#data/companies/*/reports/*.md
+#data/companies/*/reports/*.json
 
-portfolio/.cache/
+# portfolio/.cache/
 
 # Downloaded PDFs (large files — store locally, don't commit)
-data/companies/*/transcripts/*.pdf
+# data/companies/*/transcripts/*.pdf

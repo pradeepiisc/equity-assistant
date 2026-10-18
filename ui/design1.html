@@ -1,0 +1,396 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Design 1 — Command Center</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked@9/marked.min.js"></script>
+<style>
+body{background:#0a0e1a;margin:0;font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:#0d1117}
+::-webkit-scrollbar-thumb{background:#2d3748;border-radius:3px}
+.flag-red{color:#ef4444}.flag-orange{color:#f59e0b}.flag-green{color:#22c55e}
+.flag-dot-red{background:#ef4444}.flag-dot-orange{background:#f59e0b}.flag-dot-green{background:#22c55e}
+.row-hover:hover{background:rgba(59,130,246,0.06)}
+.md h1{font-size:1.3rem;font-weight:700;color:#f1f5f9;border-bottom:1px solid #334155;padding-bottom:.4rem;margin:1rem 0 .5rem}
+.md h2{font-size:1.05rem;font-weight:600;color:#e2e8f0;border-bottom:1px solid #1e293b;padding-bottom:.3rem;margin:.9rem 0 .4rem}
+.md h3{font-size:.9rem;font-weight:600;color:#cbd5e1;margin:.7rem 0 .25rem}
+.md p{color:#cbd5e1;margin:.3rem 0;line-height:1.6;font-size:.82rem}
+.md ul,.md ol{padding-left:1.2rem;margin:.3rem 0}.md li{color:#cbd5e1;margin:.15rem 0;font-size:.82rem;line-height:1.55}
+.md ul{list-style:disc}.md ol{list-style:decimal}
+.md code{background:#1e293b;color:#a5f3fc;padding:.06rem .22rem;border-radius:3px;font-size:.75rem}
+.md pre{background:#1e293b;padding:.5rem .7rem;border-radius:6px;overflow-x:auto;margin:.5rem 0}
+.md pre code{background:none;padding:0;font-size:.73rem}
+.md table{width:100%;border-collapse:collapse;margin:.5rem 0;font-size:.75rem}
+.md th{background:#1e293b;color:#94a3b8;padding:.3rem .5rem;border:1px solid #334155;font-weight:600;text-align:left}
+.md td{padding:.25rem .5rem;border:1px solid #1a2233;color:#cbd5e1}
+.md tr:nth-child(even) td{background:#0f172a}
+.md strong{color:#f1f5f9;font-weight:600}
+.md blockquote{border-left:3px solid #3b82f6;padding:.2rem .5rem;color:#94a3b8;margin:.4rem 0;font-size:.8rem}
+.md hr{border-color:#334155;margin:.6rem 0}
+.md a{color:#60a5fa}
+</style></head><body>
+<div id="root"></div>
+<script type="text/babel">
+const {useState,useEffect,useRef,useMemo}=React;
+
+const fmt=v=>{if(!v&&v!==0)return'—';const n=Number(String(v).replace(/,/g,''));if(isNaN(n))return v;if(Math.abs(n)>=100000)return'₹'+(n/100000).toFixed(1)+'L';if(Math.abs(n)>=1000)return'₹'+(n/1000).toFixed(1)+'K';return'₹'+n.toFixed(0)};
+const fmtP=v=>{if(!v&&v!==0)return'—';return(v>0?'+':'')+Number(v).toFixed(1)+'%'};
+const fmtN=v=>{if(!v&&v!==0)return'—';const n=Number(String(v).replace(/,/g,''));return isNaN(n)?v:n.toLocaleString('en-IN')};
+
+function FlagDots({count,level}){
+  if(!count)return null;
+  const cls=level==='red'?'flag-dot-red':level==='orange'?'flag-dot-orange':'flag-dot-green';
+  return <span className={`inline-block w-2 h-2 rounded-full ${cls}`}/>;
+}
+
+function FlagBadge({flags}){
+  if(!flags||!flags.length)return <span className="text-gray-700 text-xs">—</span>;
+  const reds=flags.filter(f=>f.level==='red').length;
+  const oranges=flags.filter(f=>f.level==='orange').length;
+  const greens=flags.filter(f=>f.level==='green').length;
+  return(
+    <div className="flex items-center gap-1.5">
+      {reds>0&&<span className="flex items-center gap-0.5"><span className="w-2 h-2 rounded-full flag-dot-red"/><span className="text-red-400 text-xs font-mono">{reds}</span></span>}
+      {oranges>0&&<span className="flex items-center gap-0.5"><span className="w-2 h-2 rounded-full flag-dot-orange"/><span className="text-amber-400 text-xs font-mono">{oranges}</span></span>}
+      {greens>0&&<span className="flex items-center gap-0.5"><span className="w-2 h-2 rounded-full flag-dot-green"/><span className="text-green-400 text-xs font-mono">{greens}</span></span>}
+    </div>
+  );
+}
+
+function DMABadge({price,dma40,dma100}){
+  if(!dma40)return <span className="text-gray-600 text-xs">—</span>;
+  const above40=price>dma40;
+  const above100=dma100?price>dma100:null;
+  let label,cls;
+  if(above40&&above100){label='▲▲';cls='text-green-400';}
+  else if(above40&&!above100){label='▲';cls='text-yellow-400';}
+  else if(!above40&&above100!==false){label='▼';cls='text-red-400';}
+  else{label='▼▼';cls='text-red-500';}
+  return <span className={`font-mono text-xs font-bold ${cls}`} title={`DMA40:${dma40?.toFixed(0)} DMA100:${dma100?.toFixed(0)}`}>{label}</span>;
+}
+
+function CompanyDetail({symbol,onClose}){
+  const [data,setData]=useState(null);
+  const [tab,setTab]=useState('overview');
+  useEffect(()=>{
+    fetch(`/api/dashboard/company/${symbol}`).then(r=>r.json()).then(setData);
+  },[symbol]);
+  if(!data)return <div className="p-8 text-gray-500">Loading {symbol}...</div>;
+  if(data.error)return <div className="p-8 text-red-400">{data.error}</div>;
+
+  const mr=data.master_report||{};
+  const va=data.valuation||{};
+  const fs=data.financial_snapshot||{};
+  const fin=data.financials||{};
+  const flags=data.flags||[];
+  const dma=data.dma||{};
+  const tabs=['overview','financials','valuation','thesis','reports'];
+
+  return(
+    <div className="fixed inset-0 bg-black/85 z-50 flex">
+      <div className="flex-1 flex flex-col bg-gray-950 border-l border-gray-800 ml-16 overflow-hidden">
+        {/* Header */}
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-800 shrink-0">
+          <div>
+            <div className="flex items-center gap-3">
+              <h1 className="text-lg font-bold text-white">{data.meta?.name||symbol}</h1>
+              <span className="text-xs font-mono text-blue-400 bg-blue-900/30 px-2 py-0.5 rounded">{symbol}</span>
+              <span className="text-xs text-gray-500">{data.meta?.sector}</span>
+            </div>
+            <div className="flex items-center gap-4 mt-1.5 text-xs">
+              {va.current_price&&<span className="text-white font-semibold">₹{va.current_price}</span>}
+              {dma.dma40&&<span className="text-gray-400">DMA40: <span className="text-gray-300">{dma.dma40?.toFixed(1)}</span></span>}
+              {dma.dma100&&<span className="text-gray-400">DMA100: <span className="text-gray-300">{dma.dma100?.toFixed(1)}</span></span>}
+              {mr.overall_rating&&<span className={`px-2 py-0.5 rounded font-semibold ${mr.overall_rating==='Accumulate'?'bg-green-900/40 text-green-400':mr.overall_rating==='Hold'?'bg-yellow-900/40 text-yellow-400':'bg-red-900/40 text-red-400'}`}>{mr.overall_rating}</span>}
+            </div>
+          </div>
+          <button onClick={onClose} className="text-gray-400 hover:text-white text-2xl">×</button>
+        </div>
+
+        {/* Tabs */}
+        <div className="flex gap-0 border-b border-gray-800 px-6 shrink-0">
+          {tabs.map(t=>(
+            <button key={t} onClick={()=>setTab(t)}
+              className={`px-4 py-2.5 text-xs font-medium capitalize border-b-2 transition-colors ${tab===t?'text-blue-400 border-blue-400':'text-gray-500 border-transparent hover:text-gray-300'}`}>{t}</button>
+          ))}
+        </div>
+
+        {/* Content */}
+        <div className="flex-1 overflow-y-auto p-6">
+          {tab==='overview'&&(
+            <div className="grid grid-cols-3 gap-4">
+              {/* Flags */}
+              <div className="col-span-3 bg-gray-900 border border-gray-800 rounded-lg p-4">
+                <h3 className="text-xs font-semibold text-gray-400 mb-3 uppercase tracking-wide">Health Flags</h3>
+                <div className="grid grid-cols-2 gap-2">
+                  {flags.map((f,i)=>(
+                    <div key={i} className={`flex items-start gap-2 p-2 rounded ${f.level==='red'?'bg-red-950/30':''}${f.level==='orange'?'bg-amber-950/20':''}${f.level==='green'?'bg-green-950/20':''}`}>
+                      <span className={`w-2 h-2 rounded-full mt-1 shrink-0 flag-dot-${f.level}`}/>
+                      <div>
+                        <span className="text-xs text-gray-400">{f.category}</span>
+                        <p className={`text-xs ${f.level==='red'?'text-red-300':f.level==='orange'?'text-amber-300':'text-green-300'}`}>{f.message}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Key Ratios */}
+              <div className="bg-gray-900 border border-gray-800 rounded-lg p-4">
+                <h3 className="text-xs font-semibold text-gray-400 mb-3 uppercase tracking-wide">Key Ratios</h3>
+                <div className="space-y-2">
+                  {Object.entries(fs.key_ratios||fin.ratios||{}).map(([k,v])=>(
+                    <div key={k} className="flex justify-between text-xs">
+                      <span className="text-gray-500 capitalize">{k.replace(/_/g,' ')}</span>
+                      <span className="text-gray-200 font-mono">{v}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Investment Thesis */}
+              <div className="col-span-2 bg-gray-900 border border-gray-800 rounded-lg p-4">
+                <h3 className="text-xs font-semibold text-gray-400 mb-3 uppercase tracking-wide">Investment Thesis</h3>
+                <p className="text-sm text-gray-300 leading-relaxed">{mr.investment_thesis||fs.summary||'No thesis available'}</p>
+                {mr.action_recommendation&&<p className="text-sm text-blue-300 mt-3 font-medium">{mr.action_recommendation}</p>}
+              </div>
+
+              {/* Valuation */}
+              {va.fair_value_low&&(
+                <div className="col-span-3 bg-gray-900 border border-gray-800 rounded-lg p-4">
+                  <h3 className="text-xs font-semibold text-gray-400 mb-3 uppercase tracking-wide">Valuation Range</h3>
+                  <div className="flex items-center gap-6">
+                    <div className="text-center">
+                      <div className="text-xs text-gray-500">Bear</div>
+                      <div className="text-lg font-bold text-red-400">₹{va.fair_value_low}</div>
+                    </div>
+                    <div className="flex-1 h-3 bg-gray-800 rounded-full relative">
+                      {(()=>{
+                        const lo=va.fair_value_low,hi=va.fair_value_high,cur=va.current_price;
+                        const range=hi-lo;const pct=range?Math.max(0,Math.min(100,(cur-lo)/range*100)):50;
+                        return <>
+                          <div className="absolute inset-0 bg-gradient-to-r from-red-900 via-yellow-900 to-green-900 rounded-full opacity-40"/>
+                          <div className="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full border-2 border-blue-500 shadow-lg" style={{left:`${pct}%`}}/>
+                        </>;
+                      })()}
+                    </div>
+                    <div className="text-center">
+                      <div className="text-xs text-gray-500">Bull</div>
+                      <div className="text-lg font-bold text-green-400">₹{va.fair_value_high}</div>
+                    </div>
+                    <div className="text-center ml-4">
+                      <div className="text-xs text-gray-500">Current</div>
+                      <div className="text-lg font-bold text-blue-400">₹{va.current_price}</div>
+                      <div className={`text-xs font-semibold ${va.upside_pct>0?'text-green-400':'text-red-400'}`}>{va.upside_pct>0?'+':''}{va.upside_pct}%</div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Monitoring Triggers */}
+              {mr.monitoring_triggers&&(
+                <div className="col-span-3 bg-gray-900 border border-gray-800 rounded-lg p-4">
+                  <h3 className="text-xs font-semibold text-gray-400 mb-3 uppercase tracking-wide">What to Monitor</h3>
+                  <ul className="space-y-1">
+                    {(Array.isArray(mr.monitoring_triggers)?mr.monitoring_triggers:[]).map((t,i)=>(
+                      <li key={i} className="text-xs text-gray-300 flex items-start gap-2">
+                        <span className="text-yellow-500 mt-0.5">⚡</span>{t}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          )}
+
+          {tab==='financials'&&(
+            <div className="space-y-4">
+              {/* Quarterly Table */}
+              <div className="bg-gray-900 border border-gray-800 rounded-lg p-4 overflow-x-auto">
+                <h3 className="text-xs font-semibold text-gray-400 mb-3 uppercase tracking-wide">Quarterly Results (Last 6)</h3>
+                <table className="w-full text-xs">
+                  <thead>
+                    <tr className="text-gray-500">
+                      <th className="text-left py-2 px-3 font-medium">Quarter</th>
+                      <th className="text-right py-2 px-3 font-medium">Sales</th>
+                      <th className="text-right py-2 px-3 font-medium">Op Profit</th>
+                      <th className="text-right py-2 px-3 font-medium">OPM%</th>
+                      <th className="text-right py-2 px-3 font-medium">Net Profit</th>
+                      <th className="text-right py-2 px-3 font-medium">EPS</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {(fin.quarterly||[]).map((q,i)=>(
+                      <tr key={i} className="border-t border-gray-800">
+                        <td className="py-2 px-3 text-gray-300 font-mono">{q.quarter}</td>
+                        <td className="py-2 px-3 text-right text-gray-200">{q.sales}</td>
+                        <td className="py-2 px-3 text-right text-gray-200">{q.op_profit}</td>
+                        <td className="py-2 px-3 text-right text-gray-200">{q.opm}</td>
+                        <td className="py-2 px-3 text-right text-gray-200">{q.net_profit}</td>
+                        <td className="py-2 px-3 text-right text-gray-200">{q.eps}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Cash Flow */}
+              {fin.cash_flow&&Object.keys(fin.cash_flow).length>0&&(
+                <div className="bg-gray-900 border border-gray-800 rounded-lg p-4">
+                  <h3 className="text-xs font-semibold text-gray-400 mb-3 uppercase tracking-wide">Cash Flow</h3>
+                  {Object.entries(fin.cash_flow).map(([type,years])=>(
+                    <div key={type} className="mb-2">
+                      <div className="text-xs text-gray-400 capitalize mb-1">{type.replace(/_/g,' ')}</div>
+                      <div className="flex gap-3 flex-wrap">
+                        {Object.entries(years||{}).map(([yr,val])=>(
+                          <span key={yr} className="text-xs font-mono">
+                            <span className="text-gray-500">{yr}:</span>{' '}
+                            <span className={Number(String(val).replace(/,/g,''))<0?'text-red-400':'text-green-400'}>{val}</span>
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Financial Snapshot Summary */}
+              <div className="bg-gray-900 border border-gray-800 rounded-lg p-4">
+                <h3 className="text-xs font-semibold text-gray-400 mb-3 uppercase tracking-wide">LLM Financial Summary</h3>
+                <p className="text-sm text-gray-300 leading-relaxed">{fs.summary||'—'}</p>
+              </div>
+            </div>
+          )}
+
+          {tab==='valuation'&&(
+            <div className="md" dangerouslySetInnerHTML={{__html:marked.parse(data.valuation_summary_md||'*No valuation summary available*')}}/>
+          )}
+
+          {tab==='thesis'&&(
+            <div className="md" dangerouslySetInnerHTML={{__html:marked.parse(data.master_report_md||data.thesis_review_md||'*No report available*')}}/>
+          )}
+
+          {tab==='reports'&&(
+            <div className="grid grid-cols-3 gap-3">
+              {(data.reports||[]).map(r=>(
+                <a key={r.name} href={`/api/report-content?path=${encodeURIComponent(r.path)}`} target="_blank"
+                  className="bg-gray-900 border border-gray-800 rounded-lg p-3 hover:border-blue-600 transition-colors">
+                  <div className="text-sm text-gray-200">{r.name}</div>
+                  <div className="text-xs text-gray-500 mt-1">{r.modified} · {(r.size/1024).toFixed(1)}KB</div>
+                </a>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function App(){
+  const [holdings,setHoldings]=useState([]);
+  const [total,setTotal]=useState(0);
+  const [user,setUser]=useState('combined');
+  const [search,setSearch]=useState('');
+  const [selected,setSelected]=useState(null);
+  const [sort,setSort]=useState('value');
+
+  useEffect(()=>{
+    fetch(`/api/dashboard/holdings?user=${user}`).then(r=>r.json()).then(d=>{
+      setHoldings(d.holdings||[]);setTotal(d.total_value||0);
+    });
+  },[user]);
+
+  const filtered=useMemo(()=>{
+    let list=holdings;
+    if(search){
+      const q=search.toLowerCase();
+      list=list.filter(h=>h.symbol.toLowerCase().includes(q)||h.name.toLowerCase().includes(q)||h.sector.toLowerCase().includes(q));
+    }
+    if(sort==='value')list=[...list].sort((a,b)=>b.current_value-a.current_value);
+    else if(sort==='pnl')list=[...list].sort((a,b)=>b.pnl_pct-a.pnl_pct);
+    else if(sort==='flags')list=[...list].sort((a,b)=>b.red_flags-a.red_flags);
+    return list;
+  },[holdings,search,sort]);
+
+  return(
+    <div className="min-h-screen text-gray-100">
+      {/* Top Bar */}
+      <div className="bg-gray-900/80 border-b border-gray-800 px-6 py-3 flex items-center justify-between sticky top-0 z-40 backdrop-blur-sm">
+        <div className="flex items-center gap-4">
+          <h1 className="text-base font-bold text-blue-400">📊 Portfolio Command Center</h1>
+          <span className="text-sm text-gray-400">Design 1</span>
+        </div>
+        <div className="flex items-center gap-3">
+          <input value={search} onChange={e=>setSearch(e.target.value)}
+            placeholder="Search symbol, name, sector..."
+            className="bg-gray-800 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-gray-200 w-64 outline-none focus:border-blue-500"/>
+          <div className="flex bg-gray-800 rounded-lg overflow-hidden border border-gray-700">
+            {['ZV3899','WN5759','combined'].map(u=>(
+              <button key={u} onClick={()=>setUser(u)}
+                className={`px-3 py-1.5 text-xs font-medium transition-colors ${user===u?'bg-blue-700 text-white':'text-gray-400 hover:text-gray-200'}`}>
+                {u==='combined'?'Family':u}
+              </button>
+            ))}
+          </div>
+          <div className="text-sm font-mono text-gray-300">₹{(total/100000).toFixed(1)}L</div>
+        </div>
+      </div>
+
+      {/* Table Header */}
+      <div className="px-6 py-2 bg-gray-900/50 border-b border-gray-800 grid grid-cols-12 gap-2 text-xs font-medium text-gray-500 uppercase tracking-wide sticky top-[52px] z-30">
+        <div className="col-span-3 cursor-pointer hover:text-gray-300" onClick={()=>setSort('value')}>Company {sort==='value'?'▼':''}</div>
+        <div className="text-right">Price</div>
+        <div className="text-right">DMA</div>
+        <div className="text-right cursor-pointer hover:text-gray-300" onClick={()=>setSort('value')}>Value {sort==='value'?'▼':''}</div>
+        <div className="text-right">% Port</div>
+        <div className="text-right cursor-pointer hover:text-gray-300" onClick={()=>setSort('pnl')}>P&L% {sort==='pnl'?'▼':''}</div>
+        <div className="text-right">Qty</div>
+        <div className="text-center cursor-pointer hover:text-gray-300" onClick={()=>setSort('flags')}>Flags {sort==='flags'?'▼':''}</div>
+        <div className="text-center">Data</div>
+        <div className="text-right">Users</div>
+      </div>
+
+      {/* Rows */}
+      <div className="px-6">
+        {filtered.map(h=>(
+          <div key={h.symbol} onClick={()=>setSelected(h.symbol)}
+            className="grid grid-cols-12 gap-2 py-2.5 border-b border-gray-800/50 row-hover cursor-pointer items-center">
+            <div className="col-span-3">
+              <div className="text-sm text-gray-200 font-medium truncate">{h.name}</div>
+              <div className="flex items-center gap-2 mt-0.5">
+                <span className="text-xs font-mono text-blue-400">{h.symbol}</span>
+                <span className="text-xs text-gray-600 truncate">{h.sector}</span>
+              </div>
+            </div>
+            <div className="text-right text-sm font-mono text-gray-200">₹{h.last_price?.toFixed(1)}</div>
+            <div className="text-right"><DMABadge price={h.last_price} dma40={h.dma40} dma100={h.dma100}/></div>
+            <div className="text-right text-sm font-mono text-gray-200">{fmt(h.current_value)}</div>
+            <div className="text-right text-xs font-mono text-gray-400">{h.pct_of_portfolio}%</div>
+            <div className={`text-right text-sm font-mono ${h.pnl_pct>=0?'text-green-400':'text-red-400'}`}>{fmtP(h.pnl_pct)}</div>
+            <div className="text-right text-xs font-mono text-gray-400">{h.quantity}</div>
+            <div className="text-center">
+              {h.red_flags>0?<span className="flex items-center justify-center gap-1"><FlagDots count={h.red_flags} level="red"/><span className="text-xs text-red-400">{h.red_flags}</span></span>
+                :<span className="text-gray-700 text-xs">—</span>}
+            </div>
+            <div className="text-center">
+              {h.has_reports?<span className="text-green-500 text-xs">●</span>:<span className="text-gray-700 text-xs">○</span>}
+            </div>
+            <div className="text-right text-xs text-gray-500">{h.users?.join(',')}</div>
+          </div>
+        ))}
+      </div>
+
+      <div className="px-6 py-4 text-xs text-gray-600">{filtered.length} of {holdings.length} companies</div>
+
+      {selected&&<CompanyDetail symbol={selected} onClose={()=>setSelected(null)}/>}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body></html>

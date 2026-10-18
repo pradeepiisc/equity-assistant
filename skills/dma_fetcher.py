@@ -140,13 +140,25 @@ def _from_yfinance(
 
     def _quiet_history(ticker_str: str, start: str):
         """Call yf.Ticker.history() using start= date (more reliable than period=Nd)."""
+        import warnings, contextlib, logging
+        
+        # Suppress all warnings and logging output
+        warnings.filterwarnings("ignore")
+        logging.getLogger("yfinance").setLevel(logging.CRITICAL)
+        
         captured = io.StringIO()
         old_err, old_out = sys.stderr, sys.stdout
         sys.stderr = sys.stdout = captured
+        
         try:
-            hist = yf.Ticker(ticker_str).history(start=start, auto_adjust=False)
+            with contextlib.redirect_stderr(captured), contextlib.redirect_stdout(captured):
+                hist = yf.Ticker(ticker_str).history(start=start, auto_adjust=False)
         finally:
             sys.stderr, sys.stdout = old_err, old_out
+            # Restore warnings
+            warnings.filterwarnings("default")
+            logging.getLogger("yfinance").setLevel(logging.INFO)
+        
         return hist
 
     sym_orig = symbol.upper().replace(" ", "")

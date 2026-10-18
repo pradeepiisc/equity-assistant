@@ -77,6 +77,7 @@ CAUTION_ALLOC_THRESH = 0.5
 # See .windsurf/screener_cdp_notes.md for full architecture & recovery guide.
 
 from skills.cdp_helper import fetch_page_html as _cdp_fetch_page
+from skills.cdp_helper import fetch_pages_parallel as _cdp_fetch_parallel
 from skills.cdp_helper import ensure_chrome_running as _ensure_chrome
 from skills.cdp_helper import is_available as _cdp_is_available
 
@@ -103,78 +104,86 @@ def _looks_like_block(error_str: str) -> bool:
     return any(m.lower() in error_str.lower() for m in markers)
 
 
+def _parse_shareholding_html(html: str, symbol: str, fetch_holders: bool = True) -> dict | None:
+    """Parse shareholding data from Screener HTML. Returns parsed data or None.
+    Separated from fetch to allow parallel CDP batch fetching."""
+    try:
+        soup = BeautifulSoup(html, "lxml")
+        section = soup.find("section", id="shareholding")
+        if not section:
+            return None
+        table = section.find("table")
+        if not table:
+            return None
+
+        # Parse quarters from header
+        thead = table.find("thead")
+        quarters: list[str] = []
+        if thead:
+            ths = [th.get_text(strip=True) for th in thead.find_all("th")]
+            quarters = [q for q in ths[1:] if q]
+
+        # Parse rows
+        categories: dict[str, list[float | None]] = {}
+        raw_lines: list[str] = []
+        if quarters:
+            raw_lines.append("| Category | " + " | ".join(quarters) + " |")
+            raw_lines.append("|" + "---|" * (len(quarters) + 1))
+        tbody = table.find("tbody")
+        if tbody:
+            for tr in tbody.find_all("tr"):
+                cells = tr.find_all(["td", "th"])
+                if not cells:
+                    continue
+                cat = cells[0].get_text(strip=True)
+                vals_raw = [c.get_text(strip=True) for c in cells[1:]]
+                vals: list[float | None] = []
+                for v in vals_raw:
+                    try:
+                        vals.append(float(v.replace("%", "").replace(",", "").strip()))
+                    except ValueError:
+                        vals.append(None)
+                categories[cat] = vals
+                raw_lines.append(f"| {cat} | " + " | ".join(vals_raw) + " |")
+
+        # Get company_id for individual holders
+        company_id = None
+        tag = soup.find(attrs={"data-url": re.compile(r"/trades/company-\d+/")})
+        if tag:
+            m = re.search(r"/trades/company-(\d+)/", str(tag.get("data-url", "")))
+            if m:
+                company_id = m.group(1)
+
+        # Fetch individual holders (lightweight AJAX — httpx is OK here)
+        individual: dict[str, list[dict]] = {}
+        if company_id and fetch_holders:
+            individual = _fetch_individual_holders(company_id, quarters)
+
+        # Extract company name from h1
+        h1 = soup.find("h1")
+        company_name = h1.get_text(strip=True) if h1 else symbol
+
+        return {
+            "quarters": quarters,
+            "categories": categories,
+            "raw_text": "\n".join(raw_lines),
+            "individual": individual,
+            "company_name": company_name,
+            "company_id": company_id,
+        }
+    except Exception:
+        return None
+
+
 def _fetch_screener_shareholding(symbol: str, screener_url: str = "") -> dict | None:
     """Fetch shareholding from Screener via Chrome CDP. Returns parsed data or None."""
     for url in _screener_urls(symbol, screener_url):
-        try:
-            html = _cdp_fetch_page(url)
-            if not html:
-                continue
-            soup = BeautifulSoup(html, "lxml")
-            section = soup.find("section", id="shareholding")
-            if not section:
-                continue
-            table = section.find("table")
-            if not table:
-                continue
-
-            # Parse quarters from header
-            thead = table.find("thead")
-            quarters: list[str] = []
-            if thead:
-                ths = [th.get_text(strip=True) for th in thead.find_all("th")]
-                quarters = [q for q in ths[1:] if q]
-
-            # Parse rows
-            categories: dict[str, list[float | None]] = {}
-            raw_lines: list[str] = []
-            if quarters:
-                raw_lines.append("| Category | " + " | ".join(quarters) + " |")
-                raw_lines.append("|" + "---|" * (len(quarters) + 1))
-            tbody = table.find("tbody")
-            if tbody:
-                for tr in tbody.find_all("tr"):
-                    cells = tr.find_all(["td", "th"])
-                    if not cells:
-                        continue
-                    cat = cells[0].get_text(strip=True)
-                    vals_raw = [c.get_text(strip=True) for c in cells[1:]]
-                    vals: list[float | None] = []
-                    for v in vals_raw:
-                        try:
-                            vals.append(float(v.replace("%", "").replace(",", "").strip()))
-                        except ValueError:
-                            vals.append(None)
-                    categories[cat] = vals
-                    raw_lines.append(f"| {cat} | " + " | ".join(vals_raw) + " |")
-
-            # Get company_id for individual holders
-            company_id = None
-            tag = soup.find(attrs={"data-url": re.compile(r"/trades/company-\d+/")})
-            if tag:
-                m = re.search(r"/trades/company-(\d+)/", str(tag.get("data-url", "")))
-                if m:
-                    company_id = m.group(1)
-
-            # Fetch individual holders (lightweight AJAX — httpx is OK here)
-            individual: dict[str, list[dict]] = {}
-            if company_id:
-                individual = _fetch_individual_holders(company_id, quarters)
-
-            # Extract company name from h1
-            h1 = soup.find("h1")
-            company_name = h1.get_text(strip=True) if h1 else symbol
-
-            return {
-                "quarters": quarters,
-                "categories": categories,
-                "raw_text": "\n".join(raw_lines),
-                "individual": individual,
-                "company_name": company_name,
-                "company_id": company_id,
-            }
-        except Exception:
+        html = _cdp_fetch_page(url)
+        if not html:
             continue
+        result = _parse_shareholding_html(html, symbol)
+        if result:
+            return result
     return None
 
 
@@ -223,10 +232,31 @@ def _load_tracked_investors() -> list[str]:
     data = yaml.safe_load(wl_path.read_text()) or {}
     tracked = data.get("tracked_investors", data)
     names: list[str] = []
+    seen: set[str] = set()
     for group in tracked.values():
         if isinstance(group, list):
-            names.extend(group)
+            for n in group:
+                if n not in seen:
+                    names.append(n)
+                    seen.add(n)
     return names
+
+
+def _normalize_investor_name(name: str) -> str:
+    """Normalize investor name for fuzzy matching.
+    Handles: Pvt/Private, Ltd/Limited, Ins/Institute, camelCase, punctuation, extra whitespace."""
+    # Split camelCase before lowering (e.g., "KotakInfrastructure" → "Kotak Infrastructure")
+    s = re.sub(r"([a-z])([A-Z])", r"\1 \2", name)
+    s = s.lower().strip()
+    s = re.sub(r"\bpvt\b\.?", "private", s)
+    s = re.sub(r"\bltd\b\.?", "limited", s)
+    s = re.sub(r"\bco\b\.?", "company", s)
+    s = re.sub(r"\bcorp\b\.?", "corporation", s)
+    s = re.sub(r"\bins\b\.?", "institute", s)
+    s = re.sub(r"\btechno\b", "technology", s)
+    s = re.sub(r"['\"\\.\-,&\(\)]", " ", s)
+    s = re.sub(r"\s+", " ", s).strip()
+    return s
 
 
 def _detect_tracked_investor_entries(
@@ -238,12 +268,30 @@ def _detect_tracked_investor_entries(
     alerts: list[dict] = []
     if not quarters or not tracked_names:
         return alerts
+    # Pre-normalize tracked names
+    norm_map = {_normalize_investor_name(t): t for t in tracked_names}
     latest_q = quarters[-1]
     prev_q = quarters[-2] if len(quarters) >= 2 else ""
     for label, investors in individual.items():
         for inv in investors:
             inv_name = inv["name"]
-            matched = next((t for t in tracked_names if t.lower() in inv_name.lower()), None)
+            inv_norm = _normalize_investor_name(inv_name)
+            # Substring match first, then fuzzy fallback for spelling variants
+            matched = next((orig for norm, orig in norm_map.items() if norm in inv_norm or inv_norm in norm), None)
+            if not matched:
+                from difflib import SequenceMatcher
+                # Require 0.92+ ratio AND first word overlap to avoid false positives
+                # (e.g. "Nalanda India Fund" vs "Malabar India Fund" = 0.885 → reject)
+                inv_first = inv_norm.split()[0] if inv_norm.split() else ""
+                for norm, orig in norm_map.items():
+                    if SequenceMatcher(None, inv_norm, norm).ratio() >= 0.92:
+                        matched = orig
+                        break
+                    # Also accept 0.85+ if the first word matches (genuine spelling variants)
+                    norm_first = norm.split()[0] if norm.split() else ""
+                    if norm_first and inv_first == norm_first and SequenceMatcher(None, inv_norm, norm).ratio() >= 0.85:
+                        matched = orig
+                        break
             if not matched:
                 continue
             latest_val = inv["values"].get(latest_q, 0)
@@ -253,8 +301,17 @@ def _detect_tracked_investor_entries(
                 pv = float(prev_val) if prev_val else 0
             except (ValueError, TypeError):
                 lv, pv = 0, 0
-            if lv > 0:
-                trend = "NEW" if pv == 0 else ("UP" if lv > pv + 0.01 else ("DOWN" if lv < pv - 0.01 else "STABLE"))
+            if lv > 0 or pv > 0:
+                if lv == 0 and pv > 0:
+                    trend = "EXIT"
+                elif pv == 0 and lv > 0:
+                    trend = "NEW"
+                elif lv > pv + 0.01:
+                    trend = "UP"
+                elif lv < pv - 0.01:
+                    trend = "DOWN"
+                else:
+                    trend = "STABLE"
                 alerts.append({
                     "investor": inv_name,
                     "matched_name": matched,
@@ -307,11 +364,19 @@ def _parse_existing_shareholding(symbol: str) -> dict | None:
         label = sm.group(1).strip()
         end = section_matches[i + 1].start() if i + 1 < len(section_matches) else len(text)
         block = text[sm.end():end]
-        # Determine the two quarter columns from header line
-        hdr = re.search(r"^\| Investor \| (.+?) \| (.+?) \|", block, re.MULTILINE)
-        if not hdr:
+        # Determine the quarter columns from header line (handles 1- or 2-quarter headers)
+        hdr_line = re.search(r"^\| Investor \|.+\|$", block, re.MULTILINE)
+        if not hdr_line:
             continue
-        prev_q, latest_q = hdr.group(1).strip(), hdr.group(2).strip()
+        hdr_cols = [c.strip() for c in hdr_line.group(0).split("|")]
+        # Filter to only quarter-like columns (exclude empty, 'Investor', 'Trend', '---')
+        q_cols = [c for c in hdr_cols if c and c not in ("Investor", "Trend", "---")]
+        if not q_cols:
+            continue
+        if len(q_cols) >= 2:
+            prev_q, latest_q = q_cols[-2], q_cols[-1]
+        else:
+            prev_q, latest_q = "", q_cols[0]
         investors = []
         for rm in row_re.finditer(block):
             name, pv_raw, lv_raw = rm.group(1).strip(), rm.group(2).strip(), rm.group(3).strip()
@@ -393,7 +458,7 @@ def _save_shareholding_file(
     if tracked_alerts:
         lines.append("## Tracked Investor Alerts\n")
         for a in tracked_alerts:
-            icon = {"NEW": "🆕", "UP": "⬆", "DOWN": "⬇", "STABLE": "→"}.get(a["trend"], "?")
+            icon = {"NEW": "🆕", "EXIT": "🚪", "UP": "⬆", "DOWN": "⬇", "STABLE": "→"}.get(a["trend"], "?")
             lines.append(
                 f"- {icon} **{a['investor']}** — "
                 f"latest: {a['latest_pct']:.2f}%  prev: {a['prev_pct']:.2f}%  trend: {a['trend']}"
@@ -492,8 +557,8 @@ def _fetch_shareholding_batch(
     force: bool = False,
 ) -> dict[str, dict]:
     """Fetch fresh shareholding for companies via Chrome CDP (real browser).
+    Uses parallel CDP tabs (3 concurrent) to cut wall time by ~3×.
     Skips companies whose existing file already has the expected current quarter.
-    Aborts batch early if consecutive failures suggest an IP block.
     Returns {symbol: {old, new, comparison, tracked_alerts, saved_path}}."""
     results: dict[str, dict] = {}
     expected_q = _expected_latest_quarter()
@@ -504,33 +569,85 @@ def _fetch_shareholding_batch(
         print("    Launch Chrome: bash scripts/launch_chrome_debug.sh  (from Terminal.app)")
         return results
 
-    consecutive_failures = 0
-    MAX_CONSECUTIVE_FAILURES = 5  # abort batch if this many in a row fail
-
-    for i, company in enumerate(companies, 1):
+    # Phase A: filter out companies already at current quarter
+    to_fetch: list[dict] = []  # companies that need CDP fetch
+    for company in companies:
         sym = company.get("symbol", "").upper()
-        screener_url = company.get("screener_url", "")
-        print(f"  [{i:>3}/{len(companies)}] {sym:<16}", end="", flush=True)
-
         old_data = _parse_existing_shareholding(sym)
 
-        # Skip if existing file already has the expected current quarter
         if not force and old_data and expected_q:
             existing_latest = old_data.get("quarters", [""])[-1] if old_data.get("quarters") else ""
             if existing_latest == expected_q:
-                # Re-detect tracked investors from parsed individual holder data in the file
                 tracked_alerts = _detect_tracked_investor_entries(
                     old_data.get("individual", {}), tracked_names, old_data.get("quarters", [])
                 )
                 alert_str = f"  🔔 {len(tracked_alerts)} tracked investors" if tracked_alerts else ""
-                print(f" ⏭  already has {expected_q} — skipped{alert_str}")
+                print(f"  {sym:<16} ⏭  already has {expected_q} — skipped{alert_str}")
                 results[sym] = {
                     "old": old_data, "new": None, "comparison": None,
                     "tracked_alerts": tracked_alerts, "saved_path": None, "skipped": True,
                 }
                 continue
+        to_fetch.append(company)
 
-        new_data = _fetch_screener_shareholding(sym, screener_url)
+    if not to_fetch:
+        return results
+
+    print(f"  Fetching {len(to_fetch)} companies via parallel CDP (3 tabs)...")
+
+    # Phase B: build primary URLs for all companies
+    url_to_sym: dict[str, str] = {}
+    sym_to_urls: dict[str, list[str]] = {}
+    primary_urls: list[str] = []
+
+    for company in to_fetch:
+        sym = company.get("symbol", "").upper()
+        urls = _screener_urls(sym, company.get("screener_url", ""))
+        sym_to_urls[sym] = urls
+        if urls:
+            primary_urls.append(urls[0])
+            url_to_sym[urls[0]] = sym
+
+    # Phase C: parallel fetch primary URLs
+    html_map = _cdp_fetch_parallel(primary_urls)
+
+    # Phase D: retry with alternate URLs for failures
+    retry_urls: list[str] = []
+    for sym, urls in sym_to_urls.items():
+        primary = urls[0] if urls else ""
+        html = html_map.get(primary)
+        # Check if HTML has shareholding section (quick sanity check)
+        if html and "id=\"shareholding\"" in html:
+            continue  # primary URL worked
+        if len(urls) > 1:
+            retry_urls.append(urls[1])
+            url_to_sym[urls[1]] = sym
+
+    if retry_urls:
+        print(f"  Retrying {len(retry_urls)} companies with alternate URL...")
+        retry_map = _cdp_fetch_parallel(retry_urls)
+        html_map.update(retry_map)
+
+    # Phase E: parse all HTML, fetch AJAX holders, save files
+    consecutive_failures = 0
+    MAX_CONSECUTIVE_FAILURES = 10  # higher threshold since parallel is faster
+
+    for i, company in enumerate(to_fetch, 1):
+        sym = company.get("symbol", "").upper()
+        old_data = _parse_existing_shareholding(sym)
+        urls = sym_to_urls.get(sym, [])
+
+        # Find the best HTML from primary or alternate URL
+        new_data = None
+        for url in urls:
+            html = html_map.get(url)
+            if html:
+                parsed = _parse_shareholding_html(html, sym, fetch_holders=True)
+                if parsed:
+                    new_data = parsed
+                    break
+
+        print(f"  [{i:>3}/{len(to_fetch)}] {sym:<16}", end="", flush=True)
 
         if not new_data:
             consecutive_failures += 1
@@ -540,7 +657,6 @@ def _fetch_shareholding_batch(
                 print(f"\n  ⛔ {MAX_CONSECUTIVE_FAILURES} consecutive failures — possible IP block. Aborting batch.")
                 print("    Recovery: switch network, restart Chrome, retry.")
                 break
-            time.sleep(random.uniform(FETCH_DELAY_MIN, FETCH_DELAY_MAX))
             continue
 
         # Success — reset failure counter
@@ -572,7 +688,6 @@ def _fetch_shareholding_batch(
             "old": old_data, "new": new_data, "comparison": comparison,
             "tracked_alerts": tracked_alerts, "saved_path": str(saved_path),
         }
-        time.sleep(random.uniform(FETCH_DELAY_MIN, FETCH_DELAY_MAX))
 
     return results
 
@@ -592,13 +707,8 @@ def _pct(v: float, sign: bool = True) -> str:
 
 
 def _is_sme(symbol: str, exchange: str = "") -> bool:
-    """Heuristic: SME if symbol has -SM/-BE suffix or BSE-only numeric code."""
-    sym_upper = symbol.upper()
-    if any(sym_upper.endswith(s) for s in SME_SUFFIXES):
-        return True
-    if exchange.upper() == "BSE" and symbol.isdigit():
-        return True
-    return False
+    from workflows.shared_sections import is_sme
+    return is_sme(symbol, exchange)
 
 
 # ── Data loading ─────────────────────────────────────────────────────────────
@@ -1087,12 +1197,19 @@ def _build_investor_matrix(
             if not alert:
                 row.append("—")
             else:
-                # Only show value if the alert corresponds to the expected quarter; otherwise blank
-                if alert.get("latest_q") != expected_q:
+                # Show value if alert quarter is expected or newer
+                def _q_tuple(q: str) -> tuple:
+                    _M = {"jan":1,"feb":2,"mar":3,"apr":4,"may":5,"jun":6,"jul":7,"aug":8,"sep":9,"oct":10,"nov":11,"dec":12}
+                    p = q.strip().split()
+                    return (int(p[1]), _M.get(p[0].lower()[:3], 0)) if len(p) == 2 else (0, 0)
+                if _q_tuple(alert.get("latest_q", "")) < _q_tuple(expected_q):
                     row.append("—")
                 else:
-                    arrow = {"NEW": "🆕", "UP": "↑", "DOWN": "↓", "STABLE": "→"}.get(alert["trend"], "?")
-                    row.append(f"{alert['latest_pct']:.2f}%{arrow}")
+                    arrow = {"NEW": "🆕", "EXIT": "🚪", "UP": "↑", "DOWN": "↓", "STABLE": "→"}.get(alert["trend"], "?")
+                    if alert["trend"] == "EXIT":
+                        row.append(f"0%🚪(was {alert['prev_pct']:.1f}%)")
+                    else:
+                        row.append(f"{alert['latest_pct']:.2f}%{arrow}")
                     any_val = True
         if any_val:
             filtered_syms.append(sym)
@@ -1102,6 +1219,375 @@ def _build_investor_matrix(
         lines[1] = f"*{len(filtered_syms)} companies × {len(sorted_investors)} tracked investors*\n"
     lines.append("")
     return lines
+
+
+# ── Investor group mapping (parent → fund houses) ────────────────────────────
+
+INVESTOR_GROUPS: dict[str, list[str]] = {
+    "Ashish Kacholia": [
+        "Ashish Kacholia",
+        "Bengal Finance And Investment Pvt Ltd",
+        "Suryavanshi Commotrade Private Limited",
+        "Dar'S Business Finance Pvt Ltd",
+    ],
+    "Mukul Agarwal": [
+        "Mukul Mahavir Agarwal",
+        "Mukul Mahavir Agrawal",
+        "Sanshi Fund-I",
+        "Param Capital",
+        "Ms Param Capital",
+        "Param Value Investments",
+    ],
+    "Vijay Kedia": [
+        "Vijay Kedia",
+        "Kedia Securities Private Limited",
+    ],
+}
+
+# Build reverse map: entity name → parent investor name
+_ENTITY_TO_PARENT: dict[str, str] = {}
+for _parent, _entities in INVESTOR_GROUPS.items():
+    for _e in _entities:
+        _ENTITY_TO_PARENT[_normalize_investor_name(_e)] = _parent
+# For standalone investors (not in a group), they map to themselves
+
+
+def _resolve_parent_investor(entity_name: str) -> str:
+    """Map a fund house / entity name to the parent investor."""
+    norm = _normalize_investor_name(entity_name)
+    return _ENTITY_TO_PARENT.get(norm, entity_name)
+
+
+def _get_market_cap(symbol: str) -> float | None:
+    """Extract market cap (in Cr) from the latest financials file for a company."""
+    fin_dir = COMPANIES_DIR / symbol.upper() / "financials"
+    if not fin_dir.exists():
+        return None
+    files = sorted(fin_dir.glob(f"{symbol.upper()}_financials_*.txt"), reverse=True)
+    if not files:
+        return None
+    text = files[0].read_text(encoding="utf-8", errors="ignore")
+    # Match: "Market Cap ₹ 3,909 Cr." or "Market Cap  ₹ 779 Cr.  779"
+    m = re.search(r"Market\s+Cap\s+₹?\s*([\d,]+(?:\.\d+)?)\s*Cr", text)
+    if m:
+        try:
+            return float(m.group(1).replace(",", ""))
+        except ValueError:
+            pass
+    return None
+
+
+def _build_allocation_table(
+    sh_results: dict[str, dict],
+    company_map: dict[str, dict],
+    expected_q: str,
+) -> list[str]:
+    """Build investment allocation table: companies × parent investors.
+    Value = holding% × market_cap (in ₹ Cr), grouped by parent investor.
+    Returns markdown lines to append to shareholding.md."""
+
+    # Collect all individual holder data with investment amounts
+    # Structure: { symbol: { parent_investor: investment_cr } }
+    company_investments: dict[str, dict[str, float]] = {}
+    all_parents: dict[str, float] = {}  # parent → total investment across all cos
+
+    for sym, r in sh_results.items():
+        mcap = _get_market_cap(sym)
+        if not mcap:
+            continue
+        alerts = r.get("tracked_alerts", [])
+        if not alerts:
+            continue
+        sym_inv: dict[str, float] = {}
+        for alert in alerts:
+            pct = alert.get("latest_pct", 0)
+            if not pct or pct <= 0:
+                continue
+            entity = alert.get("investor", alert.get("matched_name", ""))
+            parent = _resolve_parent_investor(entity)
+            invest_cr = pct / 100.0 * mcap
+            sym_inv[parent] = sym_inv.get(parent, 0) + invest_cr
+        if sym_inv:
+            company_investments[sym] = sym_inv
+            for parent, amt in sym_inv.items():
+                all_parents[parent] = all_parents.get(parent, 0) + amt
+
+    if not company_investments:
+        return []
+
+    # Sort parents by total investment descending
+    sorted_parents = sorted(all_parents.keys(), key=lambda p: -all_parents[p])
+
+    # Sort companies by max investment from any single parent
+    def _max_inv(sym: str) -> float:
+        return max(company_investments[sym].values()) if company_investments.get(sym) else 0
+
+    sorted_syms = sorted(company_investments.keys(), key=lambda s: -_max_inv(s))
+
+    # Build table
+    headers = ["Company", "Mcap (Cr)"] + [p.split()[0][:12] for p in sorted_parents] + ["Max Inv (Cr)"]
+    lines = [
+        "\n### 💰 Anchor Investor Allocation",
+        f"*Investment = holding% × market cap — {len(sorted_syms)} companies × {len(sorted_parents)} investors*\n",
+        "| " + " | ".join(headers) + " |",
+        "|" + "---|" * len(headers),
+    ]
+    for sym in sorted_syms:
+        c = company_map.get(sym, {})
+        name = c.get("name", sym)[:25]
+        mcap = _get_market_cap(sym)
+        mcap_str = f"{mcap:,.0f}" if mcap else "—"
+        inv_map = company_investments[sym]
+        cells = []
+        for parent in sorted_parents:
+            amt = inv_map.get(parent, 0)
+            cells.append(f"{amt:.1f}" if amt > 0 else "—")
+        max_inv = max(inv_map.values())
+        cells.append(f"**{max_inv:.1f}**")
+        lines.append(f"| {name} ({sym}) | {mcap_str} | " + " | ".join(cells) + " |")
+
+    # Totals row
+    total_cells = []
+    for parent in sorted_parents:
+        total_cells.append(f"**{all_parents[parent]:.1f}**")
+    total_cells.append(f"**{sum(all_parents.values()):.1f}**")
+    lines.append(f"| **TOTAL** | | " + " | ".join(total_cells) + " |")
+    lines.append("")
+
+    return lines
+
+
+def _write_anchor_alignment(
+    sh_results: dict[str, dict],
+    company_map: dict[str, dict],
+    holdings_map: dict[str, dict],
+    user_id: str,
+    expected_q: str,
+) -> Path | None:
+    """Write/update the anchor_alignment.md file in portfolio/{user_id}/.
+    Scans ALL holdings (+ tracked companies) for anchor investors using
+    the latest shareholding file on disk — not limited to sh_results.
+    Table 1: Companies ranked by max anchor investment (grouped by parent).
+    Table 2: Portfolio adjustment suggestions (under → over allocated)."""
+    user_dir = PORTFOLIO_DIR / user_id
+    if not user_dir.exists():
+        return None
+
+    today = date.today().isoformat()
+    tracked_names = _load_tracked_investors()
+    if not tracked_names:
+        return None
+
+    # ── Scan ALL known companies for tracked investors ────────────────────
+    # Merge symbols from: sh_results, portfolio holdings, and company_map
+    all_syms = set(sh_results.keys()) | set(holdings_map.keys()) | set(company_map.keys())
+
+    # { symbol: { parent: investment_cr } }
+    company_investments: dict[str, dict[str, float]] = {}
+    parent_totals: dict[str, float] = {}  # parent → total across all companies
+
+    for sym in sorted(all_syms):
+        mcap = _get_market_cap(sym)
+        if not mcap:
+            continue
+
+        # Try to get tracked alerts from sh_results first (freshest data)
+        alerts: list[dict] = []
+        sr = sh_results.get(sym)
+        if sr and sr.get("tracked_alerts"):
+            alerts = sr["tracked_alerts"]
+        else:
+            # Fall back to latest shareholding file on disk
+            parsed = _parse_existing_shareholding(sym)
+            if parsed and parsed.get("individual"):
+                alerts = _detect_tracked_investor_entries(
+                    parsed["individual"], tracked_names, parsed.get("quarters", [])
+                )
+
+        if not alerts:
+            continue
+
+        sym_inv: dict[str, float] = {}
+        for alert in alerts:
+            pct = alert.get("latest_pct", 0)
+            if not pct or pct <= 0:
+                continue
+            entity = alert.get("investor", alert.get("matched_name", ""))
+            parent = _resolve_parent_investor(entity)
+            invest_cr = pct / 100.0 * mcap
+            sym_inv[parent] = sym_inv.get(parent, 0) + invest_cr
+        if sym_inv:
+            company_investments[sym] = sym_inv
+            for parent, amt in sym_inv.items():
+                parent_totals[parent] = parent_totals.get(parent, 0) + amt
+
+    if not company_investments:
+        return None
+
+    # ── Compute max investment per company from any single parent ───────
+    anchor_details: dict[str, tuple[str, float]] = {}  # sym → (best_parent, best_amt)
+    for sym, inv_map in company_investments.items():
+        best_parent = max(inv_map, key=inv_map.get)
+        anchor_details[sym] = (best_parent, inv_map[best_parent])
+
+    # ── Investment rank (1 = highest) ────────────────────────────────────
+    inv_sorted = sorted(anchor_details.keys(), key=lambda s: -anchor_details[s][1])
+    inv_rank: dict[str, int] = {s: i + 1 for i, s in enumerate(inv_sorted)}
+
+    # ── My portfolio allocation ─────────────────────────────────────────
+    total_portfolio = sum(h.get("current_value", 0) for h in holdings_map.values())
+    my_alloc: dict[str, float] = {}  # sym → % of my portfolio
+    for sym, h in holdings_map.items():
+        val = h.get("current_value", 0)
+        my_alloc[sym] = (val / total_portfolio * 100) if total_portfolio > 0 else 0
+
+    # My allocation rank among anchor-held stocks (1 = highest alloc)
+    anchor_syms_by_my_alloc = sorted(inv_sorted, key=lambda s: -my_alloc.get(s, 0))
+    my_rank: dict[str, int] = {s: i + 1 for i, s in enumerate(anchor_syms_by_my_alloc)}
+
+    sorted_parents = sorted(parent_totals.keys(), key=lambda p: -parent_totals[p])
+
+    # ── Header ───────────────────────────────────────────────────────────
+    lines = [
+        f"# Anchor Investor Alignment — {expected_q}",
+        f"*Updated: {today}*\n",
+        "## Methodology",
+        "- **Investment** = individual holder % × market cap (Cr)",
+        "- **Parent grouping**: fund houses consolidated under managing investor",
+        f"  - Ashish Kacholia = Ashish + Bengal Finance + Suryavanshi + Dar's",
+        f"  - Mukul Agarwal = Mukul + Sanshi Fund + Param Capital",
+        f"  - Vijay Kedia = Vijay + Kedia Securities",
+        "- **Inv Rank**: company ranked by max anchor investment (1 = highest conviction)",
+        "- **My Rank**: same companies ranked by my allocation (1 = my highest alloc)",
+        "- **Rank Gap**: My Rank − Inv Rank (positive = I'm underweight vs anchor)\n",
+    ]
+
+    # ── Table 1: Anchor-held companies by investment ─────────────────────
+    lines.append("## Table 1: Anchor-Held Companies by Investment")
+    lines.append(f"*{len(inv_sorted)} companies held by tracked investors, sorted by max investment*\n")
+    t1_headers = ["#", "Company", "Mcap(Cr)", "Top Investor", "Invest(Cr)", "My%", "My Rank"]
+    lines.append("| " + " | ".join(t1_headers) + " |")
+    lines.append("|" + "---|" * len(t1_headers))
+
+    for sym in inv_sorted:
+        c = company_map.get(sym, {})
+        name = c.get("name", sym)[:28]
+        mcap = _get_market_cap(sym)
+        mcap_str = f"{mcap:,.0f}" if mcap else "—"
+        parent, invest = anchor_details[sym]
+        my_pct = my_alloc.get(sym, 0)
+        mr = my_rank[sym]
+        ir = inv_rank[sym]
+        sme = "ˢᵐᵉ" if any(sym.upper().endswith(s) for s in SME_SUFFIXES) else ""
+        lines.append(
+            f"| {ir} | {name} ({sym}){sme} | {mcap_str} | {parent.split()[0][:10]} "
+            f"| {invest:.1f} | {my_pct:.2f}% | {mr} |"
+        )
+    lines.append("")
+
+    # ── Table 2: Adjustment suggestions (rank-gap based) ─────────────────
+    # For anchor-held: rank_gap = my_rank − inv_rank (positive → underweight)
+    # For non-anchor holdings ≥ 1%: shown separately at bottom
+    anchor_rows: list[tuple[str, int, float, int, float, int, float]] = []
+    # (sym, inv_rank, invest_cr, my_rank, my_pct, rank_gap, current_value)
+
+    for sym in inv_sorted:
+        ir = inv_rank[sym]
+        mr = my_rank[sym]
+        rg = mr - ir
+        _, invest = anchor_details[sym]
+        my_pct = my_alloc.get(sym, 0)
+        val = holdings_map.get(sym, {}).get("current_value", 0)
+        anchor_rows.append((sym, ir, invest, mr, my_pct, rg, val))
+
+    # Sort: underweight first (rank_gap desc), then overweight
+    anchor_rows.sort(key=lambda r: -r[5])
+
+    # Non-anchor holdings ≥ 1%
+    non_anchor_rows: list[tuple[str, float, float]] = []  # sym, my_pct, val
+    for sym, h in holdings_map.items():
+        if sym in company_investments:
+            continue
+        my_pct = my_alloc.get(sym, 0)
+        if my_pct >= 1.0:
+            non_anchor_rows.append((sym, my_pct, h.get("current_value", 0)))
+    non_anchor_rows.sort(key=lambda r: -r[1])
+
+    # Count categories
+    underweight = sum(1 for r in anchor_rows if r[5] > 3)
+    overweight = sum(1 for r in anchor_rows if r[5] < -3)
+    aligned = sum(1 for r in anchor_rows if -3 <= r[5] <= 3)
+
+    lines.append("## Table 2: Portfolio Adjustment Suggestions")
+    lines.append(f"*Rank gap = My Rank − Inv Rank — positive means I'm underweight*\n")
+    lines.append(f"- **Underweight** (gap > 3): {underweight} companies")
+    lines.append(f"- **Overweight** (gap < −3): {overweight} companies")
+    lines.append(f"- **Aligned** (|gap| ≤ 3): {aligned} companies")
+    lines.append(f"- **No anchor backing** (≥1% alloc): {len(non_anchor_rows)} companies\n")
+
+    t2_headers = ["Company", "Invest(Cr)", "Inv#", "My%", "My#", "Gap", "Action"]
+    lines.append("| " + " | ".join(t2_headers) + " |")
+    lines.append("|" + "---|" * len(t2_headers))
+
+    for sym, ir, invest, mr, my_pct, rg, val in anchor_rows:
+        c = company_map.get(sym, {})
+        name = c.get("name", sym)[:28]
+        sme = "ˢᵐᵉ" if any(sym.upper().endswith(s) for s in SME_SUFFIXES) else ""
+        gap_str = f"+{rg}" if rg > 0 else str(rg)
+
+        if my_pct == 0:
+            action = "⬆️ **NEW POSITION** — not held"
+        elif rg > 10:
+            action = "⬆️ **INCREASE** significantly"
+        elif rg > 5:
+            action = "⬆️ Increase"
+        elif rg > 3:
+            action = "↗️ Slight increase"
+        elif rg < -10:
+            action = "⬇️ **REDUCE** significantly"
+        elif rg < -5:
+            action = "⬇️ Reduce"
+        elif rg < -3:
+            action = "↘️ Slight reduce"
+        else:
+            action = "✅ Aligned"
+
+        lines.append(
+            f"| {name} ({sym}){sme} | {invest:.1f} | {ir} "
+            f"| {my_pct:.2f}% | {mr} | {gap_str} | {action} |"
+        )
+
+    # Non-anchor holdings section
+    if non_anchor_rows:
+        lines.append("")
+        lines.append("### Non-Anchor Holdings ≥1%")
+        lines.append(f"*{len(non_anchor_rows)} positions with no tracked anchor backing*\n")
+        lines.append("| Company | My% | Current(₹) | Note |")
+        lines.append("|---|---|---|---|")
+        for sym, my_pct, val in non_anchor_rows:
+            c = company_map.get(sym, {})
+            name = c.get("name", sym)[:28]
+            sme = "ˢᵐᵉ" if any(sym.upper().endswith(s) for s in SME_SUFFIXES) else ""
+            val_str = f"₹{val:,.0f}" if val > 0 else "—"
+            lines.append(f"| {name} ({sym}){sme} | {my_pct:.2f}% | {val_str} | No anchor backing |")
+    lines.append("")
+
+    # ── Summary stats ────────────────────────────────────────────────────
+    total_my_in_anchor = sum(my_alloc.get(s, 0) for s in company_investments)
+    non_anchor_alloc = sum(my_alloc.get(s, 0) for s in holdings_map if s not in company_investments)
+    lines.append("## Summary")
+    lines.append(f"- **Anchor-tracked companies**: {len(company_investments)}")
+    lines.append(f"- **My portfolio total**: ₹{total_portfolio:,.0f}")
+    lines.append(f"- **My allocation in anchor stocks**: {total_my_in_anchor:.1f}% of portfolio")
+    lines.append(f"- **My allocation in non-anchor stocks**: {non_anchor_alloc:.1f}% ({len(non_anchor_rows)} stocks ≥1%)")
+    for parent in sorted_parents:
+        cos = sum(1 for s in company_investments if parent in company_investments[s])
+        lines.append(f"- **{parent}** tracked: ₹{parent_totals[parent]:.1f} Cr across {cos} companies")
+    lines.append("")
+
+    out = user_dir / "anchor_alignment.md"
+    out.write_text("\n".join(lines), encoding="utf-8")
+    return out
 
 
 # ── Quarterly evolving file writers ──────────────────────────────────────────
@@ -1187,14 +1673,21 @@ def _write_shareholding_quarterly(
             return f"{val:.2f}%" if val is not None and comp.get("latest_quarter") == expected_q else "—"
 
         alloc_str = f" ({holdings_map[sym]['pct_of_portfolio']:.1f}%)" if sym in holdings_map and "pct_of_portfolio" in holdings_map[sym] else ""
-        # Alert column: first tracked investor with trend, if any
+        # Alert column: ALL tracked investors with short format (first word + trend), deduplicated
         ta = r.get("tracked_alerts", [])
         alert = ""
         if ta:
-            first = ta[0]
-            trend = str(first.get("trend", "")).upper()
-            inv = first.get("matched_name", first.get("investor", ""))
-            alert = f"🔔 {inv} {trend}"
+            seen = set()
+            parts = []
+            for a in ta:
+                inv = a.get("matched_name", a.get("investor", ""))
+                short = inv.split()[0] if inv else "?"
+                trend = str(a.get("trend", "")).upper()
+                key = (short, trend)
+                if key not in seen:
+                    seen.add(key)
+                    parts.append(f"{short} {trend}")
+            alert = "🔔 " + ", ".join(parts)
         return (
             f"| {name} ({sym}){alloc_str} | {q_label} "
             f"| {_fmt_sh('Promoters+')} | {_fmt_sh('FIIs+')} "
@@ -1227,6 +1720,11 @@ def _write_shareholding_quarterly(
     matrix_lines = _build_investor_matrix(sh_results, company_map, expected_q)
     if matrix_lines:
         lines.extend(matrix_lines)
+
+    # Anchor investor allocation table (holding% × market cap)
+    alloc_lines = _build_allocation_table(sh_results, company_map, expected_q)
+    if alloc_lines:
+        lines.extend(alloc_lines)
 
     # Pending table — companies missing expected quarter shareholding
     pending: list[tuple[str, str, float]] = []  # (symbol, last_q, alloc%)
@@ -1352,6 +1850,9 @@ def run(
     user_id: str | None = None,
     fetch: bool = False,
     fetch_all: bool = False,
+    fetch_sh: bool = False,
+    fetch_fin: bool = False,
+    fetch_transcripts: bool = False,
     full_refresh: bool = False,
     symbols: list[str] | None = None,
     onboard: list[str] | None = None,
@@ -1410,71 +1911,38 @@ def run(
             except Exception as e:
                 print(f"  [!] Onboarding {ob_symbol} failed: {e}")
 
-    # Phase 1: Fetch shareholding via Chrome CDP when --fetch or --fetch-all
-    # Rule: open CDP for a company if ANY tracked area is missing the expected quarter
-    #       (shareholding or financial results). Transcripts are fetched separately below.
+    # Determine which fetch phases to run
+    # --fetch-all overrides everything; --fetch implies all 3; individual flags are additive
+    do_sh = fetch_sh or fetch or fetch_all
+    do_fin = fetch_fin or fetch or fetch_all
+    do_transcripts = fetch_transcripts or fetch or fetch_all
+
+    expected_q_for_flag = _expected_latest_quarter() or f"Mar {date.today().year}"
+
+    # Phase 1a: Fetch shareholding via Chrome CDP (parallel — 3 tabs)
     sh_results: dict[str, dict] = {}
-    if fetch or fetch_all:
-        expected_q = _expected_latest_quarter() or f"Mar {date.today().year}"
-
-        def _has_latest_shareholding(sym: str) -> bool:
-            data = _parse_existing_shareholding(sym)
-            if not data:
-                return False
-            qs = data.get("quarters", [])
-            return bool(qs and qs[-1] == expected_q)
-
-        def _has_latest_financials(sym: str) -> bool:
-            fin = _parse_quarterly_financials(sym)
-            return expected_q in fin and any(v is not None for v in fin.get(expected_q, {}).values())
-
+    if do_sh:
         companies_for_sh = []
         for c in target_companies:
             sym = c.get("symbol", "").upper()
-            need_sh = not _has_latest_shareholding(sym)
-            need_fin = not _has_latest_financials(sym)
-            if need_sh or need_fin or fetch_all:
+            data = _parse_existing_shareholding(sym)
+            has_q = data and data.get("quarters") and data["quarters"][-1] == expected_q_for_flag
+            if not has_q or fetch_all:
                 companies_for_sh.append(c)
 
-        print(f"\n── Fetching shareholding for {len(companies_for_sh)}/{len(target_companies)} companies (Chrome CDP) ──")
+        print(f"\n── Fetching shareholding for {len(companies_for_sh)}/{len(target_companies)} companies (parallel CDP) ──")
         if companies_for_sh:
-            sh_results = _fetch_shareholding_batch(companies_for_sh, tracked_names, force=False)
+            sh_results = _fetch_shareholding_batch(companies_for_sh, tracked_names, force=fetch_all)
             n_changed = sum(1 for r in sh_results.values() if r.get("comparison") and r["comparison"].get("changes"))
             n_new_q = sum(1 for r in sh_results.values() if r.get("comparison") and r["comparison"].get("type") == "new_quarter")
             n_tracked = sum(len(r.get("tracked_alerts", [])) for r in sh_results.values())
             print(f"  Summary: {n_new_q} new quarters, {n_changed} with changes, {n_tracked} tracked investor alerts")
         else:
-            print("  All companies have latest quarter for shareholding and financials — CDP fetch skipped.")
+            print("  All companies already have latest quarter shareholding — skipped.")
 
-    # Phase 1b: Transcripts fetch — optimized with per-quarter flag
-    # Create a per-quarter sentinel file to avoid re-fetching transcripts on every run.
-    # Behavior:
-    #  - --fetch-all: run full data fetch; mark transcripts_flag.md as updated (always).
-    #  - --fetch: if transcripts_flag.md exists for this quarter, skip fetching transcripts; otherwise fetch and create flag.
-    if fetch_all:
-        print(f"\n── Fetching ALL data for {len(target_companies)} companies (CDP needed) ──")
-        _fetch_all_data(target_companies)
-        expected_q_for_flag = _expected_latest_quarter() or f"Mar {date.today().year}"
-        qdir = EARNINGS_SEASON_DIR / expected_q_for_flag.replace(" ", "")
-        qdir.mkdir(parents=True, exist_ok=True)
-        flag_path = qdir / "transcripts_flag.md"
-        flag_path.write_text(f"# Transcripts Fetch Flag — {expected_q_for_flag}\nUpdated: {date.today().isoformat()} (full fetch)\n", encoding="utf-8")
-    elif fetch:
-        expected_q_for_flag = _expected_latest_quarter() or f"Mar {date.today().year}"
-        qdir = EARNINGS_SEASON_DIR / expected_q_for_flag.replace(" ", "")
-        flag_path = qdir / "transcripts_flag.md"
-        if flag_path.exists():
-            print("\n── Transcripts up-to-date for this quarter — skipping transcripts fetch (flag present) ──")
-        else:
-            print(f"\n── Fetching transcripts for {len(target_companies)} companies ──")
-            _fetch_transcripts(target_companies)
-            qdir.mkdir(parents=True, exist_ok=True)
-            flag_path.write_text(f"# Transcripts Fetch Flag — {expected_q_for_flag}\nUpdated: {date.today().isoformat()}\n", encoding="utf-8")
-
-        # Additionally: if financial results for expected_q are missing, fetch financials only
+    # Phase 1b: Fetch financials (Chrome CDP, per-company)
+    if do_fin:
         print("\n── Ensuring quarterly financials for expected quarter ──")
-        expected_q_fin = expected_q_for_flag
-        # Preflight CDP
         try:
             from skills.cdp_helper import is_available as _cdp_avail  # noqa: PLC0415
         except Exception:
@@ -1483,8 +1951,8 @@ def run(
         for c in target_companies:
             sym = c.get("symbol", "").upper()
             fin = _parse_quarterly_financials(sym)
-            has_latest = expected_q_fin in fin and any(v is not None for v in fin.get(expected_q_fin, {}).values())
-            if not has_latest:
+            has_latest = expected_q_for_flag in fin and any(v is not None for v in fin.get(expected_q_for_flag, {}).values())
+            if not has_latest or fetch_all:
                 missing_fin.append(sym)
         if missing_fin and (_cdp_avail()):
             print(f"  Fetching financials for {len(missing_fin)} companies…")
@@ -1511,6 +1979,23 @@ def run(
             else:
                 print("  ⚠️ Chrome CDP not available — skipping financials fetch.")
 
+    # Phase 1c: Fetch transcripts (no CDP needed — BSE/Screener AJAX)
+    if do_transcripts:
+        qdir = EARNINGS_SEASON_DIR / expected_q_for_flag.replace(" ", "")
+        flag_path = qdir / "transcripts_flag.md"
+        if fetch_all:
+            print(f"\n── Fetching ALL data for {len(target_companies)} companies (CDP needed) ──")
+            _fetch_all_data(target_companies)
+            qdir.mkdir(parents=True, exist_ok=True)
+            flag_path.write_text(f"# Transcripts Fetch Flag — {expected_q_for_flag}\nUpdated: {date.today().isoformat()} (full fetch)\n", encoding="utf-8")
+        elif flag_path.exists():
+            print("\n── Transcripts up-to-date for this quarter — skipping (flag present) ──")
+        else:
+            print(f"\n── Fetching transcripts for {len(target_companies)} companies ──")
+            _fetch_transcripts(target_companies)
+            qdir.mkdir(parents=True, exist_ok=True)
+            flag_path.write_text(f"# Transcripts Fetch Flag — {expected_q_for_flag}\nUpdated: {date.today().isoformat()}\n", encoding="utf-8")
+
     # Phase 2: Snapshot current state & detect file-level deltas
     print("\n── Scanning for file-level changes ──")
     current_snapshots: dict[str, dict] = {}
@@ -1536,6 +2021,24 @@ def run(
     total_value = sum(h.get("current_value", 0) for h in holdings)
     for h in holdings:
         h["pct_of_portfolio"] = round(h["current_value"] / total_value * 100, 2) if total_value else 0
+    # Resolve symbol aliases: if holding symbol (e.g. SONAMAC-ST) has no company dir
+    # but a variant does (e.g. SONAMAC-SM), add the dir symbol as an alias in holdings_map.
+    # This handles SME→mainboard platform migrations (-SM → -ST, -BE → regular, etc.)
+    _PLATFORM_SUFFIXES = ("-SM", "-ST", "-BE")
+    for h_sym in list(holdings_map.keys()):
+        if COMPANIES_DIR.joinpath(h_sym).exists():
+            continue  # direct match, no alias needed
+        base = h_sym
+        for sfx in _PLATFORM_SUFFIXES:
+            if h_sym.endswith(sfx):
+                base = h_sym[: -len(sfx)]
+                break
+        # Try other suffixes or bare base
+        candidates = [base] + [base + s for s in _PLATFORM_SUFFIXES if base + s != h_sym]
+        for cand in candidates:
+            if COMPANIES_DIR.joinpath(cand).exists() and cand not in holdings_map:
+                holdings_map[cand] = holdings_map[h_sym]
+                break
     company_map: dict[str, dict] = {c.get("symbol", "").upper(): c for c in all_companies}
 
     print(f"\n── Writing quarterly files → data/earnings_season/{expected_q.replace(' ', '')}/ ──")
@@ -1560,8 +2063,17 @@ def run(
         # Compare last two quarters within the same file
         latest_q = quarters[-1]
         prev_q = quarters[-2]
-        if latest_q != expected_q:
-            continue  # Only process if latest quarter matches expected
+        # Process if latest quarter is the expected or newer
+        # (some companies may already have next quarter data, e.g. Apr 2026 vs expected Mar 2026)
+        def _q_to_tuple(q: str) -> tuple:
+            _M = {"jan":1,"feb":2,"mar":3,"apr":4,"may":5,"jun":6,"jul":7,"aug":8,"sep":9,"oct":10,"nov":11,"dec":12}
+            parts = q.strip().split()
+            if len(parts) == 2:
+                try: return (int(parts[1]), _M.get(parts[0].lower()[:3], 0))
+                except: pass
+            return (0, 0)
+        if _q_to_tuple(latest_q) < _q_to_tuple(expected_q):
+            continue  # Skip if data is older than expected quarter
         
         KEY_CATS = ["Promoters+", "FIIs+", "DIIs+", "Public+"]
         changes: dict[str, dict] = {}
@@ -1583,29 +2095,63 @@ def run(
         if changes:
             # Detect tracked investors
             tracked_alerts = []
+            seen_investors: set[str] = set()  # (section, investor_name) to avoid dupes
             individual = data.get("individual", {})
             for inv_name in tracked_names:
                 for section, investors in individual.items():
                     for investor_row in investors:
-                        if inv_name.lower() in investor_row.get("name", "").lower():
+                        inv_norm = _normalize_investor_name(inv_name)
+                        row_norm = _normalize_investor_name(investor_row.get("name", ""))
+                        if inv_norm in row_norm or row_norm in inv_norm:
+                            dedup_key = (section, investor_row.get("name", ""))
+                            if dedup_key in seen_investors:
+                                continue
+                            seen_investors.add(dedup_key)
                             values = investor_row.get("values", {})
-                            if latest_q in values and prev_q in values:
+                            # Use available quarters from individual holder data
+                            # (may differ from main table quarters)
+                            def _safe_float(v):
                                 try:
-                                    lv = float(values[latest_q])
-                                    pv = float(values[prev_q])
-                                    trend = "UP" if lv > pv + 0.01 else "DOWN" if lv < pv - 0.01 else "STABLE"
-                                    if pv == 0:
-                                        trend = "NEW"
-                                    tracked_alerts.append({
-                                        "investor": inv_name,
-                                        "matched_name": investor_row.get("name"),
-                                        "trend": trend,
-                                        "latest_pct": lv,
-                                        "prev_pct": pv,
-                                        "latest_q": latest_q,
-                                    })
-                                except ValueError:
-                                    pass
+                                    return float(v) if v and v not in ("—", "-", "") else 0.0
+                                except (ValueError, TypeError):
+                                    return 0.0
+                            def _q_sort_key(q: str) -> tuple:
+                                """Sort quarters chronologically: 'Mar 2026' -> (2026, 3)"""
+                                _MONTHS = {"jan":1,"feb":2,"mar":3,"apr":4,"may":5,"jun":6,"jul":7,"aug":8,"sep":9,"oct":10,"nov":11,"dec":12}
+                                parts = q.strip().split()
+                                if len(parts) == 2:
+                                    m = _MONTHS.get(parts[0].lower()[:3], 0)
+                                    try: return (int(parts[1]), m)
+                                    except: pass
+                                return (9999, 99)
+                            avail_qs = sorted(values.keys(), key=_q_sort_key)
+                            if len(avail_qs) >= 2:
+                                ih_prev_q, ih_latest_q = avail_qs[-2], avail_qs[-1]
+                            elif len(avail_qs) == 1:
+                                ih_prev_q, ih_latest_q = None, avail_qs[0]
+                            else:
+                                continue
+                            lv = _safe_float(values.get(ih_latest_q, ""))
+                            pv = _safe_float(values.get(ih_prev_q, "")) if ih_prev_q else 0.0
+                            if lv > 0 or pv > 0:
+                                if lv == 0 and pv > 0:
+                                    trend = "EXIT"
+                                elif pv == 0 and lv > 0:
+                                    trend = "NEW"
+                                elif lv > pv + 0.01:
+                                    trend = "UP"
+                                elif lv < pv - 0.01:
+                                    trend = "DOWN"
+                                else:
+                                    trend = "STABLE"
+                                tracked_alerts.append({
+                                    "investor": inv_name,
+                                    "matched_name": investor_row.get("name"),
+                                    "trend": trend,
+                                    "latest_pct": lv,
+                                    "prev_pct": pv,
+                                    "latest_q": ih_latest_q,
+                                })
             
             sh_results[sym] = {
                 "comparison": {
@@ -1622,6 +2168,12 @@ def run(
     # Shareholding evolving file (shareholding changes + investor matrix)
     sh_path = _write_shareholding_quarterly(expected_q, sh_results, company_map, holdings_map)
     print(f"  ✓ {sh_path.name}")
+
+    # Anchor investor alignment file (portfolio/{user}/anchor_alignment.md)
+    if user_dir and user_dir != PORTFOLIO_DIR:
+        align_path = _write_anchor_alignment(sh_results, company_map, holdings_map, user_dir.name, expected_q)
+        if align_path:
+            print(f"  ✓ {align_path.name}")
 
     # Results evolving file (per-company financial comparison tables)
     res_path = _write_results_quarterly(expected_q, all_companies, company_map, holdings_map, deltas)
@@ -1646,9 +2198,15 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Earnings season delta report")
     parser.add_argument("--user", help="Kite user ID")
     parser.add_argument("--fetch", action="store_true",
-                        help="Fetch shareholding + transcripts (no CDP needed)")
+                        help="Fetch all (shareholding + financials + transcripts). Shorthand for all 3 flags.")
     parser.add_argument("--fetch-all", action="store_true",
                         help="Full data fetch (needs Chrome CDP for financials/insights)")
+    parser.add_argument("--fetch-sh", action="store_true",
+                        help="Fetch shareholding only (Chrome CDP, ~7 min with parallel)")
+    parser.add_argument("--fetch-fin", action="store_true",
+                        help="Fetch financials only (Chrome CDP)")
+    parser.add_argument("--fetch-transcripts", action="store_true",
+                        help="Fetch transcripts only (no CDP needed)")
     parser.add_argument("--full-refresh", action="store_true",
                         help="Ignore previous state, treat everything as new")
     parser.add_argument("--symbols", nargs="*",
@@ -1657,10 +2215,19 @@ if __name__ == "__main__":
                         help="Onboard new companies. Format: SYMBOL:Name:screener_url")
     args = parser.parse_args()
 
+    # --fetch implies all three sub-flags
+    if args.fetch:
+        args.fetch_sh = True
+        args.fetch_fin = True
+        args.fetch_transcripts = True
+
     run(
         user_id=args.user,
         fetch=args.fetch,
         fetch_all=args.fetch_all,
+        fetch_sh=args.fetch_sh,
+        fetch_fin=args.fetch_fin,
+        fetch_transcripts=args.fetch_transcripts,
         full_refresh=args.full_refresh,
         symbols=args.symbols,
         onboard=args.onboard,

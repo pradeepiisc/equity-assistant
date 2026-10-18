@@ -53,6 +53,62 @@ Produce a structured JSON response with the following keys:
 
 11. "overall_investment_signal": A string with format: "[positive/neutral/cautious/negative]: <2-line reasoning based on the totality of the analysis above>"
 
+12. "forward_estimates": An object tracking management's forward-looking guidance and commitments:
+   - "revenue_targets": A list of objects with "period" (e.g. "FY26", "FY27"), "estimate" (₹ Cr range or number), "basis" (what management said to support this), "quarter_source" (which concall). Include every forward revenue/growth commitment made across all transcripts.
+   - "earnings_guidance": A list of objects with "metric" (e.g. "EBITDA margin", "PAT margin", "EPS"), "target" (value or range), "basis", "quarter_source"
+   - "capex_plans": A list of objects with "item" (what capex), "amount_cr" (₹ Cr if mentioned, else "not disclosed"), "timeline", "quarter_source"
+   - "confidence_level": "high" | "medium" | "low" — overall confidence in these estimates based on management's track record of delivering on guidance
+
+13. "new_facilities_and_products": A list of objects, each with:
+   - "name": Name/description of the facility, product, JV, or technology partnership
+   - "status": "announced" | "under_construction" | "commissioning" | "operational"
+   - "expected_timeline": When management expects it to be ready/contributing
+   - "revenue_impact": Estimated revenue/margin contribution if management discussed it (else "not quantified")
+   - "quarter_source": Which concall(s) mentioned this
+
+14. "mergers_and_acquisitions": A list of objects for any M&A, JV, or strategic partnerships discussed. Each with:
+   - "target": Company/asset/partner name
+   - "type": "acquisition" | "merger" | "jv" | "technology_partnership" | "strategic_alliance"
+   - "status": "completed" | "in_progress" | "planned" | "exploring"
+   - "strategic_rationale": Why management did/is doing this (1-2 sentences)
+   - "financial_impact": Revenue/margin/synergy impact if discussed (else "not quantified")
+   - "quarter_source": Which concall mentioned this
+   Empty list if no M&A activity discussed.
+
+15. "market_landscape": An object capturing the industry picture from management's lens:
+   - "addressable_market": Total addressable market estimate if discussed (₹/$ and description)
+   - "company_market_share": Company's estimated market share or position if mentioned
+   - "competitive_position": How management positions the company vs competitors — moat, differentiation, technology edge
+   - "key_competitors_mentioned": List of competitor names mentioned in transcripts
+   - "export_opportunity": International market opportunity — geographies, order wins, pipeline
+   - "government_policy_tailwinds": Policy drivers — PLI, regulatory push, budget allocations, environmental mandates
+   - "government_policy_headwinds": Regulatory hurdles, compliance burdens, approval delays
+   - "industry_growth_rate": Industry/sector growth rate if management cited any numbers or reports
+   - "demand_drivers": List of 3-5 key demand drivers management keeps citing
+
+16. "cyclicality_and_macro_factors": An object with:
+   - "cyclicality_assessment": "highly_cyclical" | "moderately_cyclical" | "defensive" | "mixed" — based on how management discusses demand patterns and business cycles
+   - "raw_material_sensitivity": Key RM exposures mentioned (copper, steel, crude, etc.), pass-through mechanisms, hedging — with specific quotes/references
+   - "interest_rate_impact": How interest rates affect the business or its customers (if discussed)
+   - "currency_exposure": Export/import FX impact discussed
+   - "global_competition_threats": Threats from imports, dumping (e.g. Chinese competition), global overcapacity
+   - "regulatory_dependencies": Key regulatory/govt approvals company depends on (BIS, environmental clearance, etc.)
+   - "supply_chain_risks": Key supply chain bottlenecks or single-source dependencies flagged by management
+
+17. "sector_specific_kpis": A list of objects capturing sector-specific operational metrics discussed in transcripts. Examples: order_book, order_book_to_revenue_ratio, capacity_utilization, occupancy_rate, ARPOB, same_store_growth, AUM, NIM, GNPA — whatever is relevant for THIS company's sector. Each object:
+   - "metric": Name of the metric
+   - "latest_value": Most recent value mentioned by management
+   - "previous_value": Earlier value for comparison (if mentioned)
+   - "trend": "improving" | "stable" | "declining"
+   - "management_comment": What management said about this metric
+   - "quarter_source": Which concall
+
+18. "transcripts_used": A list of objects identifying each transcript/document analysed:
+   - "quarter": Quarter identifier (e.g. "Q2FY26", "Q3FY26")
+   - "type": "earnings_call" | "investor_presentation" | "analyst_meet" | "ai_summary"
+   - "key_topics_discussed": List of 3-5 major topics from this specific transcript
+   - "management_sentiment_this_quarter": "bullish" | "confident" | "cautious" | "defensive"
+
 Respond with ONLY valid JSON. Do not include markdown fences or any text outside the JSON object.
 
 Transcripts follow below:

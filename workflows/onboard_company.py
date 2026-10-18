@@ -9,7 +9,8 @@ Steps:
   3. Fetch raw data  (data_fetch: concalls, news, shareholding, financials, insights)
   4. Extract insight values  (extract_insights_values: LLM metric table from PDFs)
   5. Fetch ValuePickr forum analysis  (valuepickr_fetcher)
-  6. Run full analysis  (full_company_analysis: transcript + financials + valuation → master_report)
+  6. Build sector profile  (sector_analysis: Screener scrape + LLM enrichment → sector_profiles/{sym}.json)
+  7. Run full analysis  (full_company_analysis: transcript + financials + valuation → master_report)
 
 Usage:
     python -m workflows.onboard_company EIEL \\
@@ -122,7 +123,7 @@ def _run_data_fetch(symbol: str, skip_cdp: bool) -> None:
         fetch_shareholding=not skip_cdp,
         fetch_financials=not skip_cdp,
         fetch_insights=not skip_cdp,
-        transcript_limit=8,   # fetch more for a new company
+        transcript_limit=4,   # last 4 quarters for a new company
         news_limit=10,
     )
 
@@ -137,6 +138,12 @@ def _run_valuepickr(symbol: str, name: str) -> None:
     path = vp_run(symbol=symbol, company_name=name, verbose=True)
     if not path:
         print(f"  [valuepickr] No thread found for {symbol} — continuing")
+
+
+def _run_sector_profile(symbol: str, screener_url: str) -> None:
+    from workflows.sector_analysis import fetch_profile  # noqa: PLC0415
+    holding = {"symbol": symbol.upper(), "screener_url": screener_url}
+    fetch_profile(symbol=symbol.upper(), holding=holding, use_llm=True, refresh=True)
 
 
 def _run_full_analysis(symbol: str) -> None:
@@ -190,7 +197,7 @@ def run(
             print("  ✓ Chrome CDP detected — all steps will run (incl. shareholding, financials, insights)\n")
 
     # 1. watchlist.yaml
-    print("STEP 1/6 — watchlist.yaml")
+    print("STEP 1/7 — watchlist.yaml")
     _add_to_watchlist(
         symbol=symbol,
         name=name,
@@ -202,37 +209,44 @@ def run(
         peers=peers,
     )
 
-    # 2. folder structure
-    print("\nSTEP 2/6 — folder structure")
+    # 2. folder structure + meta.json
+    print("\nSTEP 2/7 — folder structure + meta.json")
     _create_folders(symbol)
+    from skills.company_meta import store_company_meta  # noqa: PLC0415
+    store_company_meta(symbol=symbol, name=name, screener_url=screener_url, sector=sector)
+    print(f"  [meta]      ✓ data/companies/{symbol}/meta.json")
 
     # 3. data fetch
     cdp_note = " [shareholding/financials/insights SKIPPED — Chrome CDP not running]" if skip_cdp else ""
     _step(
-        f"3/6 — data_fetch ({symbol}): concalls, news" + ("" if skip_cdp else ", shareholding, financials, insights") + cdp_note,
+        f"3/7 — data_fetch ({symbol}): concalls, news" + ("" if skip_cdp else ", shareholding, financials, insights") + cdp_note,
         _run_data_fetch, symbol, skip_cdp,
     )
 
     # 4. extract insight values (LLM over transcripts)
-    _step("4/6 — extract_insights_values (LLM quarterly metric table)", _run_extract_insights, symbol)
+    _step("4/7 — extract_insights_values (LLM quarterly metric table)", _run_extract_insights, symbol)
 
     # 5. valuepickr forum
-    _step("5/6 — valuepickr_fetcher (expert forum analysis)", _run_valuepickr, symbol, name)
+    _step("5/7 — valuepickr_fetcher (expert forum analysis)", _run_valuepickr, symbol, name)
 
-    # 6. full LLM analysis
+    # 6. sector profile (Screener scrape + LLM enrichment → valuation context)
+    _step("6/7 — sector_analysis (sector profile for valuation context)", _run_sector_profile, symbol, screener_url)
+
+    # 7. full LLM analysis
     if skip_analysis:
         print(f"\n{'─'*60}")
-        print("  STEP 6/6 — full_company_analysis [SKIPPED via --no-analysis]")
+        print("  STEP 7/7 — full_company_analysis [SKIPPED via --no-analysis]")
         print("  Run manually when ready:")
         print(f"    python -m workflows.full_company_analysis {symbol}")
     else:
-        _step("6/6 — full_company_analysis (transcript + financials + valuation → master_report)", _run_full_analysis, symbol)
+        _step("7/7 — full_company_analysis (transcript + financials + valuation → master_report)", _run_full_analysis, symbol)
 
     print(f"\n{'='*60}")
     print(f"  ONBOARD COMPLETE: {symbol}")
     print(f"{'='*60}")
     print(f"  Reports → data/companies/{symbol}/reports/")
     print(f"  ValuePickr → data/companies/{symbol}/valuepickr.md")
+    print(f"  Sector profile → data/sector_profiles/{symbol}.json")
     print(f"  Master report → data/companies/{symbol}/reports/master_report.md")
     if skip_cdp:
         print()

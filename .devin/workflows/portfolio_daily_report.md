@@ -28,7 +28,7 @@ Report saved to `portfolio/ZV3899/{today}/daily_report.md`.
 | Section | Purpose |
 |---|---|
 | **Overview** | Invested / current value / total P&L |
-| **Position Sizing** | Alert if any stock ≥5% of portfolio (with ₹ to reduce) |
+| **Position Sizing** | Alert if invested allocation >5%. Alert yellow if present value >15%, red (book profit) if >20% |
 | **DMA Status** | 🔴 below 200 DMA (reduce) / 🟢 >+10% above (avg-up) with both 50+200 |
 | **Top 20 Holdings** | Biggest positions with invested, current, 50 DMA, 200 DMA, vs-200% |
 | **Portfolio Concentration** | Cumulative % table sorted by value — see which N stocks = 50/70/90% |

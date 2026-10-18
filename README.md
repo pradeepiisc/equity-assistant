@@ -53,7 +53,7 @@ Workflows (orchestrators, multi-company or multi-skill)
   workflows/news_digest.py                → news headlines for top holdings + watchlist
   workflows/news_material_events.py       → filter digest for actionable alerts
   workflows/onboard_company.py            → add to watchlist + full data + analysis pipeline (one command)
-  workflows/earnings_season.py            → CDP shareholding delta + transcripts + DMA → quarterly report
+  workflows/earnings_season.py            → CDP shareholding/financials (parallel) + transcripts → quarterly report
 
 Data store (local filesystem)
 ─────────────────────────────
@@ -102,6 +102,8 @@ Configuration
 | **Growth ranking (all portfolio)** | `python -m workflows.growth_ranking` | `portfolio/.../growth_ranking.md` |
 | **Valuation (top N holdings)** | `python -m workflows.top_holdings_valuation` | per-company valuation reports |
 | **Sector comparison** | `python -m workflows.sector_analysis` | `data/sector_profiles/*.json` |
+| **Earnings shareholding fetch** | `python -m workflows.earnings_season --fetch-sh` | `data/earnings_season/.../shareholding.md` |
+| **Earnings financials fetch** | `python -m workflows.earnings_season --fetch-fin` | `data/earnings_season/.../results.md` |
 
 ---
 
