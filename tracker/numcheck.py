@@ -247,6 +247,17 @@ def _roles_from_periods(tokens: list, per: tuple) -> list | None:
     return roles if "Q" in roles else None
 
 
+def _roles_from_halves(lines: list[str], half: int, period) -> list | None:
+    """Roles of one half of a side-by-side table, from a header line dating all its columns."""
+    if not period:
+        return None
+    for ln in reversed(lines):
+        ds = _dates_in(ln)
+        if len(ds) == 2 * half and ds[:half] == ds[half:]:
+            return _roles_from_dates(ds[:half], period)
+    return None
+
+
 def _header_cols(lines: list[str], n: int, period: tuple[int, int] | None) -> list | None:
     """Column roles from the header lines above a table row, if they name the n columns' periods:
     dates (Sept 30, 2026 | 30.06.2026 | …, in any order), labels (Q2 FY27 | Q2 FY26 | YoY | …), or a line of month
@@ -297,6 +308,13 @@ def parse(pages: list[str], period: str | None = None) -> list[Row]:
         segment = False
         eps_ctx = 0
         header_cache: dict[int, list] = {}
+        # standalone and consolidated side by side in one table ("Standalone | Consolidated" over twice the columns)
+        side = None
+        for hl in lines[:40]:
+            hm = re.search(r"\b(standalone|consolidated)\b.{0,80}\b(standalone|consolidated)\b", hl, re.I)
+            if hm and hm.group(1).lower() != hm.group(2).lower():
+                side = (hm.group(1).lower(), hm.group(2).lower())
+                break
         fvm = re.search(r"face\s+value[^\d\n]{0,40}?(\d+(?:\.\d+)?)\s*/?-?", text, re.I)
         fv = float(fvm.group(1)) if fvm and 0 < float(fvm.group(1)) <= 1000 else None
         for i, ln in enumerate(lines):
@@ -332,8 +350,21 @@ def parse(pages: list[str], period: str | None = None) -> list[Row]:
                 cols = {6: ["Q", "PQ", "YQ", "YTD", "YTDp", "FY"], 4: ["Q", "PQ", "YQ", "FY"],
                         5: ["Q", "PQ", "YQ", None, None], 3: ["Q", "PQ", "YQ"]}.get(n, [None] * n)
             is_eps = bool(eps_ctx and re.search(r"basic|diluted", label, re.I)) or bool(EPS_HEAD.search(label))
+            raw = [v.strip() for v in vals]
+            if side and n % 2 == 0 and n >= 4:
+                half = n // 2           # one row per statement, each with its own half of the columns
+                hcols = (_header_cols(lines[max(0, i - 16):i], half, per) or
+                         [c for c in (cols or [])[:half]] if cols and "Q" in (cols or [])[:half] else None)
+                if hcols is None:
+                    hcols = _roles_from_halves(lines[max(0, i - 16):i], half, per)
+                for k, b in enumerate(side):
+                    rows.append(Row(label, nums[k * half:(k + 1) * half], pno, None if is_eps else unit, b,
+                                    list(hcols) if hcols else [None] * half, eps=is_eps,
+                                    segment=segment and not METRICS["revenue"].search(label),
+                                    raw=raw[k * half:(k + 1) * half], fv=fv))
+                continue
             rows.append(Row(label, nums, pno, None if is_eps else unit, basis, cols or [None] * n, eps=is_eps,
-                            segment=segment and not METRICS["revenue"].search(label), raw=[v.strip() for v in vals], fv=fv,
+                            segment=segment and not METRICS["revenue"].search(label), raw=raw, fv=fv,
                             positional=positional))
     # a statement whose header OCR couldn't read takes the column roles of another statement of the filing with as
     # many columns (the standalone and consolidated statements share their format) — STOVEKRAFT Q2 FY27 p.8
@@ -380,7 +411,8 @@ def identities(rows: list[Row], basis: str | None) -> dict:
     r, t = get["revenue"], get["total_income"]
     income = []                       # revenue … total income: other income, other gains, and so on
     if r and t and r.page == t.page and r in rows and t in rows and rows.index(r) < rows.index(t):
-        income = [x for x in rows[rows.index(r):rows.index(t)] if x.page == r.page and x.cols == r.cols]
+        income = [x for x in rows[rows.index(r):rows.index(t)] if x.page == r.page and x.cols == r.cols
+                  and x.basis == r.basis]
     for col in ("Q", "PQ", "YQ"):
         if income and t.at(col) is not None and all(x.at(col) is not None for x in income):
             total = sum(x.at(col) for x in income)
