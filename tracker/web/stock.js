@@ -4,9 +4,11 @@ import { api, post, useApi, fmt, Phase, Delta, Tile, EventList, Empty, Markdown,
 import { PriceChart, BarMini, LineMini } from './charts.js';
 import { StockOrderBook } from './orders.js';
 import { ScoreTab, Action } from './priorities.js';
+import { CompanyNotes } from './notes.js';
+import { CompanyDetail } from './companies.js';
 
 const RANGES = [['3M', 63], ['6M', 126], ['1Y', 250], ['All', 9999]];
-const TABS = [['timeline', 'Timeline'], ['score', 'Score & estimates'], ['orders', 'Orders'], ['outlook', 'Concall & outlook'],
+const TABS = [['fin', 'Financials & estimates'], ['timeline', 'Timeline'], ['score', 'Score'], ['orders', 'Orders'], ['outlook', 'Concall & outlook'],
               ['holding', 'Shareholding & deals'], ['notes', 'Notes'], ['research', 'Reports']];
 const qlabel = q => { const [y, m] = q.split('-'); return `${['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][+m]} ${y.slice(2)}`; };
 
@@ -14,9 +16,9 @@ export function StockPage({ sid, version, tab: initialTab }) {
   const { data, error, loading, reload } = useApi(`/stock/${encodeURIComponent(sid)}`, [sid, version]);
   const chart = useApi(`/stock/${encodeURIComponent(sid)}/chart?days=400`, [sid]);
   const score = useApi(`/score/${encodeURIComponent(sid)}`, [sid, version]);
-  const [tab, setTab] = useState(initialTab || 'timeline');
+  const [tab, setTab] = useState(initialTab || 'fin');
 
-  if (error) return html`<div class="card"><p class="err">Couldn't load ${sid}: ${error.message}</p><a href="#/stocks">← Stocks</a></div>`;
+  if (error) return html`<div class="card"><p class="err">Couldn't load ${sid}: ${error.message}</p><a href="#/companies">← Companies</a></div>`;
   if (!data) return html`<div class="muted">Loading ${sid}…</div>`;
   const { stock: s, technicals: t, holding: h, research: r } = data;
 
@@ -33,7 +35,7 @@ export function StockPage({ sid, version, tab: initialTab }) {
       <div class="s-head">
         <div>
           <div class="row small muted" style="margin-bottom:4px">
-            <a href="#/stocks">Stocks</a><span>/</span><span>${s.sector || 'Sector n/a'}</span>
+            <a href="#/companies">Companies</a><span>/</span><span>${s.sector || 'Sector n/a'}</span>
           </div>
           <h1>${s.sid} <span class="ink2" style="font-weight:400;font-size:18px">${s.name}</span></h1>
           <div class="row wrap" style="margin-top:6px">
@@ -54,6 +56,8 @@ export function StockPage({ sid, version, tab: initialTab }) {
         </div>`}
         ${!s.in_watchlist && !s.in_portfolio ? html`<button class="btn" onClick=${addWatch}>+ Watchlist</button>` : null}
       </div>
+
+      ${data.profile && html`<${About} p=${data.profile} />`}
 
       <div class="tiles">
         <${Tile} label="Trend phase" value=${html`<${Phase} p=${t && t.phase} />`}
@@ -82,14 +86,34 @@ export function StockPage({ sid, version, tab: initialTab }) {
       <div class="tabs" role="tablist">
         ${TABS.map(([k, label]) => html`<button role="tab" aria-selected=${tab === k} class=${tab === k ? 'on' : ''} onClick=${() => setTab(k)}>${label}</button>`)}
       </div>
+      ${tab === 'fin' && html`<div class="card"><${CompanyDetail} sid=${s.sid} version=${version} /></div>`}
       ${tab === 'timeline' && html`<${Timeline} events=${data.events} />`}
-      ${tab === 'outlook' && html`<${Outlook} r=${r} />`}
+      ${tab === 'outlook' && html`<div class="stack"><div class="card"><h2>Company notes <span class="muted">last four quarters → latest view</span></h2>
+        <${CompanyNotes} sid=${s.sid} version=${version} /></div><${Outlook} r=${r} /></div>`}
       ${tab === 'score' && html`<${ScoreTab} sid=${s.sid} />`}
       ${tab === 'orders' && html`<${Orders} data=${data} />`}
       ${tab === 'holding' && html`<${Holding} data=${data} />`}
       ${tab === 'notes' && html`<${NotesTab} mentions=${data.mentions} sid=${s.sid} />`}
       ${tab === 'research' && html`<${Reports} r=${r} />`}
     </div>`;
+}
+
+// what the company does and which markets its revenue depends on (profiles.py, written by the local model)
+function About({ p }) {
+  const markets = asList(p.end_markets).filter(m => m && m.market);
+  return html`<div class="card about-card" style="margin-top:12px">
+    <h2>About the company <span class="muted">${p.sector || ''}${p.business_type ? ' · ' + p.business_type : ''}</span></h2>
+    <p style="margin:6px 0 10px">${p.description}</p>
+    ${markets.length ? html`<div class="row wrap" style="gap:6px;margin-bottom:8px">
+      <span class="muted small">Markets</span>
+      ${markets.map(m => html`<span class="chip" title=${m.how || ''}>${m.market}<span class="muted"> · ${m.link === 'indirect' ? 'indirect' : 'direct'}</span></span>`)}
+    </div>` : null}
+    ${asList(p.exposures).length ? html`<div class="row wrap" style="gap:6px;margin-bottom:6px">
+      <span class="muted small">Exposures</span>${asList(p.exposures).map(x => html`<span class="chip">${x}</span>`)}
+    </div>` : null}
+    ${asList(p.sensitive_to).length ? html`<div class="small muted">Sensitive to: ${asList(p.sensitive_to).join(' · ')}</div>` : null}
+    <div class="small muted" style="margin-top:6px">Profile written ${fmt.date(p.updated_at, true)} from Screener, concall notes and research reports</div>
+  </div>`;
 }
 
 function ChartBlock({ chart }) {
@@ -321,7 +345,7 @@ function NamedHolders({ holders }) {
 }
 
 function NotesTab({ mentions, sid }) {
-  if (!mentions.length) return html`<div class="card"><${Empty}>No notes mention ${sid}. Add one on the <a href="#/notes">Notes</a> page using <code>$${sid}</code>.<//></div>`;
+  if (!mentions.length) return html`<div class="card"><${Empty}>No notes mention ${sid}. Add one on the <a href="#/notes?tab=yours">Notes</a> page using <code>$${sid}</code>.<//></div>`;
   return html`<div class="card"><div class="evlist">${mentions.map(m => html`<div class="ev">
     <div class="ev-when">${fmt.date(m.d, true)}</div>
     <div><div class="row"><span class="badge">${m.stance}</span><b>${m.title}</b>${m.channel && html`<span class="muted small">${m.channel}</span>`}

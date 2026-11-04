@@ -816,9 +816,9 @@ stocks:
 
   - symbol: SIYARAM
     screener_symbol: SIYARAM
-    name: Siyaram Silk Mills Ltd
+    name: Siyaram Recycling Industries Ltd
     exchange: BSE
-    sector: Textiles - Blended Fabrics
+    sector: Metals - Non-Ferrous Recycling (Brass)
     screener_url: https://www.screener.in/company/544047/
 
   - symbol: LOTUSDEV

@@ -62,7 +62,17 @@ def _ttm(vals: list[float | None], n: int = 4) -> float | None:
 
 
 def quarterly(conn: sqlite3.Connection, s) -> dict:
-    """Quarterly sales / OPM / EPS / PAT, oldest first — NSE XBRL when it has 8 quarters, else Screener."""
+    """Sales / OPM / EPS / PAT per reported period, oldest first: the merged history of model.py (Screener's file
+    with NSE XBRL and the read results filings on top), so the latest results count the day they are filed."""
+    from . import model
+
+    h = model.history(conn, s)
+    ps = [p for p in h["periods"] if p["sales"] is not None]
+    if ps:
+        srcs = sorted({p["source"].split(" (")[0] for p in ps[-h["per_year"]:] if p["source"]})
+        return {"source": " + ".join(srcs), "labels": [p["label"] for p in ps], "sales": [p["sales"] for p in ps],
+                "eps": [p["eps"] for p in ps], "pat": [p["pat"] for p in ps], "opm": [p["opm"] for p in ps],
+                "n": h["per_year"], "latest": ps[-1]["label"]}
     for basis in ("consolidated", "standalone"):
         rows = conn.execute("SELECT * FROM financials_q WHERE sid=? AND basis=? AND months=3 ORDER BY period_end",
                             (s["sid"], basis)).fetchall()
@@ -125,6 +135,15 @@ def forward(conn: sqlite3.Connection, s, settings: dict, pts: list[dict], q: dic
     today = now_ist().date()
     fy = _fy(today)
     rev = metrics.revenue(conn, s)
+    n_q = q.get("n", 4)
+    if len(q.get("sales") or []) >= n_q and all(v is not None for v in q["sales"][-n_q:]):
+        # the same series as EPS and the trend (metrics.revenue can be another source, period or — for a
+        # half-yearly company — a two-year sum)
+        from . import model
+        lab = q["labels"][-1]
+        mm = re.match(r"([QH])(\d) FY(\d{2})", lab)
+        end = model.period_end(2000 + int(mm.group(3)), int(mm.group(2)), mm.group(1) == "H").isoformat() if mm else rev.get("period_end")
+        rev = {"value": round(sum(q["sales"][-n_q:]), 2), "label": f"TTM to {lab} · {q.get('source')}", "period_end": end}
     rev_ttm = rev["value"]
     sc = metrics.screener_summary(s["folder"])
     annual = (sc.get("annual") or {}).get("Sales") or (sc.get("annual") or {}).get("Revenue") or {}
@@ -135,6 +154,8 @@ def forward(conn: sqlite3.Connection, s, settings: dict, pts: list[dict], q: dic
     end = rev.get("period_end")
     g = guid.get("revenue")
     gfy = _fy_of(g["period"]) if g else None
+    if g and re.match(r"\s*[QH][1-4]", g.get("period") or "", re.I):
+        g = None                       # a quarter's or a half's target is not the year's revenue
     if g and gfy in (fy, fy + 1) and g["unit"] in ("cr", None):
         mid = ((g["low"] or g["high"]) + (g["high"] or g["low"])) / 2
         n12 = _next12(mid, gfy, rev_ttm, end)
@@ -142,6 +163,8 @@ def forward(conn: sqlite3.Connection, s, settings: dict, pts: list[dict], q: dic
             options.append({"basis": "guidance", "value": n12, "fy": gfy, "quote": g["quote"], "page": g["page"],
                             "note": f"guided ₹{mid:,.0f} Cr for FY{str(gfy)[2:]} → next 12 months"})
     g = guid.get("revenue_growth")
+    if g and re.match(r"\s*[QH][1-4]", g.get("period") or "", re.I):
+        g = None
     gfy = (_fy_of(g["period"]) or fy) if g else None
     if g and gfy in (fy, fy + 1) and (last_fy_rev or rev_ttm):
         mid = ((g["low"] if g["low"] is not None else g["high"]) + (g["high"] if g["high"] is not None else g["low"])) / 2
@@ -167,7 +190,8 @@ def forward(conn: sqlite3.Connection, s, settings: dict, pts: list[dict], q: dic
             options.append({"basis": "order_book", "value": round(max(yearly, 0.0), 1), "fy": None,
                             "note": f"₹{book:,.0f} Cr book over {months:g} months{how}"})
     sales = q.get("sales") or []
-    t0, t1 = _ttm(sales[:-4]) if len(sales) >= 8 else None, _ttm(sales)
+    n = q.get("n", 4)
+    t0, t1 = _ttm(sales[:-n], n) if len(sales) >= 2 * n else None, _ttm(sales, n)
     trend = round((t1 / t0 - 1) * 100, 1) if t0 and t1 and t0 > 0 else None
     if rev_ttm and trend is not None:
         options.append({"basis": "trend", "value": round(rev_ttm * (1 + _clip(trend, -30, 60) / 100), 1), "fy": None,
@@ -175,11 +199,11 @@ def forward(conn: sqlite3.Connection, s, settings: dict, pts: list[dict], q: dic
     chosen = next((o for b in ("guidance", "order_book", "trend") for o in options if o["basis"] == b), None)
 
     eps = q.get("eps") or []
-    eps_ttm, eps_prev = _ttm(eps), (_ttm(eps[:-4]) if len(eps) >= 8 else None)
+    eps_ttm, eps_prev = _ttm(eps, n), (_ttm(eps[:-n], n) if len(eps) >= 2 * n else None)
     eps_g = round((eps_ttm / eps_prev - 1) * 100, 1) if eps_ttm and eps_prev and eps_prev > 0 else None
     opm = [v for v in (q.get("opm") or []) if v is not None]
-    opm_ttm = sum(opm[-4:]) / 4 if len(opm) >= 4 else None
-    opm_prev = sum(opm[-8:-4]) / 4 if len(opm) >= 8 else None
+    opm_ttm = sum(opm[-n:]) / n if len(opm) >= n else None
+    opm_prev = sum(opm[-2 * n:-n]) / n if len(opm) >= 2 * n else None
     margin_g = guid.get("ebitda_margin")
     margin_factor, margin_note = 1.0, "at the current margin"
     if margin_g and opm_ttm and opm_ttm > 0 and (margin_g["low"] or margin_g["high"]):

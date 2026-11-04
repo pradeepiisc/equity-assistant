@@ -44,7 +44,7 @@ class Http:
         self.min_interval = min_interval
         self._last: dict[str, float] = {}
 
-    def get(self, url: str, retries: int = 2) -> httpx.Response:
+    def get(self, url: str, retries: int = 2, headers: dict | None = None) -> httpx.Response:
         host = httpx.URL(url).host
         for attempt in range(retries + 1):
             wait = self.min_interval - (time.monotonic() - self._last.get(host, 0))
@@ -52,7 +52,7 @@ class Http:
                 time.sleep(wait)
             self._last[host] = time.monotonic()
             try:
-                r = self.client.get(url)
+                r = self.client.get(url, headers=headers)
             except httpx.HTTPError:
                 if attempt == retries:
                     raise

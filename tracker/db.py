@@ -363,6 +363,59 @@ CREATE TABLE IF NOT EXISTS financials_q (       -- NSE results XBRL (no LLM)
     PRIMARY KEY (sid, period_end, months, basis)
 );
 
+-- ── company notes: per-quarter condensed notes, the latest view, commitments checked ──
+CREATE TABLE IF NOT EXISTS company_notes (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    sid TEXT NOT NULL,
+    period TEXT NOT NULL,          -- Q2 FY27
+    period_end TEXT,               -- 2026-09-30
+    source TEXT NOT NULL,          -- concall | presentation | reports (back-filled from earlier reports)
+    doc_id INTEGER,
+    url TEXT,
+    note TEXT,                     -- json: business, guidance, commitments, triggers, tailwinds, headwinds, policy, risks, tone
+    created_at TEXT,
+    UNIQUE (sid, period, source)
+);
+CREATE INDEX IF NOT EXISTS ix_cnotes_sid ON company_notes(sid, period_end);
+
+CREATE TABLE IF NOT EXISTS company_view (     -- the latest synthesis over the last four quarters
+    sid TEXT PRIMARY KEY,
+    view TEXT,                     -- json: what_it_does, sector, story, triggers, watch, delivery, trend, risks, one_line
+    based_on TEXT,                 -- json list of periods used
+    updated_at TEXT,
+    model TEXT
+);
+
+CREATE TABLE IF NOT EXISTS commitment_checks (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    sid TEXT NOT NULL,
+    commitment TEXT,
+    said_in TEXT,
+    checked_in TEXT,
+    status TEXT,                   -- delivered | partly | missed | pending | changed
+    evidence TEXT,
+    quote TEXT,
+    page INTEGER,
+    verified REAL,
+    doc_id INTEGER,
+    url TEXT,
+    created_at TEXT
+);
+CREATE INDEX IF NOT EXISTS ix_checks_sid ON commitment_checks(sid, checked_in);
+
+CREATE TABLE IF NOT EXISTS results_reviews (  -- one per company per quarter: XBRL numbers and/or the AI read
+    sid TEXT NOT NULL,
+    period TEXT NOT NULL,          -- Q2 FY27
+    period_end TEXT,
+    basis TEXT,
+    numbers TEXT,                  -- json from XBRL (exact) or the results PDF
+    review TEXT,                   -- json from the AI read: summary, anomalies, vs_commitments, verdict
+    event_id INTEGER,
+    doc_id INTEGER,
+    updated_at TEXT,
+    PRIMARY KEY (sid, period)
+);
+
 CREATE TABLE IF NOT EXISTS llm_calls (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     ts TEXT,
@@ -399,7 +452,26 @@ CREATE TABLE IF NOT EXISTS job_runs (
 MIGRATIONS = [  # columns added after a table first shipped (ALTER is a no-op error when present)
     "ALTER TABLE orders ADD COLUMN dated INTEGER DEFAULT 1",
     "ALTER TABLE guidance ADD COLUMN scope TEXT",          # total | a segment (only total drives estimates)
+    "ALTER TABLE documents ADD COLUMN summary TEXT",       # json list: the 3–5 line summary of the document
+    "ALTER TABLE documents ADD COLUMN numcheck TEXT",      # json: numcheck.py's fixes / dropped lines for the read
+    "CREATE INDEX IF NOT EXISTS ix_feed_url ON feed_items(feed, url)",   # RSS and API copies of one filing
+    "CREATE TABLE IF NOT EXISTS valuations (id INTEGER PRIMARY KEY AUTOINCREMENT, sid TEXT NOT NULL, created_at TEXT, "
+    "model TEXT, inputs_hash TEXT, memo TEXT)",                           # valuation.py: the analyst-prompt memo
+    "CREATE INDEX IF NOT EXISTS ix_valuations_sid ON valuations(sid, id)",
+    "CREATE TABLE IF NOT EXISTS exits (sid TEXT NOT NULL, account TEXT NOT NULL, exited_on TEXT NOT NULL, "
+    "quantity REAL, avg_price REAL, PRIMARY KEY (sid, account, exited_on))",   # a stock that left every account
+    "ALTER TABLE stocks ADD COLUMN exited_on TEXT",        # latest exit (kept on the watchlist for a year)
+    "CREATE TABLE IF NOT EXISTS company_profiles (sid TEXT PRIMARY KEY, description TEXT, sector TEXT, "
+    "business_type TEXT, products TEXT, end_markets TEXT, exposures TEXT, sensitive_to TEXT, sources TEXT, model TEXT, "
+    "created_at TEXT, updated_at TEXT)",                   # profiles.py: what it does, end-markets, exposures (json lists)
+    "CREATE TABLE IF NOT EXISTS policy_releases (prid INTEGER PRIMARY KEY, ministry TEXT, title TEXT, url TEXT, "
+    "posted_at TEXT, text TEXT, relevant INTEGER, matches TEXT, model TEXT, fetched_at TEXT, matched_at TEXT)",  # policy.py: PIB
+    "CREATE TABLE IF NOT EXISTS shadow_reads (doc_id INTEGER PRIMARY KEY, model TEXT, summary TEXT, numcheck TEXT, "
+    "secs REAL, created_at TEXT)",                           # extract.shadow_read: the local model's read of a filing
 ]
+
+
+_SCHEMA_DONE: dict[str, bool] = {}
 
 
 def connect() -> sqlite3.Connection:
@@ -407,11 +479,14 @@ def connect() -> sqlite3.Connection:
     gi = TRACKER_DIR / ".gitignore"
     if not gi.exists():
         gi.write_text("# tracker database and raw exchange files stay local\n*\n")
-    conn = sqlite3.connect(DB_PATH, timeout=30)
+    conn = sqlite3.connect(DB_PATH, timeout=60)
     conn.row_factory = sqlite3.Row
-    conn.execute("PRAGMA journal_mode=WAL")
     conn.execute("PRAGMA synchronous=NORMAL")
+    if _SCHEMA_DONE.get(str(DB_PATH)):
+        return conn                        # schema already ensured by this process: no write lock needed to read
+    conn.execute("PRAGMA journal_mode=WAL")
     conn.executescript(SCHEMA)
+    _SCHEMA_DONE[str(DB_PATH)] = True
     for stmt in MIGRATIONS:
         try:
             conn.execute(stmt)

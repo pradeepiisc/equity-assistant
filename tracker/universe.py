@@ -144,6 +144,11 @@ def _financial_summary(folder: str | None) -> tuple[float | None, float | None]:
     sales_ttm = None
     q = text.split("## Quarterly Results", 1)
     if len(q) == 2:
+        header = next((ln for ln in q[1].splitlines() if "|" in ln), "")   # the heading is followed by a blank line
+        heads = re.findall(r"([A-Z][a-z]{2}) (\d{4})", header)
+        mon = {m: i for i, m in enumerate(["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"], 1)}
+        ends = [int(y) * 12 + mon.get(m, 0) for m, y in heads]
+        per_year = 2 if len(ends) >= 3 and all(b - a == 6 for a, b in zip(ends[-3:], ends[-2:])) else 4
         for line in q[1].splitlines():
             if line.strip().startswith(("Sales", "Revenue")) and "|" in line:
                 vals = []
@@ -153,8 +158,8 @@ def _financial_summary(folder: str | None) -> tuple[float | None, float | None]:
                         vals.append(float(cell))
                     except ValueError:
                         pass
-                if len(vals) >= 4:
-                    sales_ttm = sum(vals[-4:])
+                if len(vals) >= per_year:      # a year of periods: four quarters, or two half-years for SMEs
+                    sales_ttm = sum(vals[-per_year:])
                 break
             if line.startswith("---"):
                 break
@@ -170,11 +175,15 @@ def sync_universe(conn: sqlite3.Connection, accounts: list[str], log=print) -> d
 
     # ── holdings ──
     conn.execute("UPDATE stocks SET in_portfolio=0, in_watchlist=0")
+    before = {(r["account"], r["sid"]): r for r in conn.execute(
+        "SELECT account, sid, quantity, avg_price FROM holdings WHERE quantity > 0").fetchall()}
+    refreshed: dict[str, str] = {}
     for acct in accounts:
         hf = PORTFOLIO_DIR / acct / "holdings" / "holdings.json"
         if not hf.exists():
             continue
         as_of = datetime.fromtimestamp(hf.stat().st_mtime, IST).date().isoformat()
+        refreshed[acct] = as_of
         conn.execute("DELETE FROM holdings WHERE account=?", (acct,))
         for h in json.loads(hf.read_text()):
             res = resolve(conn, h.get("symbol", ""), h.get("exchange", ""), h.get("isin", ""))
@@ -202,6 +211,11 @@ def sync_universe(conn: sqlite3.Connection, accounts: list[str], log=print) -> d
     conn.execute(
         "UPDATE stocks SET in_portfolio=1 WHERE sid IN (SELECT sid FROM holdings WHERE quantity > 0)"
     )
+    held_now = {r[0] for r in conn.execute("SELECT DISTINCT sid FROM holdings WHERE quantity > 0")}
+    for (acct, sid), r in before.items():
+        if acct in refreshed and sid not in held_now:     # gone from every account → an exit
+            conn.execute("INSERT OR IGNORE INTO exits(sid, account, exited_on, quantity, avg_price) VALUES(?,?,?,?,?)",
+                         (sid, acct, refreshed[acct], r["quantity"], r["avg_price"]))
 
     # ── watchlist ──
     for w in _yaml_stocks("watchlist.yaml"):
@@ -221,6 +235,12 @@ def sync_universe(conn: sqlite3.Connection, accounts: list[str], log=print) -> d
             mcap_cr=mcap, sales_ttm_cr=sales,
         )
         conn.execute("UPDATE stocks SET in_watchlist=1 WHERE sid=?", (res["sid"],))
+
+    # ── exited in the last year: stays watched (results, filings, signals) unless bought back ──
+    conn.execute("UPDATE stocks SET exited_on=NULL")
+    cutoff = (now_ist().date().replace(year=now_ist().year - 1)).isoformat()
+    for r in conn.execute("SELECT sid, MAX(exited_on) d FROM exits WHERE exited_on >= ? GROUP BY sid", (cutoff,)).fetchall():
+        conn.execute("UPDATE stocks SET exited_on=?, in_watchlist=1 WHERE sid=? AND in_portfolio=0", (r["d"], r["sid"]))
 
     # ── notes ── (mentions are resolved by notes.index; flag is derived here)
     conn.execute("UPDATE stocks SET in_notes = CASE WHEN sid IN "

@@ -12,3 +12,8 @@ websocket-client>=1.7.0
 matplotlib>=3.8.0
 fastapi>=0.111.0
 uvicorn>=0.30.0
+# tracker (stock tracker dashboard, tracker/SETUP.md)
+pypdfium2>=4.30.0
+pandas>=2.2.0
+numpy>=1.26.0
+requests>=2.32.0

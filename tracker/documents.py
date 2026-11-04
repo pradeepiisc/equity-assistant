@@ -23,7 +23,7 @@ import json
 import re
 import sqlite3
 import time
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from pathlib import Path
 
 from .config import COMPANIES_DIR, ROOT, TRACKER_DIR
@@ -81,6 +81,25 @@ def quarter_label(year: int, month: int) -> str:
     fy = year + 1 if month >= 4 else year
     q = {3: 4, 6: 1, 9: 2, 12: 3}.get(month) or ((month - 4) % 12) // 3 + 1
     return f"Q{q}FY{str(fy)[2:]}"
+
+
+def settle_event(conn: sqlite3.Connection, event_id: int | None, *, severity: str | None = None, title: str | None = None,
+                 detail: str | None = None) -> None:
+    """Finish a filing event that waited for the AI read: restore its severity (or set one) and attach the summary.
+
+    Filings that go to the LLM are created at low severity so the inbox gets one informative alert after
+    the read instead of a bare "Results filed" first."""
+    if not event_id:
+        return
+    row = conn.execute("SELECT severity, title, detail, data FROM events WHERE id=?", (event_id,)).fetchone()
+    if not row:
+        return
+    data = json.loads(row["data"] or "{}") if row["data"] else {}
+    sev0 = data.pop("sev0", None)
+    data.pop("pending_ai", None)
+    conn.execute("UPDATE events SET severity=?, title=?, detail=?, data=? WHERE id=?",
+                 (severity or sev0 or row["severity"], title or row["title"], detail or row["detail"],
+                  json.dumps(data, default=str), event_id))
 
 
 # ── 1. discover ─────────────────────────────────────────────────────────────
@@ -178,8 +197,32 @@ def download(conn: sqlite3.Connection, http: Http, doc: sqlite3.Row) -> str:
 def page_texts(path: Path, sha: str) -> list[str]:
     """Text of each page (cached by content hash under data/tracker/text/).
 
-    PDFium (pypdfium2, already installed with pdfplumber) — ~30× faster than pdfplumber, same text."""
+    layout.py: scanned pages OCR'd again locally, tables one row per line (`label | Q | PQ | YQ …`), the rest in
+    reading order. If that fails, PDFium's plain text (pypdfium2) as before."""
     TEXT_DIR.mkdir(parents=True, exist_ok=True)
+    cache = TEXT_DIR / f"{sha}.l2.json"
+    if cache.exists():
+        return json.loads(cache.read_text())["pages"]
+    try:
+        from . import layout
+        pages, how = layout.page_texts(path, MAX_SCAN_PAGES)
+        cache.write_text(json.dumps({"pages": pages, "how": how}))
+        return pages
+    except Exception:
+        pass
+    return plain_page_texts(path, sha)
+
+
+def page_modes(sha: str) -> list[str]:
+    """How each page was read: 'ocr' | 'rows' | 'text' (empty before the layout read)."""
+    cache = TEXT_DIR / f"{sha}.l2.json"
+    return json.loads(cache.read_text()).get("how", []) if cache.exists() else []
+
+
+def plain_page_texts(path: Path, sha: str) -> list[str]:
+    """The PDF's own text layer per page, as the tracker read it before layout.py (cached as data/tracker/text/<sha>.json).
+
+    PDFium (pypdfium2, already installed with pdfplumber) — ~30× faster than pdfplumber, same text."""
     cache = TEXT_DIR / f"{sha}.json"
     if cache.exists():
         return json.loads(cache.read_text())
@@ -237,18 +280,22 @@ def prepare(conn: sqlite3.Connection, doc: sqlite3.Row) -> str:
     if twin:
         conn.execute("UPDATE documents SET sha256=?, status='duplicate', dup_of=?, updated_at=? WHERE id=?",
                      (sha, twin["id"], stamp, doc["id"]))
+        settle_event(conn, doc["event_id"], severity="low", detail="Same document as one already read — see the earlier filing.")
         return "duplicate"
     pages = page_texts(path, sha)
     chars = sum(len(p) for p in pages)
     hits = score_pages(pages)
     strong = sum(v for h in hits.values() for k, v in h.items() if k in STRONG)
+    fin = sum(h.get("financials", 0) for h in hits.values())
     if chars < 40 * max(1, len(pages)):
-        status = "no_text"          # scanned images (under ~40 characters a page) — no OCR here
-    elif strong < 2:
-        status = "irrelevant"
+        status = "no_text"          # scanned images that OCR couldn't read either (or tesseract is missing)
+    elif strong >= 2 or (not doc["backfill"] and (doc["kind"] == "results" or (reads_financials(doc["kind"]) and fin >= 3))):
+        status = "prepared"         # a plain results statement has only financial tables — still worth the read
     else:
-        status = "prepared"
-    keep = relevant_pages(pages, hits, 10 ** 9)
+        status = "irrelevant"
+    keep = relevant_pages(pages, hits, 10 ** 9, include_financials=reads_financials(doc["kind"]) and not doc["backfill"])
+    if not keep and status == "prepared":
+        keep = list(range(1, len(pages) + 1))
     est = sum(len(pages[i - 1]) for i in keep) // 4
     priority = doc["priority"]
     if doc["backfill"] and any("order_book" in h for h in hits.values()):
@@ -256,15 +303,43 @@ def prepare(conn: sqlite3.Connection, doc: sqlite3.Row) -> str:
     conn.execute("UPDATE documents SET sha256=?, pages=?, chars=?, hits=?, est_tokens=?, status=?, priority=?, "
                  "updated_at=? WHERE id=?", (sha, len(pages), chars, json.dumps(hits), est, status, priority, stamp,
                                              doc["id"]))
+    if status in ("irrelevant", "no_text"):
+        settle_unread(conn, doc)                     # nothing for the AI to read: show the filing as it came
     return status
 
 
-def relevant_pages(pages: list[str], hits: dict, max_tokens: int) -> list[int]:
+def settle_unread(conn: sqlite3.Connection, doc: sqlite3.Row) -> None:
+    """A filing the AI will not read. Show it as it came — except a results filing whose quarter already has
+    its own results event (XBRL numbers), which stays low so the inbox doesn't get a bare duplicate."""
+    from .results import norm_period, period_end
+
+    if doc["kind"] == "results" and doc["sid"]:
+        per = norm_period(doc["period"])
+        has = conn.execute("SELECT 1 FROM results_reviews WHERE sid=? AND period=?", (doc["sid"], per)).fetchone() or \
+            conn.execute("SELECT 1 FROM financials_q WHERE sid=? AND period_end=? AND months=3",
+                         (doc["sid"], period_end(per))).fetchone()
+        if has:
+            settle_event(conn, doc["event_id"], severity="low",
+                         detail="Not read by the AI; the quarter's numbers are in its results event.")
+            return
+    settle_event(conn, doc["event_id"])
+
+
+FINANCIAL_KINDS = ("results", "press_release", "presentation")
+
+
+def reads_financials(kind: str | None) -> bool:
+    """Documents whose results tables matter even without order-book / guidance words."""
+    return kind in FINANCIAL_KINDS
+
+
+def relevant_pages(pages: list[str], hits: dict, max_tokens: int, include_financials: bool = False) -> list[int]:
     """Pages worth sending, best first until the token cap, returned in page order."""
     def weight(h: dict) -> float:
         return (4 * h.get("order_book", 0) + 3 * h.get("order_inflow", 0) + 2 * h.get("guidance", 0)
-                + 1.5 * h.get("capex", 0) + h.get("macro", 0) + 0.3 * h.get("financials", 0))
-    ranked = sorted(((weight(h), p) for p, h in hits.items() if any(k in STRONG for k in h)), reverse=True)
+                + 1.5 * h.get("capex", 0) + h.get("macro", 0) + (1.0 if include_financials else 0.3) * h.get("financials", 0))
+    ranked = sorted(((weight(h), p) for p, h in hits.items()
+                     if any(k in STRONG for k in h) or (include_financials and h.get("financials"))), reverse=True)
     out, used = [], 0
     for _, p in ranked:
         cost = len(pages[p - 1]) // 4 + 10
@@ -308,7 +383,7 @@ def _sentence_with_value(text: str) -> str:
 
 def run(conn: sqlite3.Connection, http: Http, settings: dict, max_seconds: float | None = None) -> dict:
     """Discover → download → prepare → extract, bounded by time and the LLM budget."""
-    from . import extract
+    from . import company_notes, extract
 
     cfg = settings["documents"]
     t0 = time.monotonic()
@@ -337,6 +412,7 @@ def run(conn: sqlite3.Connection, http: Http, settings: dict, max_seconds: float
         if res != "ok":
             conn.execute("UPDATE documents SET status='failed', error=?, updated_at=? WHERE id=?",
                          (res, now_ist().isoformat(timespec="seconds"), doc["id"]))
+            settle_unread(conn, doc)
         dl += res == "ok"
         conn.commit()
     out["downloaded"] = dl
@@ -358,13 +434,41 @@ def run(conn: sqlite3.Connection, http: Http, settings: dict, max_seconds: float
             res = "failed"
             conn.execute("UPDATE documents SET status='failed', error=?, updated_at=? WHERE id=?",
                          (f"{exc.__class__.__name__}: {exc}"[:300], now_ist().isoformat(timespec="seconds"), doc["id"]))
+            settle_unread(conn, doc)
         prep[res] = prep.get(res, 0) + 1
         conn.commit()
     out["prepared"] = prep
 
-    # extract within the budget
-    if settings["llm"].get("enabled", True):
-        out["extracted"] = extract.run_queue(conn, settings, deadline=lambda: left() > 0)
+    # extract within the budget: new filings first, then a couple of companies' notes from earlier reports,
+    # then old PDFs with whatever time is left (so the notes back-fill is never starved by old PDFs)
+    llm_on = settings["llm"].get("enabled", True)
+    if llm_on:
+        out["extracted"] = extract.run_queue(conn, settings, deadline=lambda: left() > 0, which="live")
+    if llm_on and settings.get("notes", {}).get("backfill", True) and left() > 0:
+        # notes first: while companies still wait for theirs, old PDFs are not read (both share the back-fill cap)
+        try:        # never let the notes back-fill stop the old-PDF back-fill and the pending-event settle below
+            out["notes_backfill"] = company_notes.backfill(conn, settings, deadline=lambda: left() > 0, limit=2)
+            out["notes_backfill"]["views"] = company_notes.views_missing(conn, settings, deadline=lambda: left() > 0)
+        except Exception as exc:
+            conn.rollback()
+            out["notes_backfill"] = {"error": f"{exc.__class__.__name__}: {exc}"}
+    notes_waiting = (llm_on and settings.get("notes", {}).get("backfill", True) and company_notes.pending(conn) > 0
+                     and not out.get("notes_backfill", {}).get("deferred_budget"))
+    if llm_on and left() > 0 and not notes_waiting:
+        out["extracted_backfill"] = extract.run_queue(conn, settings, deadline=lambda: left() > 0, which="backfill")
+
+    # any filing event still waiting for the AI read after 45 minutes — whatever happened to its document
+    # (budget spent, LLM down, read by an older server, never became a document) — is shown as it came
+    cutoff = (now_ist() - timedelta(minutes=45)).isoformat(timespec="seconds")
+    for ev in conn.execute("SELECT id FROM events WHERE backfill=0 AND data LIKE '%\"pending_ai\"%' AND created_at < ?",
+                           (cutoff,)).fetchall():
+        doc = conn.execute("SELECT * FROM documents WHERE event_id=?", (ev["id"],)).fetchone()
+        if doc is not None:
+            settle_unread(conn, doc)
+        else:
+            settle_event(conn, ev["id"])
+    conn.commit()
+
     out["secs"] = round(time.monotonic() - t0, 1)
     return out
 

@@ -172,7 +172,7 @@ SEVERITY = {
     "cross_dma200_up": "high", "cross_dma200_down": "high",
     "golden_cross": "high", "death_cross": "high",
     "phase_bearish": "medium", "phase_bullish": "medium",
-    "cross_dma40_up": "medium", "cross_dma40_down": "medium",
+    "cross_dma40_up": "high", "cross_dma40_down": "high",       # pushed: the short-term trend turning
     "low_52w": "medium", "high_52w": "low",
     "volume_spike": "medium",
     "corporate_action": "low",
@@ -221,11 +221,14 @@ def update_stock(conn: sqlite3.Connection, stock: sqlite3.Row, cfg: dict, live_s
     for e in detect_events(ind, cfg):
         d = e["d"].date().isoformat()
         backfill = live_since is None or d < live_since
+        # each signal stays on the company's timeline, at low importance; the day's signals of every company reach the
+        # inbox as one "Technicals" card (daily_card) instead of one alert each
+        sev0 = SEVERITY.get(e["type"], "low")
         eid = add_event(
             conn, sid=stock["sid"], ts=f"{d}T15:30:00+05:30", kind="technical", type=e["type"],
-            severity=SEVERITY.get(e["type"], "low"), title=e["title"], detail=e["detail"],
-            source=f"{stock['price_exch']} bhavcopy", data=e["data"], backfill=backfill,
-            dedupe=f"tech:{stock['sid']}:{e['type']}:{d}",
+            severity="low" if sev0 != "low" and e["type"] != "corporate_action" else sev0, title=e["title"],
+            detail=e["detail"], source=f"{stock['price_exch']} bhavcopy", data={**(e["data"] or {}), "sev0": sev0},
+            backfill=backfill, dedupe=f"tech:{stock['sid']}:{e['type']}:{d}",
         )
         if eid and not backfill:
             new_live += 1
@@ -237,7 +240,59 @@ def update_all(conn: sqlite3.Connection, cfg: dict, live_since: str | None) -> d
     for stock in conn.execute("SELECT * FROM stocks").fetchall():
         n_events += update_stock(conn, stock, cfg, live_since)
         n_stocks += 1
-    return {"stocks": n_stocks, "new_events": n_events}
+    day = latest_trading_day(conn)
+    card = daily_card(conn, day.isoformat()) if day and live_since and day.isoformat() >= live_since else None
+    return {"stocks": n_stocks, "new_events": n_events, "card": card}
+
+
+SEV_RANK = {"high": 3, "medium": 2, "low": 1}
+MAJOR = {"cross_dma200_up", "cross_dma200_down", "golden_cross", "death_cross"}     # the long-term trend turning
+
+
+def daily_card(conn: sqlite3.Connection, day: str) -> int:
+    """One card for the session's technical signals across held and watched stocks: a row per company with its
+    signals, biggest first (DMA200 and golden / death crosses, DMA40 crosses, phase changes, 52-week, volume)."""
+    import json
+
+    rows = {}
+    for e in conn.execute(
+            "SELECT e.sid, e.type, e.title, e.data, s.name, s.in_portfolio, t.close, t.chg_pct, t.dma40, t.dma200, t.phase "
+            "FROM events e JOIN stocks s ON s.sid=e.sid LEFT JOIN technicals t ON t.sid=e.sid "
+            "WHERE e.kind='technical' AND e.d=? AND e.backfill=0 AND e.type != 'corporate_action' "
+            "AND (s.in_portfolio=1 OR s.in_watchlist=1)", (day,)):
+        sev0 = (json.loads(e["data"] or "{}") or {}).get("sev0") or SEVERITY.get(e["type"], "low")
+        r = rows.setdefault(e["sid"], {"sid": e["sid"], "name": e["name"], "held": bool(e["in_portfolio"]), "signals": [],
+                                       "rank": 0, "close": e["close"], "chg": e["chg_pct"], "phase": e["phase"],
+                                       "vs40": (e["close"] / e["dma40"] - 1) * 100 if e["close"] and e["dma40"] else None,
+                                       "vs200": (e["close"] / e["dma200"] - 1) * 100 if e["close"] and e["dma200"] else None})
+        r["signals"].append(e["title"])
+        r["rank"] = max(r["rank"], 4 if e["type"] in MAJOR else SEV_RANK.get(sev0, 1))
+    if not rows:
+        return 0
+    ordered = sorted(rows.values(), key=lambda r: (r["rank"], r["held"], abs(r["chg"] or 0)), reverse=True)
+    fmt = lambda v: f"{v:+.1f}%" if v is not None else None  # noqa: E731
+    table = {"columns": [{"key": "sid", "label": "Company"}, {"key": "signal", "label": "Signal", "wide": True},
+                         {"key": "day", "label": "Day", "num": True, "tone": True},
+                         {"key": "v40", "label": "vs DMA40", "num": True}, {"key": "v200", "label": "vs DMA200", "num": True},
+                         {"key": "phase", "label": "Trend"}],
+             "rows": [{"sid": r["sid"], "name": r["name"], "held": r["held"], "signal": "; ".join(r["signals"]),
+                       "day": fmt(r["chg"]), "tone": "pos" if (r["chg"] or 0) >= 0 else "neg", "v40": fmt(r["vs40"]),
+                       "v200": fmt(r["vs200"]), "phase": r["phase"]} for r in ordered]}
+    held_high = sum(1 for r in ordered if r["held"] and r["rank"] == 4)
+    sev = "high" if held_high else "medium" if any(r["rank"] >= 2 for r in ordered) else "low"
+    up = sum(1 for r in ordered if (r["chg"] or 0) >= 0)
+    title = f"Technicals · {date.fromisoformat(day).strftime('%d %b')}: {len(ordered)} stocks with signals" + \
+        (f", {held_high} held with a major one" if held_high else "")
+    detail = f"{up} up, {len(ordered) - up} down. Major: DMA200 and golden / death crosses, DMA40 crosses."
+    data = {"day": day, "sids": [r["sid"] for r in ordered], "table": table}
+    dedupe = f"techday:{day}"
+    if conn.execute("SELECT 1 FROM events WHERE dedupe=?", (dedupe,)).fetchone():
+        conn.execute("UPDATE events SET title=?, detail=?, severity=?, data=? WHERE dedupe=?",
+                     (title, detail, sev, json.dumps(data, default=str), dedupe))
+        return 0
+    add_event(conn, sid=None, ts=f"{day}T15:35:00+05:30", kind="technical", type="daily_technicals", severity=sev,
+              title=title, detail=detail, source="NSE / BSE bhavcopy", dedupe=dedupe, data=data)
+    return 1
 
 
 def chart_series(conn: sqlite3.Connection, stock: sqlite3.Row, cfg: dict, days: int = 400) -> dict:

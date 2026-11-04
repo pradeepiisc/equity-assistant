@@ -25,10 +25,8 @@ if lsof -ti tcp:$CHROME_DEBUG_PORT &>/dev/null; then
     fi
 fi
 
-# Kill any existing Chrome instances (required — you cannot add debug port to a running Chrome)
-echo "  Killing existing Chrome instances..."
-pkill -x "Google Chrome" 2>/dev/null
-sleep 1
+# Your own Chrome keeps running: the debug session uses its own profile directory (below), which Chrome
+# starts as a separate instance — nothing needs to be closed.
 
 echo "  Launching Chrome with --remote-debugging-port=$CHROME_DEBUG_PORT ..."
 # Launch Chrome with a PERSISTENT dedicated debug profile stored in home directory.

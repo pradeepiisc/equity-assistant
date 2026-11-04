@@ -6,6 +6,8 @@ import { StockPage } from './stock.js';
 import { StatusPage } from './status.js';
 import { OrderBooksPage, OrdersPage } from './orders.js';
 import { PrioritiesPage } from './priorities.js';
+import { CompanyNotesPage } from './notes.js';
+import { CompaniesPage } from './companies.js';
 
 // ── router ───────────────────────────────────────────────────────────────
 function parseHash() {
@@ -30,8 +32,17 @@ const setParams = (page, params) => {
 };
 
 // ── shell ────────────────────────────────────────────────────────────────
-const NAV = [['today', 'Today'], ['stocks', 'Stocks'], ['priorities', 'Priorities'], ['orderbooks', 'Order books'], ['orders', 'Orders'],
-             ['events', 'Events'], ['deals', 'Deals'], ['notes', 'Notes'], ['status', 'Status']];
+// Companies replaces Stocks, Priorities and the per-company notes list; Orders holds order books and orders.
+const NAV = [['today', 'Today'], ['companies', 'Companies'], ['orders', 'Orders'], ['events', 'Events'], ['deals', 'Deals'],
+             ['notes', 'Notes'], ['status', 'Status']];
+const NAV_OF = { stock: 'companies', stocks: 'companies', priorities: 'companies', orderbooks: 'orders' };
+
+function OrdersHub({ page, params, version }) {
+  return html`<div class="seg" style="margin-bottom:12px" role="tablist">
+      ${[['orderbooks', 'Order books'], ['orders', 'Orders']].map(([k, l]) => html`<button role="tab" aria-selected=${page === k}
+        class=${page === k ? 'on' : ''} onClick=${() => go(k)}>${l}</button>`)}</div>
+    ${page === 'orderbooks' ? html`<${OrderBooksPage} params=${params} version=${version} />` : html`<${OrdersPage} params=${params} version=${version} />`}`;
+}
 
 // Bumps whenever a background tick finishes, so open pages refetch without a reload.
 function usePulse() {
@@ -60,22 +71,23 @@ function App() {
   const unread = summary.data ? Object.values(summary.data.unread).reduce((a, b) => a + b, 0) : 0;
   const page = {
     today: html`<${Today} summary=${summary} version=${v} />`,
-    stocks: html`<${Stocks} params=${route.params} version=${v} />`,
+    companies: html`<${CompaniesPage} params=${route.params} version=${v} />`,
+    stocks: html`<${CompaniesPage} params=${{ scope: 'all', ...route.params }} version=${v} />`,
     stock: html`<${StockPage} sid=${route.arg} key=${route.arg} version=${v} tab=${route.params.tab} />`,
-    priorities: html`<${PrioritiesPage} params=${route.params} version=${v} />`,
+    priorities: html`<${CompaniesPage} params=${route.params} version=${v} />`,
     events: html`<${Events} params=${route.params} version=${v} />`,
     deals: html`<${Deals} version=${v} />`,
-    notes: html`<${Notes} />`,
+    notes: html`<${NotesPage} params=${route.params} version=${v} />`,
     status: html`<${StatusPage} version=${v} />`,
-    orderbooks: html`<${OrderBooksPage} params=${route.params} version=${v} />`,
-    orders: html`<${OrdersPage} params=${route.params} version=${v} />`,
+    orderbooks: html`<${OrdersHub} page="orderbooks" params=${route.params} version=${v} />`,
+    orders: html`<${OrdersHub} page="orders" params=${route.params} version=${v} />`,
   }[route.page] || html`<${Empty}>Unknown page.<//>`;
   return html`
     <div class="shell">
       <aside class="side">
         <div class="brand">Stock Tracker<small>portfolio · watchlist · notes</small></div>
         <nav class="nav">
-          ${NAV.map(([k, l]) => html`<a href="#/${k}" class=${route.page === k || (k === 'stocks' && route.page === 'stock') ? 'active' : ''}>
+          ${NAV.map(([k, l]) => html`<a href="#/${k}" class=${route.page === k || NAV_OF[route.page] === k ? 'active' : ''}>
             ${l}${k === 'today' && unread ? html`<span class="count" title="unread alerts">${unread}</span>` : null}</a>`)}
           <a href="/legacy" title="The existing workflow launcher">Workflows ↗</a>
         </nav>
@@ -306,6 +318,21 @@ function Deals({ version }) {
 }
 
 // ── Notes ────────────────────────────────────────────────────────────────
+function NotesPage({ params, version }) {
+  const [tab, setTab] = useState(params.tab === 'yours' ? 'yours' : 'companies');
+  return html`
+    <div class="page-head"><h1>Notes</h1><span class="muted">${tab === 'companies'
+      ? 'each company\'s story, quarter by quarter, condensed from concalls, presentations and earlier reports'
+      : 'your video notes, as markdown files in notes/'}</span>
+      <div class="spacer"></div>
+      <div class="seg">${[['companies', 'Company notes'], ['yours', 'Your notes']].map(([k, l]) => html`<button class=${tab === k ? 'on' : ''}
+        onClick=${() => { setTab(k); history.replaceState(null, '', `#/notes?tab=${k}`); }}>${l}</button>`)}</div></div>
+    ${tab === 'companies'
+      // the current hash, not the landing route: the tabs and filters rewrite it without a hashchange
+      ? html`<${CompanyNotesPage} params=${Object.fromEntries(new URLSearchParams(location.hash.split('?')[1] || ''))} version=${version} />`
+      : html`<${Notes} />`}`;
+}
+
 const EXAMPLE = `$ROSSTECH add — order book ~3x revenue, aerospace plant by Q4. entry 650 target 1100 sl 560
 $ZELIO watch: EV two-wheelers, wait for Q2 numbers
 - APOLLOPIPE: reduce, guidance deferred again`;
@@ -340,7 +367,6 @@ function Notes() {
   }
   const d = disc.data;
   return html`
-    <div class="page-head"><h1>Notes & discovery</h1><span class="muted">your video notes, as markdown files in notes/</span></div>
     <div class="grid g-main-side">
       <div class="stack">
         <div class="card"><h2>Ideas from your notes <span class="muted">mentioned, not held or watched</span></h2>

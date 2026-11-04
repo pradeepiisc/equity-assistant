@@ -37,6 +37,22 @@ def _point(p: dict) -> dict:
             "doc_title": p.get("doc_title")}
 
 
+def orders_since(conn, sid: str, as_of: str) -> dict:
+    """Dated orders announced after the last disclosed order book, each counted once (an order's PDF and its XBRL
+    copy, or a re-filing, carry the same customer and value) — the book's running estimate between disclosures."""
+    seen, total, n, last = set(), 0.0, 0, None
+    for o in conn.execute("SELECT announced_on, customer, value_cr, method FROM orders WHERE sid=? AND dated=1 "
+                          "AND value_cr > 0 AND announced_on > ? ORDER BY method='llm' DESC, announced_on", (sid, as_of)):
+        key = round(o["value_cr"], 1)
+        if key in seen:
+            continue
+        seen.add(key)
+        total += o["value_cr"]
+        n += 1
+        last = max(last or "", o["announced_on"])
+    return {"value_cr": round(total, 2), "n": n, "last": last}
+
+
 @router.get("/orderbooks")
 def orderbooks(scope: str = "all"):
     conn = connect()
@@ -54,11 +70,15 @@ def orderbooks(scope: str = "all"):
             mcap = metrics.market_cap(conn, s, s["close"])
             bars = metrics.quarter_bars(pts)
             g = {f"g{m}": metrics.growth(pts, m) for m in (3, 6, 12)}
+            since = orders_since(conn, s["sid"], last["as_of"])
+            updated = max((p.get("filed_at") or p.get("created_at") or "") for p in pts)[:10] or None
             rows.append({
                 "sid": s["sid"], "name": s["name"], "nse": s["nse_symbol"], "bse": s["bse_code"], "sector": s["sector"],
                 "in_portfolio": bool(s["in_portfolio"]), "in_watchlist": bool(s["in_watchlist"]),
                 "order_book_cr": last["value_cr"], "as_of": last["as_of"], "verified": last["verified"],
-                "updated": max((p.get("filed_at") or p.get("created_at") or "") for p in pts)[:10] or None,
+                "orders_since_cr": since["value_cr"] or None, "orders_since_n": since["n"],
+                "book_est_cr": round(last["value_cr"] + since["value_cr"], 2) if since["n"] else None,
+                "updated": max(updated or "", since["last"] or "") or None,
                 "revenue_cr": rev["value"], "revenue_label": rev["label"],
                 "book_to_revenue": round(last["value_cr"] / rev["value"], 2) if rev["value"] else None,
                 "mcap_cr": mcap, "points": len(pts),
@@ -274,6 +294,43 @@ def score_one(sid: str):
         for g in out["guidance"]:
             g["link"] = g.get("url") or file_link(g.get("path"))
         out["weights"] = load_settings()["score"]
+        return out
+    finally:
+        conn.close()
+
+
+# ── company notes ───────────────────────────────────────────────────────────
+
+@router.get("/notes/companies")
+def notes_companies(scope: str = "all"):
+    from . import company_notes
+
+    conn = connect()
+    try:
+        rows = company_notes.listing(conn, _scope(scope))
+        pending = conn.execute(
+            f"SELECT COUNT(*) FROM stocks s WHERE {_scope(scope)} AND s.folder IS NOT NULL AND NOT EXISTS "
+            f"(SELECT 1 FROM company_notes n WHERE n.sid=s.sid AND n.source='reports') AND NOT EXISTS "
+            f"(SELECT 1 FROM kv WHERE k='notesbf_skip:' || s.sid)").fetchone()[0]
+        return {"rows": rows, "pending_backfill": pending}
+    finally:
+        conn.close()
+
+
+@router.get("/notes/company/{sid}")
+def notes_company(sid: str):
+    from . import company_notes
+
+    conn = connect()
+    try:
+        s = conn.execute("SELECT sid, name, sector, nse_symbol, bse_code FROM stocks WHERE sid=?", (sid,)).fetchone()
+        if s is None:
+            raise HTTPException(404, f"{sid} is not tracked")
+        out = company_notes.company(conn, sid)
+        out.update(name=s["name"], sector=s["sector"], nse=s["nse_symbol"], bse=s["bse_code"])
+        out["mentions"] = [dict(r) for r in conn.execute(
+            "SELECT m.stance, m.text, n.title, n.d, n.source_url FROM note_mentions m JOIN notes n ON n.id=m.note_id "
+            "WHERE m.sid=? ORDER BY n.d DESC LIMIT 10", (sid,))]
         return out
     finally:
         conn.close()

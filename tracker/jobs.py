@@ -91,7 +91,9 @@ def _holdings_mtime() -> float:
         hf = PORTFOLIO_DIR / acct / "holdings" / "holdings.json"
         if hf.exists():
             m = max(m, hf.stat().st_mtime)
-    return m
+    from .config import ROOT
+    wl = ROOT / "watchlist.yaml"                 # an edited watchlist re-syncs the universe too
+    return max(m, wl.stat().st_mtime if wl.exists() else 0.0)
 
 
 def init():
@@ -142,6 +144,14 @@ def feeds_job(only: list[str] | None = None):
     return _run("feeds", _feeds)
 
 
+def catch_up_job(force: bool = False):
+    from . import feeds
+
+    def _cu(conn):
+        return feeds.catch_up(conn, _http(), load_settings(), force=force)
+    return _run("catch_up", _cu, record=lambda r: "skipped" not in r)
+
+
 def deals_job():
     from . import deals
 
@@ -179,6 +189,14 @@ def results_job():
     return _run("results", _r)
 
 
+def history_job(limit: int = 3):
+    from . import financials
+
+    def _h(conn):
+        return financials.backfill_history(conn, _http(), limit=limit)
+    return _run("history", _h, record=lambda r: bool(r.get("stocks")))
+
+
 def documents_job(max_seconds: float | None = None, llm: bool | None = None):
     """Filings → PDFs → relevant pages → LLM extraction within the daily budget."""
     from . import documents
@@ -195,7 +213,9 @@ def documents_job(max_seconds: float | None = None, llm: bool | None = None):
 
     def worth_logging(r):
         return bool(r) and any(r.get(k) for k in ("discovered", "discovered_disk", "downloaded", "prepared", "orders_text")) or \
-            bool(r and (r.get("extracted") or {}).get("done")) or bool(r and (r.get("insights") or {}).get("points"))
+            bool(r and ((r.get("extracted") or {}).get("done") or (r.get("extracted_backfill") or {}).get("done"))) or \
+            bool(r and (r.get("insights") or {}).get("points")) or \
+            bool(r and (r.get("notes_backfill") or {}).get("companies"))
     return _run("documents", _d, record=worth_logging)
 
 
@@ -403,6 +423,12 @@ def _tick(push: bool, force: bool) -> list[str]:
     if feeds_due:
         feeds_job(only=feeds_due)
         ran.append("feeds:" + ",".join(feeds_due))
+    if _after(now, sch["feeds_from"]) or force:     # also the first tick after the laptop wakes
+        res = catch_up_job(force=force)
+        if res and "skipped" not in res:
+            got = sum((res.get(i) or {}).get("tracked", 0) + (res.get(i) or {}).get("results_tracked", 0)
+                      for i in ("equities", "sme"))
+            ran.append(f"catch-up:{got}" if "error" not in res else "catch-up:error")
 
     if weekday and _after(now, sch["deals_after"]) and deals_done != now.date().isoformat():
         deals_job()
@@ -429,12 +455,17 @@ def _tick(push: bool, force: bool) -> list[str]:
     if res_pending:
         results_job()
         ran.append(f"results:{res_pending}")
+    with session() as conn:
+        hist_pending = conn.execute(
+            "SELECT COUNT(*) FROM stocks WHERE nse_symbol IS NOT NULL AND (in_portfolio=1 OR in_watchlist=1) "
+            "AND NOT EXISTS (SELECT 1 FROM kv WHERE k='xbrl_hist:' || sid)").fetchone()[0]
+    if hist_pending:
+        res = history_job()
+        ran.append(f"history:{(res or {}).get('stocks', 0)}")
 
     alerts_job(push=push)
 
     # BSE-only fallback and documents last, so neither delays the alerts above; their events alert right after
-    with session() as conn:
-        before = conn.execute("SELECT COALESCE(MAX(id), 0) FROM events").fetchone()[0]
     if settings["screener_fallback"].get("enabled", True):
         res = bse_job()
         if res and "skipped" not in res:
@@ -442,13 +473,131 @@ def _tick(push: bool, force: bool) -> list[str]:
     if settings["documents"].get("enabled", True):
         res = documents_job()
         if res:
-            ex = res.get("extracted") or {}
-            ran.append(f"documents:{ex.get('done', 0)} extracted" if ex.get("done") else "documents")
+            done = (res.get("extracted") or {}).get("done", 0) + (res.get("extracted_backfill") or {}).get("done", 0)
+            nb = (res.get("notes_backfill") or {}).get("companies", 0)
+            ran.append("documents" + (f":{done} extracted" if done else "") + (f":{nb} notes" if nb else ""))
+    if settings["llm"].get("enabled", True) and settings.get("valuation", {}).get("auto", True):
+        res = valuations_job()
+        if res and res.get("written"):
+            ran.append(f"valuations:{res['written']}")
+    # without the model, whenever due: the PIB list every 3 hours in the feed window, the movers scan after prices
     with session() as conn:
-        after = conn.execute("SELECT COALESCE(MAX(id), 0) FROM events").fetchone()[0]
-    if after > before:
-        alerts_job(push=push)
+        last_pib = kv_get(conn, "policy_polled_at")
+    if (force or (_after(now, sch["feeds_from"]) and not _after(now, sch["feeds_to"]))) and \
+            (not last_pib or (now - datetime.fromisoformat(last_pib)).total_seconds() >= 60 * policy_every(settings)):
+        res = policy_job(fetch=True, match=False)
+        if res and res.get("new"):
+            ran.append(f"policy:{res['new']} new")
+    res = movers_job(explain=False)
+    if res and res.get("movers") and res.get("pending") == res.get("movers"):
+        ran.append(f"movers:{res['movers']}")
+    # the local model (free, a few minutes a call): one task a tick, so it never holds the 3-minute polls for long
+    res = local_model_job()
+    if res:
+        ran.append(res)
+    transcripts_ready_check()
+    alerts_job(push=push)       # cheap: picks up new events and filings the AI read just settled to medium/high
     return ran
+
+
+def policy_every(settings: dict) -> int:
+    from .policy import EVERY_MIN
+    return int(settings.get("policy", {}).get("every_min", EVERY_MIN))
+
+
+def policy_job(fetch: bool = True, match: bool = True):
+    """PIB releases → policy events for the tracked companies they can move (policy.py, local model)."""
+    from . import policy
+
+    def _p(conn):
+        res = policy.run(conn, _http(), load_settings(), fetch=fetch, max_match=1 if match else 0)
+        if fetch and "error" not in res:
+            kv_set(conn, "policy_polled_at", now_ist().isoformat(timespec="seconds"))
+        return res
+    return _run("policy", _p, record=lambda r: bool(r.get("new") or r.get("matched") or r.get("error") or r.get("failed")))
+
+
+def movers_job(explain: bool = True):
+    """The session's unusual price moves among held and watched stocks, with the trigger (movers.py)."""
+    from . import movers
+
+    def _m(conn):
+        return movers.run(conn, _http(), load_settings(), explain=explain)
+    return _run("movers", _m, record=lambda r: bool(r.get("explained") or r.get("error")))
+
+
+def local_model_job() -> str | None:
+    """One local-model task, the most time-sensitive first: the movers' reasons (the day's card), the local read of the
+    newest filing (the comparison week), a PIB release's companies, a company profile (five a day)."""
+    from . import extract, localllm, movers, policy
+
+    settings = load_settings()
+    if not settings["llm"].get("enabled", True) or not localllm.available(settings):
+        return None
+    with session() as conn:
+        movers_left = movers.pending_reasons(conn)
+        shadow = extract.shadow_due(conn, settings)
+        policy_left = policy.pending(conn)
+    if movers_left:
+        res = movers_job(explain=True)
+        return f"movers:{(res or {}).get('explained', 0)} explained"
+    if shadow is not None:
+        def _s(conn):
+            doc = conn.execute("SELECT * FROM documents WHERE id=?", (shadow["id"],)).fetchone()
+            return extract.shadow_read(conn, doc, settings)
+        res = _run("local_read", _s)
+        return f"local read:{shadow['sid']}" if res else None
+    if policy_left:
+        res = policy_job(fetch=False, match=True)
+        return f"policy:{(res or {}).get('events', 0)} cards" if res else None
+    res = profiles_job()
+    if res and res.get("profiles"):
+        return f"profiles:{sum(1 for p in res['profiles'] if p.get('written'))}"
+    return None
+
+
+def profiles_job():
+    """One company profile (what it does, end-markets, exposures) per tick, five a day (profiles.py, local model)."""
+    from . import profiles
+
+    def _pr(conn):
+        return profiles.run(conn, load_settings(), _http(), limit=1)
+    return _run("profiles", _pr, record=lambda r: bool(r.get("profiles")))
+
+
+def valuations_job(limit: int = 2):
+    """Rewrite the valuation memo of companies whose results, notes, order book or guidance changed."""
+    from . import valuation
+
+    def _v(conn):
+        return valuation.refresh(conn, load_settings(), limit=limit)
+    return _run("valuations", _v, record=lambda r: bool(r.get("written") or r.get("failed")))
+
+
+def transcripts_ready_check():
+    """Once a week at most: when no transcript is waiting for its read, say how many could go to the Trash."""
+    from . import transcripts
+    from .db import add_event
+
+    with session() as conn:
+        last = kv_get(conn, "transcripts_ready_at")
+        if last and (now_ist() - datetime.fromisoformat(last)).days < 7:
+            return
+        waiting = conn.execute("SELECT COUNT(*) FROM documents WHERE path LIKE '%/transcripts/%' AND status IN "
+                               "('queued','prepared')").fetchone()[0]
+        if waiting:
+            return
+        inv = transcripts.inventory()
+        if not inv["read"]:
+            return
+        stamp = now_ist().isoformat(timespec="seconds")
+        add_event(conn, sid=None, ts=stamp, kind="system", type="transcripts_ready", severity="medium",
+                  title=f"{len(inv['read'])} old transcripts are read ({inv['read_mb']:.0f} MB) — ready for the Trash",
+                  detail="Their figures and quarterly notes are stored. Nothing moves until you run "
+                         "`python -m tracker transcripts --trash`, which asks first. Unread ones stay.",
+                  source="tracker", dedupe=f"transcripts_ready:{stamp[:10]}")
+        kv_set(conn, "transcripts_ready_at", stamp)
+        conn.commit()
 
 
 def status():

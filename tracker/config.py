@@ -24,7 +24,7 @@ SETTINGS_PATH = ROOT / "tracker.yaml"
 USER_AGENT = "equity-assistant-tracker/0.1 (personal portfolio tracker)"
 
 DEFAULTS: dict[str, Any] = {
-    "accounts": ["ZV3899", "WN5759"],
+    "accounts": ["ZV3899", "WN5759", "CQN676"],
     "technicals": {
         # Phase classification — same rule as workflows/shared_sections.classify_trend
         "phase_fast": 40,
@@ -64,6 +64,8 @@ DEFAULTS: dict[str, Any] = {
         "market_from": "09:00",            # weekdays in this window: announcements polled faster
         "market_to": "18:00",
         "announcements_every_min": 3,
+        "catch_up_every_min": 30,          # NSE date-range APIs: whatever the rolling RSS windows missed
+        "catch_up_max_days": 14,           # how far back the first catch-up after a long gap reaches
         "eod_after": "18:15",
         "deals_after": "17:15",
         "server_poll": True,               # `serve` runs a tick at start-up, then every server_every_min
@@ -83,19 +85,37 @@ DEFAULTS: dict[str, Any] = {
     "llm": {
         "enabled": True,
         "client": "client_gpt41_itam",     # a config name from llm/client.py
-        "daily_token_budget": 500000,      # prompt + completion tokens per IST day, all calls
-        "backfill_share": 0.6,             # back-fill may use at most this share; the rest stays for new filings
-        "max_input_tokens": 12000,         # per document, after keeping only the relevant pages
-        "max_output_tokens": 3000,
+        "daily_budget_inr": 1000,          # all LLM calls per IST day (≈ 3.9M tokens on gpt-4.1)
+        "daily_token_budget": 500000,      # deprecated: only read by a server still running pre-2026-10-20 code
+        "backfill_share": 0.6,             # back-fill (old PDFs, notes from old reports) may use at most this share;
+                                           # the rest always stays free for new filings
+        "max_input_tokens": 14000,         # per document, after keeping only the relevant pages
+        "max_output_tokens": 4000,
+        "request_timeout_s": 120,          # one LLM call; the SDK retries once
         "usd_per_m_input": 2.0,            # for the cost estimate on the status page
         "usd_per_m_output": 8.0,
+        "local_model": "qwen3.8:27b",      # ollama model on this Mac (localllm.py): free; company profiles, policy matching
+        "local_url": "http://127.0.0.1:11434",
+        "local_timeout_s": 600,
+        "shadow_from": "2026-11-04",       # every live filing also read by the local model (extract.shadow_read)…
+        "shadow_until": "2026-11-11",      # …for this week, shown beside gpt-4.1's read; then choose one
+    },
+    "valuation": {
+        "auto": True,                      # rewrite a memo when the company's numbers change (2 per tick)
+        "max_age_days": 120,
+    },
+    "notes": {
+        "backfill": True,                  # condense the existing reports into quarterly notes (once per company)
     },
     # ── phase 2: BSE-only stocks via Screener (Chrome debug session only; gentle) ──
     "screener_fallback": {
         "enabled": True,
-        "daily_cap": 30,                   # companies a day, at most
+        "daily_pages": 300,                # Screener page loads a day, at most
+        "per_tick": 2,                     # companies per 3-minute tick
+        "check_hours": {"meeting": 0.75, "season": 3, "quiet": 12},   # held / watched BSE-only companies
+        "launch_chrome": True,             # start the dedicated debug profile when it isn't running
         "min_gap_s": 9,                    # seconds between any two Screener requests
-        "window": ["08:00", "22:00"],      # spread across this window: one company per (window ÷ cap)
+        "window": ["08:00", "22:00"],      # only inside this window
         "stale_days": 30,                  # refresh a company not fetched for this long
         "results_refresh_days": 7,         # in results season, re-check weekly until the quarter appears
     },

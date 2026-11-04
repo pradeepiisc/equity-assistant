@@ -240,9 +240,10 @@ def stock(sid: str):
         sid = s["sid"]
         t = conn.execute("SELECT * FROM technicals WHERE sid=?", (sid,)).fetchone()
         h = universe.holdings_value(conn).get(sid)
-        events = _rows(conn.execute(
+        events = _rows(conn.execute(        # its own events, and the one-card-for-many ones that list it
             "SELECT e.*, a.id AS alert_id, a.read_at FROM events e LEFT JOIN alerts a ON a.event_id=e.id "
-            "WHERE e.sid=? ORDER BY e.ts DESC LIMIT 400", (sid,)))
+            "WHERE e.sid=? OR (e.sid IS NULL AND e.type IN ('policy_release', 'daily_movers', 'daily_technicals') "
+            "AND e.data LIKE ?) ORDER BY e.ts DESC LIMIT 400", (sid, f'%"sid": "{sid}"%')))
         mentions = _rows(conn.execute(
             "SELECT m.*, n.title, n.source_url, n.channel, n.d FROM note_mentions m JOIN notes n ON n.id=m.note_id "
             "WHERE m.sid=? ORDER BY n.d DESC", (sid,)))
@@ -276,8 +277,10 @@ def stock(sid: str):
             holding = {**h, "value": round(h["quantity"] * price) if price else None,
                        "pnl_pct": _pct(price, h["avg_price"]),
                        "pnl": round(h["quantity"] * price - h["invested"]) if price else None}
+        from . import profiles
         return {
             "stock": dict(s), "technicals": tech, "holding": holding,
+            "profile": profiles.get(conn, sid),
             "research": research.summary(s["folder"]),
             "events": events, "mentions": mentions, "shareholding": sh, "deals": deals,
             "announced_orders": sorted(by_q.values(), key=lambda b: (b["quarter"][-2:], b["quarter"][1])),
@@ -598,11 +601,14 @@ def _llm_state(conn) -> dict:
         "SELECT c.*, d.kind, d.title, d.backfill FROM llm_calls c LEFT JOIN documents d ON d.id=c.doc_id "
         "ORDER BY c.id DESC LIMIT 15"))
     found = {t: conn.execute(f"SELECT COUNT(*) FROM {t}").fetchone()[0]
-             for t in ("order_book_history", "orders", "guidance", "doc_facts", "financials_q")}
+             for t in ("order_book_history", "orders", "guidance", "doc_facts", "financials_q", "company_notes",
+                       "company_view", "commitment_checks", "results_reviews")}
+    b = extract.budget(conn, settings)
     return {
         "enabled": cfg.get("enabled", True) and load_settings()["documents"].get("enabled", True),
-        "client": cfg["client"], "budget": cfg["daily_token_budget"], "backfill_share": cfg["backfill_share"],
-        "today": {**today, "inr": extract.cost_inr(today["prompt_tokens"], today["completion_tokens"], settings)},
+        "client": cfg["client"], "budget_inr": b["cap_inr"], "backfill_share": cfg["backfill_share"],
+        "backfill_inr": b["backfill_inr"], "backfill_cap_inr": b["backfill_cap_inr"], "by_purpose": b["by_purpose"],
+        "today": {**today, "inr": b["spent_inr"]},
         "days": days, "calls": calls, "queue": documents.queue_counts(conn), "found": found,
         "total": {"inr": round(sum(d["inr"] for d in days), 2), "tokens": sum(d["tokens"] for d in days)},
     }
@@ -621,7 +627,9 @@ def status():
         }
         return {"runs": runs, "counts": counts, "job": _job_state,
                 "latest_day": (technicals.latest_trading_day(conn) or "").__str__(),
-                "scheduler": _scheduler_state(conn), "llm": _llm_state(conn), "bse": _bse_state(conn)}
+                "scheduler": _scheduler_state(conn), "llm": _llm_state(conn), "bse": _bse_state(conn),
+                "kite": {a: kv_get(conn, f"kite_daily:{a}") for a in load_settings()["accounts"]},
+                "catch_up": {"synced_to": kv_get(conn, "nse_api_synced_to")}}
     finally:
         conn.close()
 

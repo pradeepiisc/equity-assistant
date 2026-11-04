@@ -90,13 +90,17 @@ export function polarity(e) {
   if (t.endsWith('_deal_buy')) return ['ace', 'promoter', 'fii', 'dii', 'fund'].includes(d.client_type) ? 'pos' : 'neu';
   if (t.endsWith('_deal_sell')) return ['ace', 'promoter', 'fii', 'dii', 'fund'].includes(d.client_type) ? 'neg' : 'neu';
   if (t === 'volume_spike') return (d.chg_pct || 0) >= 0 ? 'pos' : 'neg';
+  if (t === 'results_review') return d.tone === 'strong' ? 'pos' : d.tone === 'weak' ? 'neg' : 'neu';
+  if (t === 'policy') return d.impact === 'positive' ? 'pos' : d.impact === 'negative' ? 'neg' : 'neu';
+  if (t === 'daily_movers' || t === 'daily_technicals' || t === 'policy_release') return 'neu';
   if (POS.has(t)) return 'pos';
   if (NEG.has(t)) return 'neg';
   return 'neu';
 }
 
 export const KIND_LABEL = {
-  technical: 'Technical', filing: 'Filing', deal: 'Deal', sast: 'SAST', pledge: 'Pledge', insider: 'Insider',
+  technical: 'Technical', filing: 'Filing', deal: 'Deal', sast: 'SAST', pledge: 'Pledge', insider: 'Insider', policy: 'Policy',
+  movers: 'Movers',
   shareholding: 'Holding', note: 'Note', system: 'System',
 };
 export const SEV_LABEL = { high: 'High', medium: 'Med', low: 'Low', info: 'Info' };
@@ -154,6 +158,8 @@ export function EventItem({ e, showStock = true }) {
           <span class="ev-title">${e.title}</span>
         </div>
         ${e.detail && html`<div class="ev-detail">${e.detail}</div>`}
+        ${e.data && e.data.table && html`<${EvTable} t=${e.data.table} />`}
+        ${e.data && e.data.local_reads && html`<${LocalReads} r=${e.data.local_reads} />`}
         <div class="ev-meta">
           ${showStock && html`<${StockLink} sid=${e.sid} name=${e.name} />`}
           ${showStock && e.name && html`<span class="ink2">${e.name}</span>`}
@@ -165,6 +171,29 @@ export function EventItem({ e, showStock = true }) {
         </div>
       </div>
     </div>`;
+}
+
+// the local model's read of the same filing, shown under gpt-4.1's for the comparison week (extract.shadow_read)
+function LocalReads({ r }) {
+  const reads = Object.values(r || {});
+  if (!reads.length) return null;
+  return html`<div class="ev-local">${reads.map(x => html`<div>
+    <span class="badge">Local · ${x.model}${reads.length > 1 && x.kind ? ' · ' + x.kind.replace('_', ' ') : ''}</span>
+    <div class="ev-detail">${(x.lines || []).join('\n')}</div></div>`)}</div>`;
+}
+
+// one card for many companies (policy, daily movers, daily technicals): rows in priority order, the first column links
+const TONE_CLS = { pos: 'up', neg: 'down' };
+export function EvTable({ t }) {
+  const cols = t.columns || [];
+  return html`<div class="ev-table-wrap"><table class="ev-table">
+    <thead><tr>${cols.map(c => html`<th class=${c.num ? 'n' : ''}>${c.label}</th>`)}</tr></thead>
+    <tbody>${(t.rows || []).map(r => html`<tr>${cols.map((c, i) => {
+      const v = r[c.key];
+      if (i === 0) return html`<td class="nowrap"><${StockLink} sid=${r.sid} name=${r.name} />${r.held ? html` <span class="badge">Held</span>` : ''}</td>`;
+      return html`<td class=${(c.num ? 'n ' : '') + (c.wide ? 'wide ' : '') + (c.tone && TONE_CLS[r.tone] ? TONE_CLS[r.tone] : '')}>${v == null ? '—' : v}</td>`;
+    })}</tr>`)}</tbody></table>
+    ${t.note ? html`<div class="small muted" style="margin-top:4px">${t.note}</div>` : null}</div>`;
 }
 
 export function EventList({ rows, showStock = true, empty = 'Nothing here yet.' }) {

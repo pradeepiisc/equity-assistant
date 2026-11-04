@@ -159,10 +159,13 @@ def revenue(conn: sqlite3.Connection, stock: sqlite3.Row | dict) -> dict:
 
 def shares_cr(conn: sqlite3.Connection, stock: sqlite3.Row | dict) -> tuple[float | None, str]:
     """Shares outstanding in crore: NSE XBRL paid-up ÷ face value, else Screener market cap ÷ price."""
-    r = conn.execute("SELECT paid_up_cr, face_value FROM financials_q WHERE sid=? AND paid_up_cr > 0 AND face_value > 0 "
-                     "ORDER BY period_end DESC LIMIT 1", (stock["sid"],)).fetchone()
-    if r:
-        return r["paid_up_cr"] / r["face_value"], "NSE results"
+    from . import model
+    try:
+        sh = model.shares_cr(conn, stock["sid"], model.history(conn, stock))   # checked against PAT ÷ EPS
+    except (KeyError, IndexError, TypeError):
+        sh = None
+    if sh:
+        return sh, "NSE results"
     sc = screener_summary(stock["folder"])
     if sc.get("mcap_cr") and sc.get("price"):
         return sc["mcap_cr"] / sc["price"], "Screener"

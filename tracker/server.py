@@ -18,6 +18,7 @@ from fastapi.staticfiles import StaticFiles
 
 from .api import router
 from .api_orders import router as orders_router
+from .api_companies import router as companies_router
 from .config import WEB_DIR, load_settings
 from .scheduler import poller
 
@@ -35,6 +36,7 @@ async def lifespan(_app):
 app = FastAPI(title="Stock Tracker", lifespan=lifespan)
 app.include_router(router, prefix="/api/t")
 app.include_router(orders_router, prefix="/api/t")
+app.include_router(companies_router, prefix="/api/t")
 app.mount("/static", StaticFiles(directory=WEB_DIR), name="static")
 
 

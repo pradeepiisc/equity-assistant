@@ -1,7 +1,7 @@
 # Stock tracker settings — uncomment a line to override the default shown.
 # (defaults live in tracker/config.py)
 
-# accounts: [ZV3899, WN5759]          # Kite accounts whose holdings.json define the portfolio
+# accounts: [ZV3899, WN5759, CQN676]  # Kite accounts whose holdings.json define the portfolio (and the 16:00 job)
 
 technicals:
   # phase_fast: 40                    # phase = price vs DMA40 vs DMA100 (same rule as the daily report)
@@ -53,16 +53,36 @@ documents:                            # filings → PDFs → LLM extraction (the
 llm:
   # enabled: true
   # client: client_gpt41_itam         # gpt-4.1 via llm/client.py (decided 2026-10-18)
-  # daily_token_budget: 500000        # ≈ ₹130/day if fully used (decided 2026-10-18)
+  daily_budget_inr: 10000             # ₹ per IST day, all LLM calls — edit this number to change it (next tick picks it up)
   # backfill_share: 0.6               # back-fill may use 60% of it; the rest stays free for new filings
-  # max_input_tokens: 12000           # per document, relevant pages only
-  # max_output_tokens: 3000
+  # max_input_tokens: 14000           # per document, relevant pages only
+  # max_output_tokens: 4000
+  # request_timeout_s: 120            # per call (one retry), so a stalled request can't hold a tick
+  # local_model: qwen3.8:27b          # ollama on this Mac (free): company profiles and policy matching
+  # local_url: http://127.0.0.1:11434
+
+# policy:                             # PIB releases → policy events (policy.py)
+#   every_min: 180                    # within schedule.feeds_from–feeds_to
+
+# movers:                             # unusual end-of-day moves and their trigger (movers.py)
+#   min_move_pct: 4.0                 # main board: this move and…
+#   z_main: 2.0                       # …this many σ of its own 60-session daily moves
+#   z_any: 3.0                        # any move this many σ
+#   vol_move_pct: 2.5                 # or this move on…
+#   vol_x: 3.0                        # …this multiple of its usual volume
+#   sme_vol_x: 2.0                    # SME: beyond its last 5 sessions' moves on this volume multiple
+#   sme_min_pct: 3.0
+#   max_rows: 20
+#   per_tick: 5                       # reasons filled per tick (local model)
 
 screener_fallback:                    # BSE-only stocks, through the Chrome debug session only
   # enabled: true
-  # daily_cap: 30                     # companies per day
+  # daily_pages: 300                 # Screener page loads per day
+  # per_tick: 2                       # companies per 3-minute tick
+  # check_hours: {meeting: 0.75, season: 3, quiet: 12}   # board-meeting day / results season / otherwise
+  # launch_chrome: true               # start the dedicated debug profile (your own Chrome is left alone)
   # min_gap_s: 9                      # between any two Screener requests
-  # window: ["08:00", "22:00"]        # spread across this window
+  # window: ["08:00", "22:00"]
   # stale_days: 30
   # results_refresh_days: 7
 

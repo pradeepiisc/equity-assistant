@@ -34,6 +34,8 @@ ROUTINE = _rx(
     r"change in (registered|corporate) office address", r"e-?voting", r"scrutini[sz]er", r"postal ballot notice",
     r"secretarial compliance", r"annual secretarial", r"intimation of (the )?book closure",
 )
+MONITORING = _rx(r"monitoring agency", r"utili[sz]ation of (issue )?proceeds", r"statement of deviation",
+                 r"deviation\(?s\)? or variation")
 ORDER = _rx(
     r"bagging/receiving of orders", r"\b(bag(s|ged|ging)?|receiv(e|ed|es|ing)|secur(e|ed|es|ing)|won|wins?|"
     r"award(ed|s)?|bags|clinch(ed|es)?|grab(bed|s)?|acquired)\b.{0,80}\b(orders?|contracts?|lo[ai]s?|"
@@ -102,6 +104,8 @@ def classify_announcement(description: str, *, sales_ttm_cr: float | None, high_
     else:
         value = money_to_crore(text, usd_inr)
 
+    if MONITORING.search(blob):   # how earlier fund-raise money was used — a compliance report, not a new raise
+        return Classified("routine", "info", "Monitoring agency report", None, data)
     if ROUTINE.search(blob) and not (ORDER.search(text) or FUND.search(text)):
         return Classified("routine", "info", "Routine filing", None, data)
 

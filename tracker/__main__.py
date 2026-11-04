@@ -14,6 +14,7 @@ Tracker CLI.
   python -m tracker bse                  # one due BSE-only company via Screener (Chrome debug session)
   python -m tracker tick [--force]       # one scheduler pass (runs only what is due; --force polls every feed)
   python -m tracker serve [--port 7788]  # dashboard + background polling (tick at start-up, then every 3 min)
+  python -m tracker reread ID [ID …]     # read documents again with the current pipeline; rewrites their events
   python -m tracker status
 """
 from __future__ import annotations
@@ -50,8 +51,38 @@ def main(argv: list[str] | None = None) -> int:
     sv.add_argument("--port", type=int, default=None)
     sv.add_argument("--no-poll", action="store_true", help="serve pages only; don't poll in the background")
     sub.add_parser("status")
+    sk = sub.add_parser("kite-daily", help="save today's holdings for every Kite account (the 16:00 job)")
+    sk.add_argument("--force", action="store_true", help="also accounts already saved today")
+    sv2 = sub.add_parser("valuations", help="write the valuation memo (analyst prompt) for held / watched companies")
+    sv2.add_argument("--all", action="store_true", help="every held and watched company, not just stale ones")
+    sv2.add_argument("--sid", action="append", help="only these companies (repeatable)")
+    sv2.add_argument("--workers", type=int, default=4)
+    st2 = sub.add_parser("transcripts", help="old concall transcripts: what has been read, and moving them to the Trash")
+    st2.add_argument("--trash", action="store_true", help="move the read ones to the Trash (asks first)")
+    sr = sub.add_parser("reread", help="read documents again with the current pipeline (OCR, tables as rows, number check)")
+    sr.add_argument("ids", type=int, nargs="+", help="document ids")
     args = p.parse_args(argv)
 
+    if args.cmd == "reread":
+        import json as _json
+        from . import config, db, extract
+        settings = config.load_settings()
+        with db.session() as conn:
+            for i in args.ids:
+                print(i, _json.dumps(extract.reread(conn, i, settings), ensure_ascii=False, indent=1))
+        return 0
+    if args.cmd == "kite-daily":
+        from . import kite_daily
+        import json as _json
+        print(_json.dumps(kite_daily.attempt(force=args.force), indent=1))
+        return 0
+    if args.cmd == "valuations":
+        from . import valuation
+        print(valuation.run_batch(all_=args.all, sids=args.sid, workers=args.workers))
+        return 0
+    if args.cmd == "transcripts":
+        from . import transcripts
+        return transcripts.cli(trash=args.trash)
     if args.cmd == "serve":
         from .server import run
         run(args.port, poll=not args.no_poll)

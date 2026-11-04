@@ -100,6 +100,7 @@ bash scripts/tracker_schedule.sh uninstall</pre>
           </div>
           <${LlmCard} llm=${data.llm} />
           <${BseCard} b=${data.bse} />
+          <${KiteCard} k=${data.kite} catchUp=${data.catch_up} />
           <div class="card"><h2>Data</h2>
             <dl class="kv">
               <dt>Tracked stocks</dt><dd>${fmt.num(data.counts.stocks)}</dd>
@@ -119,44 +120,69 @@ const DOC_STATUS = [['prepared', 'Waiting for LLM'], ['queued', 'Not read yet'],
 
 function LlmCard({ llm }) {
   if (!llm) return null;
-  const t = llm.today, pct = Math.min(100, Math.round(t.tokens / llm.budget * 100));
-  const bfCap = Math.round(llm.budget * llm.backfill_share);
+  const t = llm.today || { inr: 0, tokens: 0, calls: 0, errors: 0 }, budget = llm.budget_inr ?? 0;
+  const pct = budget ? Math.min(100, Math.round((t.inr ?? 0) / budget * 100)) : 0;
   const q = llm.queue || {};
   const n = (scope, st) => (q[scope] && q[scope][st] ? q[scope][st].n : 0);
-  return html`<div class="card"><h2>LLM usage <span class="muted">${llm.client} · document extraction only</span></h2>
+  const PURPOSE = { filing: 'new filings', backfill: 'old PDFs', notes: 'company views', notes_backfill: 'notes from old reports',
+                    valuation: 'valuation memos' };
+  return html`<div class="card"><h2>LLM usage <span class="muted">${llm.client} · documents and notes only</span></h2>
     <div class="row" style="justify-content:space-between;align-items:baseline">
-      <div><span style="font-size:22px;font-weight:600" class="num">${fmt.num(t.tokens)}</span> <span class="muted small">of ${fmt.num(llm.budget)} tokens today</span></div>
-      <div class="num">≈ ₹${t.inr.toFixed(0)}</div>
+      <div><span style="font-size:22px;font-weight:600" class="num">₹${(t.inr ?? 0).toFixed(0)}</span> <span class="muted small">of ₹${fmt.num(budget)} today</span></div>
+      <div class="num muted small">${fmt.num(t.tokens)} tokens</div>
     </div>
-    <div class="meter" role="meter" aria-valuenow=${pct} aria-valuemin="0" aria-valuemax="100" aria-label="daily token budget used">
-      <i style=${`width:${pct}%`}></i><b style=${`left:${llm.backfill_share * 100}%`} title="back-fill cap"></b></div>
-    <div class="small muted">${`${t.calls} calls · back-fill ${fmt.num(t.backfill_tokens)} / ${fmt.num(bfCap)} (its cap) · `}
-      ${t.errors ? html`<span class="err">${t.errors} errors</span>` : 'no errors'}${' · '}${llm.enabled ? 'on' : html`<b>off</b> (tracker.yaml)`}</div>
+    <div class="meter" role="meter" aria-valuenow=${pct} aria-valuemin="0" aria-valuemax="100" aria-label="daily LLM budget used">
+      <i style=${`width:${pct}%`}></i><b style=${`left:${(llm.backfill_share ?? 0) * 100}%`} title="back-fill cap"></b></div>
+    <div class="small muted">${`${t.calls} calls · back-fill ₹${(llm.backfill_inr ?? 0).toFixed(0)} / ₹${(llm.backfill_cap_inr ?? 0).toFixed(0)} (its cap) · `}
+      ${t.errors ? html`<span class="err">${t.errors} ${t.errors === 1 ? 'error' : 'errors'}</span>` : 'no errors'}${' · '}${llm.enabled ? 'on' : html`<b>off</b> (tracker.yaml)`}</div>
+    ${Object.keys(llm.by_purpose || {}).length ? html`<div class="small muted">${Object.entries(llm.by_purpose).map(([k, v]) => `${PURPOSE[k] || k} ₹${v.toFixed(0)}`).join(' · ')}</div>` : null}
     <table class="t small" style="margin-top:10px"><thead><tr><th>Documents</th><th class="n">New filings</th><th class="n">Back-fill</th></tr></thead>
       <tbody>${DOC_STATUS.filter(([k]) => n('live', k) || n('backfill', k)).map(([k, l]) => html`<tr><td>${l}</td>
         <td class="n">${fmt.num(n('live', k))}</td><td class="n">${fmt.num(n('backfill', k))}</td></tr>`)}</tbody></table>
     <div class="small muted" style="margin-top:8px">${`Found so far: ${fmt.num(llm.found.order_book_history)} order-book figures · ` +
-      `${fmt.num(llm.found.orders)} orders · ${fmt.num(llm.found.guidance)} guidance items · ${fmt.num(llm.found.doc_facts)} other facts · ` +
-      `${fmt.num(llm.found.financials_q)} XBRL result rows (no LLM)`}</div>
+      `${fmt.num(llm.found.orders)} orders · ${fmt.num(llm.found.guidance)} guidance items · ${fmt.num(llm.found.results_reviews)} results reviews · ` +
+      `${fmt.num(llm.found.company_notes)} quarterly notes · ${fmt.num(llm.found.company_view)} company views · ` +
+      `${fmt.num(llm.found.commitment_checks)} commitment checks · ${fmt.num(llm.found.financials_q)} XBRL result rows (no LLM)`}</div>
     ${llm.days.length > 1 ? html`<div class="small muted" style="margin-top:6px">Last ${llm.days.length} days: ${fmt.num(llm.total.tokens)} tokens ≈ ₹${llm.total.inr.toFixed(0)}</div>` : null}
     ${llm.calls.length ? html`<details style="margin-top:8px"><summary class="small">Recent calls</summary>
       <div class="tablewrap"><table class="t small"><tbody>${llm.calls.map(c => html`<tr>
-        <td class="nowrap">${fmt.time(c.ts)}</td><td><a href="#/stock/${encodeURIComponent(c.sid)}">${c.sid}</a> <span class="muted">${c.kind || ''}${c.backfill ? ' · back-fill' : ''}</span></td>
+        <td class="nowrap">${fmt.time(c.ts)}</td><td><a href="#/stock/${encodeURIComponent(c.sid)}">${c.sid}</a> <span class="muted">${c.kind || PURPOSE[c.purpose] || c.purpose}${c.backfill ? ' · back-fill' : ''}</span></td>
         <td class="n">${fmt.num(c.prompt_tokens + c.completion_tokens)}</td><td class="n">${(c.ms / 1000).toFixed(0)}s</td>
         <td>${c.ok ? '' : html`<span class="err" title=${c.error}>failed</span>`}</td></tr>`)}</tbody></table></div></details>` : null}
   </div>`;
 }
 
+const KITE_STATUS = { saved: ['up', 'saved today'], 'not signed in': ['down', 'waiting for you to sign in'], 'no keys': ['down', 'not set up'],
+                      'login failed': ['down', 'sign-in failed'], 'save failed': ['down', 'save failed'] };
+
+const istToday = () => new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata' }).format(new Date());
+
+function KiteCard({ k, catchUp }) {
+  if (!k) return null;
+  const today = istToday();
+  return html`<div class="card"><h2>Daily Kite save <span class="muted">weekdays 16:00, retried every 30 min until 21:00</span></h2>
+    <table class="t small"><tbody>${Object.entries(k).map(([acct, st]) => {
+      const cur = st && st.day === today ? st : null;
+      const [cls, label] = cur ? (KITE_STATUS[cur.status] || ['muted', cur.status]) : ['muted', st ? `last ${st.status} ${fmt.date(st.day, true)}` : 'not run yet'];
+      return html`<tr><td><b>${acct}</b></td><td class=${cls}>${label}</td><td class="muted">${cur ? `${cur.tries} tr${cur.tries === 1 ? 'y' : 'ies'} · ${fmt.time(cur.at)}` : ''}</td>
+        <td class="muted">${cur && cur.msg ? cur.msg : ''}</td></tr>`;
+    })}</tbody></table>
+    <div class="small muted" style="margin-top:6px">When a token has expired the Kite login page opens in your browser — you sign in there.
+      <code>bash scripts/kite_daily_schedule.sh status</code> · <code>python -m tracker kite-daily</code> runs it now.</div>
+    ${catchUp && catchUp.synced_to ? html`<div class="small muted" style="margin-top:6px">NSE catch-up (filings missed while offline): synced to ${fmt.date(catchUp.synced_to, true)} ${fmt.time(catchUp.synced_to)}.</div>` : null}
+  </div>`;
+}
+
 function BseCard({ b }) {
   if (!b || b.error) return b && b.error ? html`<div class="card"><h2>BSE-only stocks</h2><div class="err small">${b.error}</div></div>` : null;
-  const blocked = b.blocked_on && b.blocked_on === new Date().toISOString().slice(0, 10);
+  const blocked = b.blocked_on && b.blocked_on === istToday();
   return html`<div class="card"><h2>BSE-only stocks <span class="muted">${b.stocks.length} tracked · Screener fallback</span></h2>
     <div class="small">${!b.enabled ? html`<b>Off</b> (tracker.yaml)`
       : blocked ? html`<span class="err">▲ Paused for today — ${b.block_reason}</span>`
-      : !b.chrome ? html`<span class="down">▲ Chrome debug session not running</span> — start it with <code>bash scripts/launch_chrome_debug.sh</code>; nothing is fetched without it.`
-      : html`<span class="up">●</span> Ready · ${b.today} of ${b.cap} companies today`}</div>
+      : !b.chrome ? html`<span class="down">▲ Chrome debug session not running</span> — the tracker starts its own profile on the next tick (or <code>bash scripts/launch_chrome_debug.sh</code>).`
+      : html`<span class="up">●</span> Ready · ${b.today} of ${b.cap} Screener pages today`}</div>
     <div class="small muted" style="margin-top:4px">${b.due} due now${b.last_request ? ` · last Screener request ${fmt.ago(b.last_request)}` : ''} ·
-      one company at a time, ≥9 s between requests, spread over the day; PDFs come straight from BSE.</div>
+      every 45 min on a board-meeting day, 3 h in results season, else 12 h; ≥9 s between requests; PDFs come straight from BSE.</div>
     ${b.stocks.length ? html`<details style="margin-top:6px"><summary class="small">Stocks</summary><table class="t small"><tbody>
       ${b.stocks.map(s => html`<tr><td><a href="#/stock/${encodeURIComponent(s.sid)}">${s.sid}</a> <span class="muted">${s.name}</span></td>
         <td>${s.due || html`<span class="muted">up to date</span>`}</td><td class="nowrap muted">${s.last ? fmt.date(s.last, true) : '—'}</td></tr>`)}</tbody></table></details>` : null}

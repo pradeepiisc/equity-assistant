@@ -4,6 +4,12 @@ NSE corporate-filing RSS feeds (https://www.nseindia.com/rss-feed) → events.
 The feeds are rolling windows (20–60 latest items), so they are polled every few
 minutes; every item is stored once (feed_items) and items for tracked stocks become
 events. BSE-only stocks are not covered by these feeds.
+
+A rolling window loses whatever was filed while the laptop slept or the server was off,
+and can overflow in a results-season burst. `catch_up` therefore reads NSE's own
+date-range APIs (announcements and integrated results filings, main board and SME) from
+the last sync to now — every `catch_up_every_min`, and on the first tick after a gap.
+An item is stored once whichever path sees it first (matched by its attachment URL).
 """
 from __future__ import annotations
 
@@ -14,7 +20,7 @@ import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta
 
 from . import classify
-from .db import add_event, kv_set
+from .db import add_event, kv_get, kv_set
 from .util import IST, Http, norm_name, now_ist, to_float
 
 BASE = "https://nsearchives.nseindia.com/content/RSS/"
@@ -29,7 +35,7 @@ FEEDS = {
     "results": "Integrated_Filing_Financials.xml",
     "corp_action": "Corporate_action.xml",
 }
-_DATE_FORMATS = ("%d-%b-%Y %H:%M:%S", "%d-%b-%Y %H:%M", "%Y-%m-%d %H:%M:%S", "%d-%b-%Y")
+_DATE_FORMATS = ("%d-%b-%Y %H:%M:%S", "%d-%b-%Y %H:%M", "%Y-%m-%d %H:%M:%S", "%d-%b-%Y")   # also NSE API stamps
 
 
 def parse_ts(s: str) -> str:
@@ -42,13 +48,18 @@ def parse_ts(s: str) -> str:
     return now_ist().isoformat(timespec="seconds")
 
 
+def fix_link(link: str) -> str:
+    """NSE's RSS sometimes drops the '/corporate/' path ('…nseindia.comSYMBOL_…pdf'): put it back."""
+    return re.sub(r"^(https://nsearchives\.nseindia\.com)(?=[^/])", r"\1/corporate/", link or "")
+
+
 def parse_rss(content: bytes) -> list[dict]:
     root = ET.fromstring(content)
     items = []
     for it in root.iter("item"):
         items.append({
             "title": (it.findtext("title") or "").strip(),
-            "link": (it.findtext("link") or "").strip(),
+            "link": fix_link((it.findtext("link") or "").strip()),
             "description": (it.findtext("description") or "").strip(),
             "pubDate": (it.findtext("pubDate") or "").strip(),
         })
@@ -79,7 +90,9 @@ class Matcher:
             token = link.rsplit("/", 1)[-1].split("_", 1)[0].upper()
             ref = self.by_code.get(token)
         stock = self.tracked.get(ref["isin"]) if ref is not None else None
-        if stock is None:
+        if stock is None and ref is None:
+            # by name only when the exchange master doesn't know the company: a known ISIN that isn't tracked
+            # is another company (SIYSIL's filings once matched 544047 by a wrong stored name)
             stock = self.tracked_norm.get(norm_name(company))
         return ref, stock
 
@@ -140,6 +153,12 @@ def _event_for(feed: str, it: dict, stock: sqlite3.Row, settings: dict) -> dict:
     return {"kind": "filing", "type": feed, "severity": "low", "title": feed, "detail": desc, "data": {}}
 
 
+def _goes_to_ai(feed: str, ev: dict, it: dict, settings: dict) -> bool:
+    docs = settings.get("documents", {})
+    return (feed == "announcements" and docs.get("enabled", True) and settings.get("llm", {}).get("enabled", True)
+            and ev["type"] in set(docs.get("kinds") or []) and (it.get("link") or "").lower().endswith(".pdf"))
+
+
 def _shp_fields(desc: str) -> dict:
     out = {}
     for key, name in (("AS ON DATE", "as_on"), ("PR_AND_PRGRP", "promoters"), ("PUBLIC_VAL", "public")):
@@ -163,6 +182,66 @@ def _record_shareholding(conn: sqlite3.Connection, sid: str, fields: dict) -> No
         "public=COALESCE(shareholding.public, excluded.public)",
         (sid, qdate, None, fields["promoters"], fields.get("public"), "nse_rss"),
     )
+
+
+def _ingest(conn: sqlite3.Connection, feed: str, it: dict, matcher: Matcher, settings: dict, stamp: str,
+            source: str) -> tuple[bool, bool]:
+    """Store one feed item (once) and turn it into an event when it belongs to a tracked stock → (new, tracked)."""
+    guid = _guid(feed, it)
+    seen = conn.execute("SELECT guid, sid FROM feed_items WHERE feed=? AND guid=?", (feed, guid)).fetchone() or \
+        (conn.execute("SELECT guid, sid FROM feed_items WHERE feed=? AND url=?", (feed, it["link"])).fetchone()
+         if it["link"] else None)   # the same filing, already seen by the other path (RSS ↔ API)
+    if seen is not None:
+        if seen["sid"] is not None:
+            return False, False
+        # stored while the company wasn't tracked: if it is now (added to the watchlist), it becomes an event
+        ref, stock = matcher.match(it["title"], it["link"], it["description"])
+        if stock is None:
+            return False, False
+        conn.execute("UPDATE feed_items SET sid=? WHERE feed=? AND guid=?", (stock["sid"], feed, seen["guid"]))
+        guid = seen["guid"]
+        ts = parse_ts(it["pubDate"])
+        ev = _event_for(feed, it, stock, settings)
+        if _goes_to_ai(feed, ev, it, settings):
+            ev["data"] = {**(ev.get("data") or {}), "sev0": ev["severity"], "pending_ai": True}
+            ev["severity"] = "low"
+        elif feed == "results":
+            ev["severity"] = "low"
+        add_event(conn, sid=stock["sid"], ts=ts, kind=ev["kind"], type=ev["type"], severity=ev["severity"],
+                  title=ev["title"], detail=ev.get("detail", ""), value_cr=ev.get("value_cr"),
+                  url=it["link"], source=source, data=ev.get("data"), dedupe=f"feed:{feed}:{guid}")
+        return False, True
+    ref, stock = matcher.match(it["title"], it["link"], it["description"])
+    ts = parse_ts(it["pubDate"])
+    text, subject = classify.split_subject(it["description"])
+    conn.execute(
+        "INSERT INTO feed_items(feed, guid, ts, company, isin, sid, subject, description, url, "
+        "category, fetched_at) VALUES(?,?,?,?,?,?,?,?,?,?,?)",
+        (feed, guid, ts, it["title"], ref["isin"] if ref is not None else None,
+         stock["sid"] if stock is not None else None, subject, it["description"], it["link"],
+         None, stamp),
+    )
+    if stock is None:
+        return True, False
+    ev = _event_for(feed, it, stock, settings)
+    if feed == "shareholding":
+        _record_shareholding(conn, stock["sid"], ev["data"])
+    if _goes_to_ai(feed, ev, it, settings):
+        # the AI read (documents.py → extract.py) finishes this event with a summary and its real
+        # severity, so the inbox gets one informative alert instead of a bare "Results filed" first
+        ev["data"] = {**(ev.get("data") or {}), "sev0": ev["severity"], "pending_ai": True}
+        ev["severity"] = "low"
+    elif feed == "results":
+        ev["severity"] = "low"          # the quarter's results event (results.py) carries the numbers
+    elif feed == "announcements" and re.search(r"/xbrl/.*\.xml$", it.get("link") or "", re.I):
+        # the machine-readable twin of a PDF announcement filed minutes earlier — never a second alert
+        ev["severity"] = "low"
+        ev["title"] = f"{ev['title']} (XBRL copy)"
+    conn.execute("UPDATE feed_items SET category=? WHERE feed=? AND guid=?", (ev["type"], feed, guid))
+    add_event(conn, sid=stock["sid"], ts=ts, kind=ev["kind"], type=ev["type"], severity=ev["severity"],
+              title=ev["title"], detail=ev.get("detail", ""), value_cr=ev.get("value_cr"),
+              url=it["link"], source=source, data=ev.get("data"), dedupe=f"feed:{feed}:{guid}")
+    return True, True
 
 
 def poll(conn: sqlite3.Connection, http: Http, settings: dict, only: list[str] | None = None) -> dict:
@@ -189,32 +268,104 @@ def poll(conn: sqlite3.Connection, http: Http, settings: dict, only: list[str] |
             continue
         new = tracked = 0
         for it in items:
-            guid = _guid(feed, it)
-            if conn.execute("SELECT 1 FROM feed_items WHERE feed=? AND guid=?", (feed, guid)).fetchone():
-                continue
-            ref, stock = matcher.match(it["title"], it["link"], it["description"])
-            ts = parse_ts(it["pubDate"])
-            text, subject = classify.split_subject(it["description"])
-            conn.execute(
-                "INSERT INTO feed_items(feed, guid, ts, company, isin, sid, subject, description, url, "
-                "category, fetched_at) VALUES(?,?,?,?,?,?,?,?,?,?,?)",
-                (feed, guid, ts, it["title"], ref["isin"] if ref is not None else None,
-                 stock["sid"] if stock is not None else None, subject, it["description"], it["link"],
-                 None, stamp),
-            )
-            new += 1
-            if stock is None:
-                continue
-            ev = _event_for(feed, it, stock, settings)
-            if feed == "shareholding":
-                _record_shareholding(conn, stock["sid"], ev["data"])
-            conn.execute("UPDATE feed_items SET category=? WHERE feed=? AND guid=?", (ev["type"], feed, guid))
-            add_event(conn, sid=stock["sid"], ts=ts, kind=ev["kind"], type=ev["type"], severity=ev["severity"],
-                      title=ev["title"], detail=ev.get("detail", ""), value_cr=ev.get("value_cr"),
-                      url=it["link"], source=f"NSE · {fname.removesuffix('.xml')}", data=ev.get("data"),
-                      dedupe=f"feed:{feed}:{guid}")
-            tracked += 1
+            n, t = _ingest(conn, feed, it, matcher, settings, stamp, f"NSE · {fname.removesuffix('.xml')}")
+            new, tracked = new + n, tracked + t
         out[feed] = {"items": len(items), "new": new, "tracked": tracked}
+        if new or items:
+            kv_set(conn, f"feed_ok:{feed}", stamp)
     cutoff = (now_ist() - timedelta(days=45)).isoformat()
     conn.execute("DELETE FROM feed_items WHERE ts < ?", (cutoff,))
+    return out
+
+
+# ── catch-up: NSE's date-range APIs ─────────────────────────────────────────
+
+API = "https://www.nseindia.com/api/"
+API_PAGE = "https://www.nseindia.com/companies-listing/corporate-filings-announcements"   # sets the session cookies
+
+
+class ApiError(Exception):
+    pass
+
+
+def _api(http: Http, path: str):
+    if not getattr(http, "_nse_session", False):
+        http.get(API_PAGE)
+        http._nse_session = True
+    r = http.get(API + path, headers={"Referer": API_PAGE, "Accept": "application/json, text/plain, */*"})
+    if r.status_code != 200:
+        raise ApiError(f"HTTP {r.status_code} for {path.split('?')[0]}")
+    try:
+        return r.json()
+    except ValueError as exc:
+        raise ApiError(f"not JSON for {path.split('?')[0]}") from exc
+
+
+def _ann_item(x: dict) -> dict:
+    text, subj = (x.get("attchmntText") or "").strip(), (x.get("desc") or "").strip()
+    return {"title": (x.get("sm_name") or x.get("symbol") or "").strip(), "link": (x.get("attchmntFile") or "").strip(),
+            "description": f"{text} |SUBJECT: {subj}" if subj else text, "pubDate": x.get("an_dt") or ""}
+
+
+def _res_item(x: dict) -> dict:
+    return {"title": (x.get("smName") or x.get("cmName") or x.get("symbol") or "").strip(),
+            "link": (x.get("xbrl") or "").strip(),
+            "description": f"{x.get('type') or 'Integrated Filing- Financials'}|{x.get('type_Sub') or ''}|",
+            "pubDate": x.get("creation_Date") or ""}
+
+
+def catch_up(conn: sqlite3.Connection, http: Http, settings: dict, force: bool = False) -> dict:
+    """Everything NSE published since the last sync (both boards), through the date-range APIs."""
+    sch = settings["schedule"]
+    now = now_ist()
+    last_s = kv_get(conn, "nse_api_synced_to")
+    if last_s and not force and (now - datetime.fromisoformat(last_s)) < timedelta(minutes=int(sch["catch_up_every_min"])):
+        return {"skipped": "synced recently"}
+    # the first run reaches the full window back: gaps before it are unknown (the RSS may have resumed since)
+    since = datetime.fromisoformat(last_s) - timedelta(hours=2) if last_s else now     # overlap: filings lag
+    since = max(since if last_s else now - timedelta(days=int(sch["catch_up_max_days"])),
+                now - timedelta(days=int(sch["catch_up_max_days"])))
+    cut = since.isoformat(timespec="seconds")
+    fd, td = since.strftime("%d-%m-%Y"), now.strftime("%d-%m-%Y")
+    matcher = Matcher(conn)
+    stamp = now.isoformat(timespec="seconds")
+    out: dict = {"from": since.isoformat(timespec="minutes")}
+    try:
+        for index in ("equities", "sme"):
+            board = "SME" if index == "sme" else "main board"
+            ann = _api(http, f"corporate-announcements?index={index}&from_date={fd}&to_date={td}")
+            new = tracked = 0
+            for x in ann if isinstance(ann, list) else []:
+                it = _ann_item(x)
+                if not it["link"] or parse_ts(it["pubDate"]) < cut:
+                    continue
+                n, t = _ingest(conn, "announcements", it, matcher, settings, stamp, f"NSE · announcements ({board}, catch-up)")
+                new, tracked = new + n, tracked + t
+            res = _api(http, f"integrated-filing-results?index={index}&from_date={fd}&to_date={td}"
+                             "&type=Integrated%20Filing-%20Financials&size=1000")
+            rn = rt = 0
+            for x in (res.get("data") if isinstance(res, dict) else None) or []:
+                it = _res_item(x)
+                if not it["link"].lower().endswith(".xml") or parse_ts(it["pubDate"]) < cut:
+                    continue
+                n, t = _ingest(conn, "results", it, matcher, settings, stamp, f"NSE · results filings ({board}, catch-up)")
+                rn, rt = rn + n, rt + t
+            out[index] = {"announcements": len(ann) if isinstance(ann, list) else 0, "new": new, "tracked": tracked,
+                          "results_new": rn, "results_tracked": rt}
+        # substantial stake changes (SAST Reg 29) — high importance, so they are not lost to a sleep gap either
+        sast = _api(http, f"corporate-sast-reg29?index=equities&from_date={fd}&to_date={td}")
+        sn = st_ = 0
+        for x in (sast.get("data") if isinstance(sast, dict) else None) or []:
+            it = {"title": (x.get("company") or x.get("symbol") or "").strip(), "link": (x.get("attachement") or "").strip(),
+                  "description": f"{x.get('acqSaleType') or 'Change'} by {x.get('regType') or 'Reg 29'}: {(x.get('acquirerName') or '').strip()}",
+                  "pubDate": x.get("timestamp") or x.get("sysTime") or ""}
+            if not it["link"] or parse_ts(it["pubDate"]) < cut:
+                continue
+            n, t = _ingest(conn, "sast29", it, matcher, settings, stamp, "NSE · SAST Reg 29 (catch-up)")
+            sn, st_ = sn + n, st_ + t
+        out["sast29"] = {"new": sn, "tracked": st_}
+    except Exception as exc:                  # network / NSE hiccup: the next tick tries again from the same point
+        out["error"] = f"{exc.__class__.__name__}: {exc}"
+        return out
+    kv_set(conn, "nse_api_synced_to", stamp)
     return out

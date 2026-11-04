@@ -218,7 +218,8 @@ export function OrderBooksPage({ params, version }) {
             <td><a href="#/stock/${encodeURIComponent(r.sid)}" class="sym">${r.name}</a>
               <span class="cname">${codes(r)}${r.in_portfolio ? ' · held' : ''}</span></td>
             <td class="n"><${Growth} v=${r.g} /></td>
-            <td class="n">${fmt.cr(r.order_book_cr)}${r.verified < 1 ? html`<span class="muted" title="approximate match in the PDF"> ≈</span>` : ''}</td>
+            <td class="n">${fmt.cr(r.order_book_cr)}${r.verified < 1 ? html`<span class="muted" title="approximate match in the PDF"> ≈</span>` : ''}
+              ${r.orders_since_n ? html`<div class="small muted" title=${`last disclosed ${fmt.cr(r.order_book_cr)} + ${r.orders_since_n} order(s) won since ${fmt.date(r.as_of, true)} (before execution)`}>≈ ${fmt.cr(r.book_est_cr)} incl. +${fmt.cr(r.orders_since_cr)} since</div>` : null}</td>
             <td class="n" title=${r.revenue_label}>${fmt.cr(r.revenue_cr)}<div class="tiny muted">${r.revenue_label.split(' · ')[1] || ''}</div></td>
             <td class="n">${r.book_to_revenue != null ? r.book_to_revenue.toFixed(2) + '×' : '—'}</td>
             <td class="n">${fmt.cr(r.mcap_cr)}</td>
