@@ -95,9 +95,18 @@ titled "Strong …", ▲ in the inbox; a fall is ▼. DMA40 crosses are pushed l
 
 - **Local model** (`localllm.py`): `qwen3.8:27b` under ollama on this Mac (`brew services start ollama`), free, so its
   calls never count against `llm.daily_budget_inr` (logged in `llm_calls` as `local:<model>`, ₹0). It writes company
-  profiles, matches policy and names the movers' triggers, and from 4 to 11 Nov 2026 also reads every live filing a
-  second time (with one worked example) — its lines appear under gpt-4.1's on the event, so the two can be compared
-  for a week (`llm.shadow_until`). About 0.5–5 minutes a call; one call per tick at most, most time-sensitive first.
+  profiles, matches policy and names the movers' triggers (one call per tick at most, most time-sensitive first).
+  From 5 to 13 Nov 2026 it also reads every live filing a second time (with one worked example), only on weekday
+  evenings 17:00–21:00 (`llm_eval.py`, `llm_eval` in config.py), beside `gemma4:26b-a4b`; its lines appear under
+  gpt-4.1's on the event, and gpt-5.2 grades all the reads into `data/tracker/evals/<mon>-<d>-eval.md`, then
+  `final-eval.md` after 7 evenings. See [../BACKGROUND_JOBS.md](../BACKGROUND_JOBS.md).
+- **Priority list** (`priority.py`, `python -m tracker priority`, every day at 21:00): every held and watched stock
+  with a results, press release, presentation or concall filing in the last 7 days. The filings' summaries, the
+  reported quarters, the cash-flow and debt rows of the results, the order book, capex, guidance, the weight in the
+  portfolio and the close against DMA40/50/100/200 are graded by gpt-5.2 (`priority.client`) as a small-cap momentum
+  investor: tier 1 (everything improving, price above every average) to 6 (exit). For SME stocks the EBITDA margin,
+  net cash and cash from operations weigh most. It writes `data/tracker/priority/<mon>-<d>-priority.md`: invest more,
+  start, trim or exit, rotations, then the full list best first.
 - **Government policy** (`policy.py`): PIB's release list (all ministries) every 3 hours, 07:00–23:30. Releases from
   the Cabinet and the economic ministries, or whose title names a scheme, outlay, duty, PLI … are read, and the local
   model names the tracked companies the policy can move — positive / negative, how strongly, and through which channel

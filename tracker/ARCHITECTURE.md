@@ -42,7 +42,8 @@ How the tracker turns exchange files into the dashboard, and where each model is
 | Task | Model | Where | Cost |
 |---|---|---|---|
 | Reading filings (results, presentations, transcripts, orders): summary, figures, results review, quarter notes, company view, valuation memo | gpt-4.1 | Azure OpenAI through `llm/client.py` (config `llm.client`) | within `llm.daily_budget_inr` |
-| A second read of every live filing, 4–11 Nov 2026 (`extract.shadow_read`): same pages and prompt plus one worked example, same number check; shown under gpt-4.1's on the event | qwen3.8:27b | local | free |
+| A second read of every live filing, 5–13 Nov 2026, weekday evenings 17:00–21:00 (`llm_eval.py` → `extract.shadow_read`): same pages and prompt plus one worked example, same number check; qwen3.8's is shown under gpt-4.1's on the event | qwen3.8:27b, gemma4:26b-a4b | local | free |
+| Grading those reads blind against the filing's pages (`llm_eval.judge`) → `data/tracker/evals/` | gpt-5.2 | Azure OpenAI (`llm_eval.judge_client`) | within `llm.daily_budget_inr` |
 | OCR of scanned pages | tesseract 5 (`eng`) | local binary | free |
 | Number check of every AI figure | none — `numcheck.py` (rules) | local | free |
 | Company profiles, policy matching, movers' triggers | qwen3.8:27b (27.8B, nvfp4, 18 GB) | ollama on this Mac, `localllm.py` | free |
@@ -52,9 +53,10 @@ example the local model matched or slightly beat gpt-4.1 — 4 vs 5 wrong figure
 4.3 vs 4.1, clarity 3.9 vs 3.7, fewer misleading lines — and covered one checklist item fewer; without the example it
 left out expenses and margins more often. It takes 0.5–5 minutes a filing on an M4 Pro (gpt-4.1: 2–20 seconds): a
 27B model reads all 18 GB of its weights for every token it writes, and this Mac's memory moves about 273 GB/s.
-So for one week both read every filing — gpt-4.1's read drives the alert, the local read sits under it — and then
-one is chosen (`llm.shadow_until`). The local model does one task a tick, most time-sensitive first: the movers'
-reasons, the second read of the newest filing, a PIB release's companies, a company profile.
+So for 7 weekdays every filing is read by both — gpt-4.1's read drives the alert, the local reads are made in the
+evening and graded by gpt-5.2 — and then `python -m tracker eval-final` decides once (`llm_eval` in config.py;
+schedule in `scripts/evening_schedule.sh`). In the ticks the local model does one task, most time-sensitive first:
+the movers' reasons, a PIB release's companies, a company profile; while an evening read runs, it waits.
 
 ## Reading a filing (documents.py → layout.py → extract.py → numcheck.py)
 

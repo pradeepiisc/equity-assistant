@@ -527,33 +527,31 @@ def movers_job(explain: bool = True):
 
 
 def local_model_job() -> str | None:
-    """One local-model task, the most time-sensitive first: the movers' reasons (the day's card), the local read of the
-    newest filing (the comparison week), a PIB release's companies, a company profile (five a day)."""
-    from . import extract, localllm, movers, policy
+    """One local-model task, the most time-sensitive first: the movers' reasons (the day's card), a PIB release's
+    companies, a company profile (five a day). The second reads of filings run in the evening only (llm_eval.py),
+    and while one is running this waits for the next tick."""
+    from . import localllm, movers, policy
+    from .llm_eval import LOCAL_LOCK
 
     settings = load_settings()
     if not settings["llm"].get("enabled", True) or not localllm.available(settings):
         return None
-    with session() as conn:
-        movers_left = movers.pending_reasons(conn)
-        shadow = extract.shadow_due(conn, settings)
-        policy_left = policy.pending(conn)
-    if movers_left:
-        res = movers_job(explain=True)
-        return f"movers:{(res or {}).get('explained', 0)} explained"
-    if shadow is not None:
-        def _s(conn):
-            doc = conn.execute("SELECT * FROM documents WHERE id=?", (shadow["id"],)).fetchone()
-            return extract.shadow_read(conn, doc, settings)
-        res = _run("local_read", _s)
-        return f"local read:{shadow['sid']}" if res else None
-    if policy_left:
-        res = policy_job(fetch=False, match=True)
-        return f"policy:{(res or {}).get('events', 0)} cards" if res else None
-    res = profiles_job()
-    if res and res.get("profiles"):
-        return f"profiles:{sum(1 for p in res['profiles'] if p.get('written'))}"
-    return None
+    with tick_lock("tick", LOCAL_LOCK) as got:   # one model in memory at a time
+        if not got:
+            return None
+        with session() as conn:
+            movers_left = movers.pending_reasons(conn)
+            policy_left = policy.pending(conn)
+        if movers_left:
+            res = movers_job(explain=True)
+            return f"movers:{(res or {}).get('explained', 0)} explained"
+        if policy_left:
+            res = policy_job(fetch=False, match=True)
+            return f"policy:{(res or {}).get('events', 0)} cards" if res else None
+        res = profiles_job()
+        if res and res.get("profiles"):
+            return f"profiles:{sum(1 for p in res['profiles'] if p.get('written'))}"
+        return None
 
 
 def profiles_job():

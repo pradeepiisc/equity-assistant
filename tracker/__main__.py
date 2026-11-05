@@ -15,6 +15,9 @@ Tracker CLI.
   python -m tracker tick [--force]       # one scheduler pass (runs only what is due; --force polls every feed)
   python -m tracker serve [--port 7788]  # dashboard + background polling (tick at start-up, then every 3 min)
   python -m tracker reread ID [ID …]     # read documents again with the current pipeline; rewrites their events
+  python -m tracker eval-nightly [--force]   # comparison week: local reads 17:00–21:00, grading, <mon>-<d>-eval.md
+  python -m tracker eval-final [--force]     # comparison week: overall table and decision, once after 7 evenings
+  python -m tracker priority                 # 21:00: held/watched stocks with new filings, invest more → exit
   python -m tracker status
 """
 from __future__ import annotations
@@ -61,8 +64,25 @@ def main(argv: list[str] | None = None) -> int:
     st2.add_argument("--trash", action="store_true", help="move the read ones to the Trash (asks first)")
     sr = sub.add_parser("reread", help="read documents again with the current pipeline (OCR, tables as rows, number check)")
     sr.add_argument("ids", type=int, nargs="+", help="document ids")
+    se = sub.add_parser("eval-nightly", help="comparison week: local reads (17:00-21:00), grading, tonight's eval file")
+    se.add_argument("--force", action="store_true", help="read even outside the evening window")
+    sf = sub.add_parser("eval-final", help="comparison week: the overall table and the decision (once)")
+    sf.add_argument("--force", action="store_true", help="decide now, with however many evenings are graded")
+    sub.add_parser("priority", help="tonight's priority list: held and watched stocks with new filings, add more → exit")
     args = p.parse_args(argv)
 
+    if args.cmd == "priority":
+        import json as _json
+        from . import config, priority
+        print(_json.dumps(priority.run(config.load_settings()), ensure_ascii=False, indent=1))
+        return 0
+    if args.cmd in ("eval-nightly", "eval-final"):
+        import json as _json
+        from . import config, llm_eval
+        settings = config.load_settings()
+        fn = llm_eval.nightly if args.cmd == "eval-nightly" else llm_eval.final
+        print(_json.dumps(fn(settings, force=args.force), ensure_ascii=False, indent=1, default=str))
+        return 0
     if args.cmd == "reread":
         import json as _json
         from . import config, db, extract

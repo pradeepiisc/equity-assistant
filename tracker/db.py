@@ -468,6 +468,9 @@ MIGRATIONS = [  # columns added after a table first shipped (ALTER is a no-op er
     "posted_at TEXT, text TEXT, relevant INTEGER, matches TEXT, model TEXT, fetched_at TEXT, matched_at TEXT)",  # policy.py: PIB
     "CREATE TABLE IF NOT EXISTS shadow_reads (doc_id INTEGER PRIMARY KEY, model TEXT, summary TEXT, numcheck TEXT, "
     "secs REAL, created_at TEXT)",                           # extract.shadow_read: the local model's read of a filing
+    "CREATE TABLE IF NOT EXISTS eval_reads (doc_id INTEGER NOT NULL, model TEXT NOT NULL, summary TEXT, numcheck TEXT, "
+    "secs REAL, created_at TEXT, PRIMARY KEY (doc_id, model))",   # llm_eval.py: each local model's read of a filing
+    "CREATE TABLE IF NOT EXISTS eval_judgements (doc_id INTEGER PRIMARY KEY, day TEXT, data TEXT, created_at TEXT)",
 ]
 
 

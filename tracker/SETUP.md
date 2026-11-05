@@ -45,7 +45,12 @@ ollama list                               # qwen3.8:27b   47951e4a6661   18 GB
 - The tracker calls it with thinking off and without ollama's JSON mode (this model answers 501 "structured output
   is unavailable" to it); the prompt asks for one JSON object and `localllm.py` parses the first one in the reply.
 - Another model: set `llm.local_model` in `tracker.yaml` (and `llm.local_url` for another host). Smaller Macs:
-  `gemma4:26b-a4b` (16 GB, faster, slightly weaker on tables) was the other candidate considered.
+  `gemma4:26b-a4b` (16 GB, MoE with 3.8B active parameters: several times faster and cooler) — pulled 2026-11-05
+  for the comparison week (`ollama pull gemma4:26b-a4b`, `llm_eval.models`).
+- Models live in `~/.ollama/models` (`blobs/` holds the weights, `manifests/` the names). To move them to another
+  machine, run `ollama pull` there, or copy that folder over to the same path.
+- Comparison week (5–13 Nov 2026): `bash scripts/evening_schedule.sh install` (weekday 17:00 reads and grading,
+  21:45 final decision). See [../BACKGROUND_JOBS.md](../BACKGROUND_JOBS.md).
 - Not running → company profiles, policy matching and the movers' reasons wait; nothing else changes.
 
 ## 5. Chrome debug profile (BSE-only stocks via Screener)

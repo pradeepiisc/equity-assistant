@@ -27,8 +27,9 @@ def _cfg(settings: dict) -> tuple[str, str, float]:
         float(llm.get("local_timeout_s", 600))
 
 
-def available(settings: dict) -> bool:
-    url, model, _ = _cfg(settings)
+def available(settings: dict, model: str | None = None) -> bool:
+    url, default, _ = _cfg(settings)
+    model = model or default
     try:
         tags = requests.get(f"{url}/api/tags", timeout=3).json().get("models") or []
     except Exception:
@@ -36,15 +37,25 @@ def available(settings: dict) -> bool:
     return any(t.get("name") == model or t.get("model") == model for t in tags)
 
 
+def unload(settings: dict, model: str | None = None) -> None:
+    """Free the model's memory now instead of after keep_alive."""
+    url, default, _ = _cfg(settings)
+    try:
+        requests.post(f"{url}/api/generate", json={"model": model or default, "keep_alive": 0}, timeout=30)
+    except Exception:
+        pass
+
+
 def chat_json(conn: sqlite3.Connection | None, settings: dict, prompt: str, *, purpose: str, sid: str | None = None,
               doc_id: int | None = None, cache_name: str | None = None, max_tokens: int = 4000,
               system: str = "You are a careful financial-document extraction engine. Output one strict JSON object only — "
                             "no prose, no code fences.",
-              examples: list[tuple[str, str]] | None = None, num_ctx: int = 32768) -> dict:
-    """`examples`: (user, assistant) turns placed before the prompt (one-shot)."""
+              examples: list[tuple[str, str]] | None = None, num_ctx: int = 32768, model: str | None = None) -> dict:
+    """`examples`: (user, assistant) turns placed before the prompt (one-shot). `model`: instead of llm.local_model."""
     from .extract import RESPONSE_DIR, json_repair
 
-    url, model, timeout = _cfg(settings)
+    url, default, timeout = _cfg(settings)
+    model = model or default
     cached = RESPONSE_DIR / f"{cache_name}.json" if cache_name else None
     if cached and cached.exists():
         return json.loads(cached.read_text())

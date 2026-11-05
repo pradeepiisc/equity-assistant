@@ -97,12 +97,29 @@ DEFAULTS: dict[str, Any] = {
         "local_model": "qwen3.8:27b",      # ollama model on this Mac (localllm.py): free; company profiles, policy matching
         "local_url": "http://127.0.0.1:11434",
         "local_timeout_s": 600,
-        "shadow_from": "2026-11-04",       # every live filing also read by the local model (extract.shadow_read)…
-        "shadow_until": "2026-11-11",      # …for this week, shown beside gpt-4.1's read; then choose one
+    },
+    # ── the evening priority list (priority.py): held and watched stocks with new filings, best first ──
+    "priority": {
+        "days": 7,                         # filings from the last 7 days
+        "client": "client_gpt52_azure",    # the grader
+        "batch": 12,                       # companies per call
+        "workers": 4,
+    },
+    # ── the local-model comparison week (llm_eval.py): every filing also read by the local models in the evening,
+    #    shown beside gpt-4.1's read and graded by another model; then choose one ──
+    "llm_eval": {
+        "from": "2026-11-05",              # filings from this day…
+        "until": "2026-11-13",             # …to this one (7 weekdays); then eval-final decides once
+        "window": ["17:00", "21:00"],      # local reads only inside this window (fans)
+        "models": ["qwen3.8:27b", "gemma4:26b-a4b"],
+        "kinds": ["results", "press_release", "presentation", "transcript"],
+        "judge_client": "client_gpt52_azure",
+        "weekdays_needed": 7,
     },
     "valuation": {
         "auto": True,                      # rewrite a memo when the company's numbers change (2 per tick)
         "max_age_days": 120,
+        "fallback_client": "client_gpt52_azure",   # when gpt-4.1's memo is broken JSON twice (repetition loop)
     },
     "notes": {
         "backfill": True,                  # condense the existing reports into quarterly notes (once per company)

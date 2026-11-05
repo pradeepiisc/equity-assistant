@@ -198,8 +198,9 @@ SUMMARY_ORDER = """
 def llm_json(conn: sqlite3.Connection, settings: dict, prompt: str, *, purpose: str, sid: str | None,
              doc_id: int | None = None, cache_name: str | None = None, max_tokens: int | None = None,
              system: str = "You are a careful financial-document extraction engine. Output strict JSON only.",
-             temperature: float = 0) -> dict:
-    """One JSON-mode call, cached on disk under data/tracker/llm/<cache_name>.json (never paid twice)."""
+             temperature: float = 0, frequency_penalty: float = 0) -> dict:
+    """One JSON-mode call, cached on disk under data/tracker/llm/<cache_name>.json (never paid twice).
+    `frequency_penalty` breaks the repetition loops gpt-4.1 sometimes falls into on long JSON answers."""
     from llm.client import get_client, get_model_name, is_gpt52
 
     cfg = settings["llm"]
@@ -220,6 +221,8 @@ def llm_json(conn: sqlite3.Connection, settings: dict, prompt: str, *, purpose: 
     else:
         kwargs["max_tokens"] = out_tokens
         kwargs["temperature"] = temperature
+        if frequency_penalty:
+            kwargs["frequency_penalty"] = frequency_penalty
     t0 = time.monotonic()
     stamp = now_ist().isoformat(timespec="seconds")
     try:
@@ -785,31 +788,21 @@ ONE_SHOT_ANSWER = json.dumps({"summary": [
     "Tailwind: strong data-centre demand; headwind: higher copper prices weighed on gross margin"]}, ensure_ascii=False)
 
 
-def shadow_due(conn: sqlite3.Connection, settings: dict) -> sqlite3.Row | None:
-    """The newest live filing read by gpt-4.1 that the local model hasn't read yet, inside the comparison week."""
-    cfg = settings["llm"]
-    until, since = cfg.get("shadow_until"), cfg.get("shadow_from") or "2000-01-01"
-    if not until or _day() > until:
-        return None
-    return conn.execute("SELECT d.* FROM documents d WHERE d.backfill=0 AND d.status='extracted' AND d.filed_at >= ? "
-                        "AND NOT EXISTS (SELECT 1 FROM shadow_reads s WHERE s.doc_id=d.id) "
-                        "ORDER BY d.filed_at DESC LIMIT 1", (since,)).fetchone()
-
-
-def shadow_read(conn: sqlite3.Connection, doc: sqlite3.Row, settings: dict) -> dict:
+def shadow_read(conn: sqlite3.Connection, doc: sqlite3.Row, settings: dict, model: str | None = None) -> dict:
     """The local model reads the filing with the same pages and prompt (plus the worked example) and the same number
-    check; its lines go on the filing's event and its results card beside gpt-4.1's. Nothing else is stored from it."""
+    check; its lines go on the filing's event and its results card beside gpt-4.1's. Nothing else is stored from it.
+    Every model's read is kept in eval_reads (llm_eval.py); only llm.local_model's goes on the dashboard."""
     import hashlib
 
     from . import localllm, results
     from .company_notes import context_block
 
     t0 = time.monotonic()
-    model = settings["llm"]["local_model"]
+    model = model or settings["llm"]["local_model"]
     prompt, keep, pages = build_prompt(conn, doc, settings)
     name = f"{doc['sha256']}_local-{model.replace(':', '-')}-1shot_{PROMPT_VERSION}_{hashlib.sha256(prompt.encode()).hexdigest()[:10]}"
-    data = localllm.chat_json(conn, settings, prompt, purpose="shadow", sid=doc["sid"], cache_name=name,
-                              examples=[(ONE_SHOT_USER, ONE_SHOT_ANSWER)])
+    data = localllm.chat_json(conn, settings, prompt, purpose="shadow", sid=doc["sid"], doc_id=doc["id"], cache_name=name,
+                              examples=[(ONE_SHOT_USER, ONE_SHOT_ANSWER)], model=model)
     want_res, _ = _wants(doc)
     res = data.get("results") if want_res and isinstance(data.get("results"), dict) else None
     stock = conn.execute("SELECT name FROM stocks WHERE sid=?", (doc["sid"],)).fetchone()
@@ -820,10 +813,14 @@ def shadow_read(conn: sqlite3.Connection, doc: sqlite3.Row, settings: dict) -> d
                          company=stock["name"] if stock else "")
     lines = list(chk.summary) + ([DROPPED_NOTE] if chk.dropped else [])
     secs = round(time.monotonic() - t0, 1)
-    conn.execute("INSERT OR REPLACE INTO shadow_reads(doc_id, model, summary, numcheck, secs, created_at) VALUES(?,?,?,?,?,?)",
-                 (doc["id"], localllm.LOCAL_PREFIX + model, json.dumps(lines, ensure_ascii=False),
-                  json.dumps({"source": chk.source, "fixes": chk.fixes, "dropped": chk.dropped}, ensure_ascii=False), secs,
-                  now_ist().isoformat(timespec="seconds")))
+    row = (doc["id"], localllm.LOCAL_PREFIX + model, json.dumps(lines, ensure_ascii=False),
+           json.dumps({"source": chk.source, "fixes": chk.fixes, "dropped": chk.dropped}, ensure_ascii=False), secs,
+           now_ist().isoformat(timespec="seconds"))
+    conn.execute("INSERT OR REPLACE INTO eval_reads(doc_id, model, summary, numcheck, secs, created_at) VALUES(?,?,?,?,?,?)", row)
+    if model != settings["llm"]["local_model"]:
+        conn.commit()
+        return {"doc_id": doc["id"], "sid": doc["sid"], "model": model, "secs": secs, "lines": len(lines)}
+    conn.execute("INSERT OR REPLACE INTO shadow_reads(doc_id, model, summary, numcheck, secs, created_at) VALUES(?,?,?,?,?,?)", row)
     events = {doc["event_id"]} if doc["event_id"] else set()
     rr = conn.execute("SELECT event_id FROM results_reviews WHERE sid=? AND doc_id=?", (doc["sid"], doc["id"])).fetchone() \
         or conn.execute("SELECT event_id FROM results_reviews WHERE sid=? AND period=?",
@@ -840,7 +837,7 @@ def shadow_read(conn: sqlite3.Connection, doc: sqlite3.Row, settings: dict) -> d
         d["local_reads"] = reads
         conn.execute("UPDATE events SET data=? WHERE id=?", (json.dumps(d, ensure_ascii=False, default=str), eid))
     conn.commit()
-    return {"doc_id": doc["id"], "sid": doc["sid"], "secs": secs, "lines": len(lines)}
+    return {"doc_id": doc["id"], "sid": doc["sid"], "model": model, "secs": secs, "lines": len(lines)}
 
 
 def reread(conn: sqlite3.Connection, doc_id: int, settings: dict) -> dict | None:

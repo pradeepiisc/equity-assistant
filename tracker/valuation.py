@@ -197,21 +197,28 @@ def write_memo(conn: sqlite3.Connection, s, settings: dict) -> dict | None:
     prompt, _ = prompt_for(conn, s, settings)
     key = hashlib.sha256(prompt.encode()).hexdigest()[:24]
     out = None
-    for attempt in range(2):                   # the model occasionally emits malformed JSON: one more try
+    client = settings["llm"]["client"]
+    fallback = settings.get("valuation", {}).get("fallback_client")
+    # gpt-4.1 sometimes loops on this long JSON (one object's keys over and over until max_tokens): retry with a
+    # frequency penalty, then hand it to the fallback model, which hasn't looped on it
+    attempts = [(client, 0, 0, 7000), (client, 0.4, 0.3, 7000)] + ([(fallback, 0, 0, 12000)] if fallback else [])
+    for i, (name, temp, fp, max_tokens) in enumerate(attempts):
         try:
-            out = extract.llm_json(conn, settings, prompt, purpose="valuation", sid=s["sid"],
-                                   cache_name=f"valuation_{s['sid']}_{key}", max_tokens=7000,
+            out = extract.llm_json(conn, {**settings, "llm": {**settings["llm"], "client": name}}, prompt,
+                                   purpose="valuation", sid=s["sid"], max_tokens=max_tokens,
+                                   cache_name=f"valuation_{s['sid']}_{key}" + ("" if name == client else f"_{name}"),
                                    system="You are a senior equity research analyst. Output strict, complete JSON only; "
                                           "keep each list to at most 5 short items.",
-                                   temperature=0 if attempt == 0 else 0.4)   # a deterministic loop repeats itself
+                                   temperature=temp, frequency_penalty=fp)
+            client = name
             break
         except json.JSONDecodeError:
-            if attempt == 1:
+            if i == len(attempts) - 1:
                 raise
     if not isinstance(out, dict) or not out.get("projections"):
         return None
     conn.execute("INSERT INTO valuations(sid, created_at, model, inputs_hash, memo) VALUES(?,?,?,?,?)",
-                 (s["sid"], now_ist().isoformat(timespec="seconds"), settings["llm"]["client"], key,
+                 (s["sid"], now_ist().isoformat(timespec="seconds"), client, key,
                   json.dumps(out, ensure_ascii=False)))
     conn.execute("DELETE FROM kv WHERE k=?", (f"valuation_stale:{s['sid']}",))
     return out
