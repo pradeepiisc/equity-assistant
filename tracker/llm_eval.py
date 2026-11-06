@@ -199,17 +199,16 @@ def judge(conn, settings: dict, doc) -> dict:
 
 
 def _judge_all(settings: dict, today: str) -> dict:
-    """Grade every filing that every installed local model has read (the rest wait for the next evening). A filing
-    graded before a model was installed is graded again, with all the reads, once that model has read it."""
+    """Grade every filing that has at least one local model read. A filing graded before another model
+    finishes is graded again, with all reads, once the newer read is recorded."""
     from . import localllm
     from .extract import BudgetExceeded
 
-    want = {localllm.LOCAL_PREFIX + m for m in _cfg(settings)["models"] if localllm.available(settings, m)}
     done = failed = 0
     with session() as conn:
         for doc in _docs(conn, settings, today):
             have = {r["model"] for r in conn.execute("SELECT model FROM eval_reads WHERE doc_id=?", (doc["id"],))}
-            if not want or not want <= have:
+            if not have:
                 continue
             old = conn.execute("SELECT data FROM eval_judgements WHERE doc_id=?", (doc["id"],)).fetchone()
             if old and have <= set(json.loads(old["data"])["summaries"]):

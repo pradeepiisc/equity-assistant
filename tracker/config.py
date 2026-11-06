@@ -111,7 +111,7 @@ DEFAULTS: dict[str, Any] = {
         "from": "2026-11-05",              # filings from this day…
         "until": "2026-11-13",             # …to this one (7 weekdays); then eval-final decides once
         "window": ["17:00", "21:00"],      # local reads only inside this window (fans)
-        "models": ["qwen3.8:27b", "gemma4:26b-a4b"],
+        "models": ["gemma4:26b-a4b", "qwen3.8:27b"],
         "kinds": ["results", "press_release", "presentation", "transcript"],
         "judge_client": "client_gpt52_azure",
         "weekdays_needed": 7,
