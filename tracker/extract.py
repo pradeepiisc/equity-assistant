@@ -765,31 +765,63 @@ def _events(conn: sqlite3.Connection, doc: sqlite3.Row, url: str, summary: list[
 
 # ── second read by the local model (a week of side-by-side reads, then the user picks) ───────────────
 
-# the worked example the local model gets before each filing: what a results summary covers, in order (one-shot)
-ONE_SHOT_USER = """(example) Company: Example Industries Ltd. Document: results. Pages are marked "=== Page N ===".
+# the 2 best real-filing few-shot examples for results summary: revenue YoY/QoQ, EBITDA margins, PAT, order book/capacity, guidance
+FEW_SHOT_EXAMPLES: list[tuple[str, str]] = [
+    (
+        """(example 1) Company: V-Marc India Limited. Document: results. Pages are marked "=== Page N ===".
 === Page 1 ===
-Statement of unaudited consolidated financial results for the quarter ended 30/09/2026 (₹ in crore)
-Particulars | 30/09/2026 | 30/06/2026 | 30/09/2025 | 31/03/2026
-Revenue from operations | 412.50 | 380.10 | 350.20 | 1,402.00
-Other income | 6.20 | 5.10 | 4.00 | 18.30
-Total expenses | 352.40 | 330.80 | 309.10 | 1,231.40
-Finance costs | 8.10 | 8.30 | 9.00 | 34.60
-Depreciation and amortisation | 12.40 | 12.10 | 11.20 | 46.00
-Profit before tax | 66.30 | 54.40 | 45.10 | 189.00
-Net profit for the period | 49.60 | 40.70 | 33.80 | 141.20
-Basic EPS (₹) | 4.96 | 4.07 | 3.38 | 14.12
-Order book as on 30 September 2026 stood at ₹2,150 crore; new orders of ₹520 crore were received in the quarter.
-Management said demand from data-centre customers stayed strong, while higher copper prices weighed on gross margin."""
-ONE_SHOT_ANSWER = json.dumps({"summary": [
-    "Q2 FY27 consolidated revenue ₹412.5 Cr, up 17.8% YoY and 8.5% QoQ",
-    "Total expenses ₹352.4 Cr, up 14.0% YoY; EBITDA ₹80.6 Cr, margin 19.5%, up 200 bps YoY",
-    "Consolidated PAT ₹49.6 Cr, up 46.7% YoY and 21.9% QoQ; EPS ₹4.96 vs ₹3.38 a year ago",
-    "Order book ₹2,150 Cr (5.2x quarterly revenue) as of 30 Sep 2026; Q2 order inflow ₹520 Cr",
-    "Tailwind: strong data-centre demand; headwind: higher copper prices weighed on gross margin"]}, ensure_ascii=False)
+Statement of Unaudited Consolidated Financial Results for the quarter and half year ended September 30, 2026 (₹ in Lakhs)
+Particulars | Quarter Ended 30/09/2026 | Quarter Ended 30/06/2026 | Quarter Ended 30/09/2025 | Half Year Ended 30/09/2026 | Half Year Ended 30/09/2025
+Revenue from operations | 71,985.20 | 55,550.80 | 41,705.50 | 127,536.00 | 69,150.20
+Other income | 312.40 | 280.10 | 195.00 | 592.50 | 380.00
+Total expenses | 63,205.10 | 48,920.40 | 36,780.20 | 112,125.50 | 61,040.10
+Operating EBITDA | 8,780.10 | 6,630.40 | 4,925.30 | 15,410.50 | 8,110.10
+Finance costs | 1,420.50 | 1,350.20 | 1,180.40 | 2,770.70 | 2,210.30
+Depreciation | 985.30 | 920.10 | 790.20 | 1,905.40 | 1,510.20
+Profit before tax | 6,686.70 | 4,640.20 | 3,149.70 | 11,326.90 | 4,769.60
+Net profit for the period | 4,791.20 | 3,340.50 | 2,666.10 | 8,131.70 | 3,420.50
+Basic EPS (₹) | 3.27 | 2.28 | 1.82 | 5.55 | 2.33
+Order book stands at ₹1,450 Cr as of 30 September 2026. Management raised FY27 revenue growth guidance to 60%+ with 11-12% EBITDA margin.""",
+        json.dumps({
+            "summary": [
+                "Q2 FY27 consolidated revenue ₹719.85 Cr, up 72.6% YoY and 29.6% QoQ; H1 FY27 revenue ₹1,275.36 Cr, up 84.4% YoY",
+                "Operating EBITDA ₹87.80 Cr, up 78.3% YoY; EBITDA margin 12.2%, up 34 bps YoY and 26 bps QoQ",
+                "Consolidated PAT ₹47.91 Cr, up 79.7% YoY and 43.4% QoQ; EPS ₹3.27 vs ₹1.82 a year ago",
+                "Unexecuted order book at ₹1,450 Cr (2.0x quarterly revenue) as of 30 Sep 2026; execution across 12-18 months",
+                "Management raised FY27 revenue growth guidance to 60%+ YoY (from 40%+), maintaining 11-12% EBITDA margin target"
+            ]
+        }, ensure_ascii=False)
+    ),
+    (
+        """(example 2) Company: Fractal Analytics Limited. Document: results. Pages are marked "=== Page N ===".
+=== Page 1 ===
+Statement of Unaudited Consolidated Financial Results for the quarter and half year ended September 30, 2026 (₹ in Crore)
+Particulars | 30/09/2026 | 30/06/2026 | 30/09/2025 | Half Year 30/09/2026 | Half Year 30/09/2025
+Revenue from operations | 957.00 | 912.00 | 797.50 | 1,869.00 | 1,557.50
+Total expenses | 802.00 | 772.00 | 678.00 | 1,574.00 | 1,328.00
+Adjusted EBITDA | 155.00 | 140.00 | 119.50 | 295.00 | 229.50
+Finance costs | 18.00 | 17.50 | 16.00 | 35.50 | 31.00
+Depreciation and amortisation | 31.00 | 30.50 | 28.00 | 61.50 | 54.00
+Profit before tax | 106.00 | 92.00 | 75.50 | 198.00 | 144.50
+Net profit after tax | 79.00 | 72.00 | 33.00 | 151.00 | 70.50
+Diluted EPS (₹) | 4.48 | 4.08 | 1.93 | 8.56 | 4.12
+Product revenue was ₹38 Cr (4% of revenue), up 39% YoY; RPO for products exceeded ₹200 Cr.
+Management expects sequential margin improvement in H2 FY27, with gross margins recovering and AI product unit approaching breakeven.""",
+        json.dumps({
+            "summary": [
+                "Q2 FY27 consolidated revenue ₹957.0 Cr, up 20.0% YoY and 4.9% QoQ; H1 FY27 revenue ₹1,869.0 Cr, up 20.0% YoY",
+                "Adjusted EBITDA ₹155.0 Cr, up 29.7% YoY; EBITDA margin 16.2%, expanded 123 bps YoY",
+                "Consolidated PAT ₹79.0 Cr, up 139.4% YoY and 9.7% QoQ; diluted EPS ₹4.48 vs ₹1.93 YoY",
+                "Product revenue ₹38.0 Cr, up 39.0% YoY; Remaining Performance Obligations (RPO) for products exceeded ₹200 Cr",
+                "Tailwind: strong enterprise AI demand; Management expects sequential margin expansion in H2 FY27 with product breakeven"
+            ]
+        }, ensure_ascii=False)
+    )
+]
 
 
 def shadow_read(conn: sqlite3.Connection, doc: sqlite3.Row, settings: dict, model: str | None = None) -> dict:
-    """The local model reads the filing with the same pages and prompt (plus the worked example) and the same number
+    """The local model reads the filing with the same pages and prompt (plus the worked examples) and the same number
     check; its lines go on the filing's event and its results card beside gpt-4.1's. Nothing else is stored from it.
     Every model's read is kept in eval_reads (llm_eval.py); only llm.local_model's goes on the dashboard."""
     import hashlib
@@ -800,9 +832,9 @@ def shadow_read(conn: sqlite3.Connection, doc: sqlite3.Row, settings: dict, mode
     t0 = time.monotonic()
     model = model or settings["llm"]["local_model"]
     prompt, keep, pages = build_prompt(conn, doc, settings)
-    name = f"{doc['sha256']}_local-{model.replace(':', '-')}-1shot_{PROMPT_VERSION}_{hashlib.sha256(prompt.encode()).hexdigest()[:10]}"
+    name = f"{doc['sha256']}_local-{model.replace(':', '-')}-fewshot_{PROMPT_VERSION}_{hashlib.sha256(prompt.encode()).hexdigest()[:10]}"
     data = localllm.chat_json(conn, settings, prompt, purpose="shadow", sid=doc["sid"], doc_id=doc["id"], cache_name=name,
-                              examples=[(ONE_SHOT_USER, ONE_SHOT_ANSWER)], model=model)
+                              examples=FEW_SHOT_EXAMPLES, model=model)
     want_res, _ = _wants(doc)
     res = data.get("results") if want_res and isinstance(data.get("results"), dict) else None
     stock = conn.execute("SELECT name FROM stocks WHERE sid=?", (doc["sid"],)).fetchone()

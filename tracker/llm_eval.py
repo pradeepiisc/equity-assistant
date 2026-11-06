@@ -83,7 +83,7 @@ def _hm(s: str) -> tuple[int, int]:
 def in_window(settings: dict, now: datetime | None = None) -> bool:
     now = now or now_ist()
     a, b = (_hm(x) for x in _cfg(settings)["window"])
-    return now.weekday() < 5 and a <= (now.hour, now.minute) < b
+    return now.weekday() <= 5 and a <= (now.hour, now.minute) < b
 
 
 def label(variant: str, models: list[str]) -> str:
@@ -341,27 +341,34 @@ def nightly(settings: dict, force: bool = False) -> dict:
     out = {"day": today, "reads": _read_all(settings, today, force) if force or in_window(settings) else "outside window"}
     out["grading"] = _judge_all(settings, today)
     out["report"] = report(settings, today)
+    # also update the running cumulative final-eval.md table
+    final_res = final(settings)
+    out["final_status"] = final_res
     return out
 
 
 def final(settings: dict, force: bool = False) -> dict:
-    """Once, after `weekdays_needed` graded evenings (or after `until`): the overall table and the decision."""
+    """Updates final-eval.md with the cumulative table across all graded evenings.
+    Records the final decision in kv once weekdays_needed evenings are graded."""
     cfg = _cfg(settings)
     models = cfg["models"]
     with session() as conn:
-        if kv_get(conn, FINAL_KEY) and not force:
-            return {"skipped": "already decided", **kv_get(conn, FINAL_KEY)}
+        already_decided = kv_get(conn, FINAL_KEY)
+        if already_decided and not force:
+            return {"skipped": "already decided", **already_decided}
         days = [r["day"] for r in conn.execute("SELECT DISTINCT day FROM eval_judgements WHERE day >= ? ORDER BY day",
-                                               (cfg["from"],)) if date.fromisoformat(r["day"]).weekday() < 5]
-        if not force and len(days) < cfg["weekdays_needed"] and now_ist().date().isoformat() <= cfg["until"]:
-            return {"waiting": f"{len(days)} of {cfg['weekdays_needed']} evenings graded"}
+                                               (cfg["from"],)) if date.fromisoformat(r["day"]).weekday() <= 5]
         rows = conn.execute("SELECT * FROM eval_judgements WHERE day >= ?", (cfg["from"],)).fetchall()
         if not rows:
             return {"waiting": "nothing graded"}
         agg = aggregate(conn, rows)
         per_day = {d: aggregate(conn, [r for r in rows if r["day"] == d]) for d in days}
+
+    is_complete = force or len(days) >= cfg["weekdays_needed"] or now_ist().date().isoformat() > cfg["until"]
     decision, why = decide(agg)
-    lines = [f"# Summary comparison: final ({days[0] if days else '?'} to {days[-1] if days else '?'})", "",
+    status_msg = f"Completed ({len(days)} evenings graded)" if is_complete else f"In progress ({len(days)} of {cfg['weekdays_needed']} evenings graded)"
+    lines = [f"# Summary comparison: cumulative ({days[0] if days else '?'} to {days[-1] if days else '?'})", "",
+             f"**Status: {status_msg}**  ",
              f"{len(rows)} filings over {len(days)} evenings, graded blind by "
              f"{json.loads(rows[0]['data']).get('judge', '')}. Daily files: "
              + ", ".join(f"`{eval_path(date.fromisoformat(d)).name}`" for d in days), "",
@@ -374,7 +381,7 @@ def final(settings: dict, force: bool = False) -> dict:
             n = x["docs"] or 1
             lines.append(f"| {d} | {label(v, models).split(':')[0]} | {x['docs']} | {x['wrong']} / {x['figures']} | "
                          f"{x['covered']} / {x['applicable']} | {x['use'] / n:.1f} | {x['misleading']} | {x['best']} |")
-    lines += ["", "## Decision", "", f"**{label(decision, models)}**", "", why, "",
+    lines += ["", "## Current Standing & Decision", "", f"**{label(decision, models)}**", "", why, "",
               "Rule: a local model is chosen only if, against gpt-4.1, its wrong-figure rate is at most 1 point "
               "higher, its misleading statements per filing at most 0.1 higher, its checklist coverage at most "
               "3 points lower and its usefulness at most 0.1 lower. Among the local models that pass, the fastest "
@@ -386,10 +393,12 @@ def final(settings: dict, force: bool = False) -> dict:
     EVAL_DIR.mkdir(parents=True, exist_ok=True)
     path = EVAL_DIR / "final-eval.md"
     path.write_text("\n".join(lines) + "\n")
-    result = {"decision": decision, "why": why, "report": str(path), "decided_at": now_ist().isoformat(timespec="seconds")}
-    with session() as conn:
-        kv_set(conn, FINAL_KEY, result)
-        conn.commit()
+    result = {"status": status_msg, "days_graded": len(days), "weekdays_needed": cfg["weekdays_needed"],
+              "decision": decision, "why": why, "report": str(path), "updated_at": now_ist().isoformat(timespec="seconds")}
+    if is_complete:
+        with session() as conn:
+            kv_set(conn, FINAL_KEY, result)
+            conn.commit()
     return result
 
 

@@ -29,7 +29,7 @@ case "${1:-status}" in
       slot() { echo "<dict>${1:+<key>Weekday</key><integer>$1</integer>}<key>Hour</key><integer>$((10#$hh))</integer><key>Minute</key><integer>$((10#$mm))</integer></dict>"; }
       slots=""
       if [ "$days" = weekdays ]; then
-        for wd in 1 2 3 4 5; do slots="$slots$(slot "$wd")"; done
+        for wd in 1 2 3 4 5 6; do slots="$slots$(slot "$wd")"; done   # Mon–Sat (includes Saturday results)
       else
         slots="$(slot "")"
       fi

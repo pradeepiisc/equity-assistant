@@ -311,9 +311,13 @@ def parse(pages: list[str], period: str | None = None) -> list[Row]:
         # standalone and consolidated side by side in one table ("Standalone | Consolidated" over twice the columns)
         side = None
         for hl in lines[:40]:
-            hm = re.search(r"\b(standalone|consolidated)\b.{0,80}\b(standalone|consolidated)\b", hl, re.I)
-            if hm and hm.group(1).lower() != hm.group(2).lower():
-                side = (hm.group(1).lower(), hm.group(2).lower())
+            if re.search(r"\b(?:nature of report|whether|type of)\b|\bstandalone\s+(?:or|and|/)\s+consolidated\b", hl, re.I):
+                continue
+            cells = [c.strip().lower() for c in hl.split(CELL_SPLIT) if c.strip()]
+            sa = [i for i, c in enumerate(cells) if re.search(r"^standalone\b", c)]
+            co = [i for i, c in enumerate(cells) if re.search(r"^consolidated\b", c)]
+            if sa and co:
+                side = ("standalone", "consolidated") if sa[0] < co[0] else ("consolidated", "standalone")
                 break
         fvm = re.search(r"face\s+value[^\d\n]{0,40}?(\d+(?:\.\d+)?)\s*/?-?", text, re.I)
         fv = float(fvm.group(1)) if fvm and 0 < float(fvm.group(1)) <= 1000 else None
