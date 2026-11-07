@@ -98,7 +98,7 @@ Rules:
   ₹ X lakh = X/100 Cr; ₹ X lakh crore = X*100000 Cr. USD: 1 USD = ₹{usd_inr}.
 - order_book = unexecuted orders on hand at a date — never revenue, bids, pipeline, opportunities or orders
   received in a period. as_of = the date the quote states ("as on 12th August 2025" → 2025-08-12); for a
-  quarter ("as of Q2 FY27") its end — FY27 Q1 ends 2026-06-30, Q2 2026-09-30, Q3 2026-12-31, Q4 2027-03-31;
+  quarter (e.g. "as of Q3 FY27") its quarter-end date (Q1 ends June 30, Q2 September 30, Q3 December 31, Q4 March 31);
   for "current", "today" or "as on date", the filing date. Use scope "total" for the company-wide figure.
 - order_inflow = new orders received during a period.
 - orders = individual NEW contracts or orders won (customer, value, duration as stated). Not reference lists

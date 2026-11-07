@@ -65,7 +65,7 @@ def chat_json(conn: sqlite3.Connection | None, settings: dict, prompt: str, *, p
     messages.append({"role": "user", "content": prompt})
     # no "format": "json" — qwen3.8 under ollama 0.40 answers 501 "structured output is unavailable"; the prompt asks
     # for one JSON object and the reply is parsed leniently below
-    body = {"model": model, "messages": messages, "stream": False, "think": False, "keep_alive": "30m",
+    body = {"model": model, "messages": messages, "stream": False, "think": False, "keep_alive": "2m",
             "options": {"temperature": 0, "num_ctx": num_ctx, "num_predict": max_tokens}}
     t0 = time.monotonic()
     stamp = now_ist().isoformat(timespec="seconds")

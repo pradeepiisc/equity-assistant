@@ -192,7 +192,7 @@ def judge(conn, settings: dict, doc) -> dict:
            "grades": grades, "ranking": [labels[s] for s in data.get("ranking") or [] if s in labels],
            "note": data.get("note") or "", "summaries": variants}
     conn.execute("INSERT OR REPLACE INTO eval_judgements(doc_id, day, data, created_at) VALUES(?,?,?,?)",
-                 (doc["id"], now_ist().date().isoformat(), json.dumps(out, ensure_ascii=False),
+                 (doc["id"], doc["filed_at"][:10], json.dumps(out, ensure_ascii=False),
                   now_ist().isoformat(timespec="seconds")))
     conn.commit()
     return out

@@ -57,29 +57,29 @@ Work ONLY from the data below (it is what the investor's tracker holds; say when
 inventing it). The TRACKER BASELINE is mechanical (guidance, else order book, else trend, split by past seasonality):
 challenge it — check every projected period against the latest reported periods, the year-to-date run-rate, the order
 book's execution and stated timing of new capacity; when the run-rate already beats a guidance, say so and project
-from the run-rate. Bear, base and bull must differ in revenue, margin and EPS, not only in the multiple. Money in ₹ crore. Fiscal years end in March (FY27 = Apr 2026–Mar 2027). Section 4 (portfolio
+from the run-rate. Bear, base and bull must differ in revenue, margin and EPS, not only in the multiple. Money in ₹ crore. Fiscal years end in March ({fy_curr} = Apr {fy_start}–Mar {fy_end}). Section 4 (portfolio
 allocation) is out of scope: give valuation levels, not position sizes.
 
 Return ONE JSON object with exactly these keys:
 {{
   "one_line": "the investment case in ≤ 25 words",
   "pipeline": {{"summary": ["3-6 lines, numbers first"],
-               "guidance": [{{"metric": "...", "period": "FY27", "value": "...", "source": "where it was said"}}],
+               "guidance": [{{"metric": "...", "period": "{fy_curr}", "value": "...", "source": "where it was said"}}],
                "order_book": {{"value_cr": number|null, "as_of": "YYYY-MM-DD"|null, "execution_months": number|null,
-                              "billing_by_period": [{{"period": "Q3 FY27", "revenue_cr": number}}], "note": "..."}},
-               "capex": [{{"what": "...", "amount_cr": number|null, "capacity": "...", "revenue_from": "Q1 FY28",
+                              "billing_by_period": [{{"period": "{next_label}", "revenue_cr": number}}], "note": "..."}},
+               "capex": [{{"what": "...", "amount_cr": number|null, "capacity": "...", "revenue_from": "{fy_next}",
                           "peak_revenue_cr": number|null}}],
                "deals": ["partnerships / large deals, with values"]}},
   "macro": {{"summary": ["3-5 lines"], "rates": "...", "inflation": "...", "currency": "...",
             "policy": ["PLI / tariffs / FTAs and their direction"]}},
   "projections": {{
      "periods": [{{"period": "{next_label} …", "revenue_cr": number, "ebitda_margin_pct": number, "pat_cr": number}}],
-     "years": [{{"fy": "FY27", "revenue_cr": number, "ebitda_margin_pct": number, "pat_cr": number, "eps": number}}],
+     "years": [{{"fy": "{fy_curr}", "revenue_cr": number, "ebitda_margin_pct": number, "pat_cr": number, "eps": number}}],
      "assumptions": ["how revenue, margin and PAT were derived, each with its source in the data"]}},
   "valuation": {{"metric": "P/E|EV/EBITDA", "roe_pct": number|null, "multiple_rationale": "...",
-                "bear": {{"fy": "FY28", "eps": number, "multiple": number, "rationale": "..."}},
-                "base": {{"fy": "FY28", "eps": number, "multiple": number, "rationale": "..."}},
-                "bull": {{"fy": "FY28", "eps": number, "multiple": number, "rationale": "..."}},
+                "bear": {{"fy": "{fy_next}", "eps": number, "multiple": number, "rationale": "..."}},
+                "base": {{"fy": "{fy_next}", "eps": number, "multiple": number, "rationale": "..."}},
+                "bull": {{"fy": "{fy_next}", "eps": number, "multiple": number, "rationale": "..."}},
                 "three_year": {{"fy": "FY{y3}", "eps": number, "multiple": number, "market_cap_cr": number}},
                 "five_year": {{"fy": "FY{y5}", "eps": number, "multiple": number, "market_cap_cr": number}},
                 "entry_slippage": "how to stage entries to limit slippage"}},
@@ -177,6 +177,10 @@ def prompt_for(conn: sqlite3.Connection, s, settings: dict) -> tuple[str, dict]:
     nxt = [p["label"] for p in (est.get("periods") or [])]
     yrs = [y["label"].rstrip("E") for y in (est.get("years") or [])]
     fy0 = int(yrs[0][2:]) if yrs else (now_ist().year % 100 + 1)
+    fy_curr = f"FY{fy0}"
+    fy_next = f"FY{fy0 + 1}"
+    fy_start = 2000 + fy0 - 1
+    fy_end = 2000 + fy0
     p = ANALYST_PROMPT.format(
         company=s["name"] or s["sid"], sid=s["sid"], sector=s["sector"] or "n/a",
         listing="BSE" if not s["nse_symbol"] else ("NSE SME" if s["is_sme"] else "NSE"),
@@ -187,6 +191,7 @@ def prompt_for(conn: sqlite3.Connection, s, settings: dict) -> tuple[str, dict]:
         next_label=nxt[0] if nxt else "next period", n_periods=len(nxt) or 2 * per,
         period_word="half-years" if h["half"] else "quarters", periods_list=", ".join(nxt) or "n/a",
         years_list=", ".join(yrs) + f" and FY{fy0 + 4} (5-year)" if yrs else "the next three fiscal years",
+        fy_curr=fy_curr, fy_next=fy_next, fy_start=fy_start, fy_end=fy_end,
         y3=fy0 + 2, y5=fy0 + 4, data=data)
     return p, ctx
 
