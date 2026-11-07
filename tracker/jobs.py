@@ -527,14 +527,13 @@ def movers_job(explain: bool = True):
 
 
 def local_model_job() -> str | None:
-    """One local-model task, the most time-sensitive first: the movers' reasons (the day's card), a PIB release's
-    companies, a company profile (five a day). The second reads of filings run in the evening only (llm_eval.py),
-    and while one is running this waits for the next tick."""
+    """One local-model task in the evening window (17:00-21:00): movers' reasons, PIB policy matching,
+    or company profiles. Outside the evening window, local LLMs do not run to prevent background fan noise."""
     from . import localllm, movers, policy
-    from .llm_eval import LOCAL_LOCK
+    from .llm_eval import LOCAL_LOCK, in_window
 
     settings = load_settings()
-    if not settings["llm"].get("enabled", True) or not localllm.available(settings):
+    if not settings["llm"].get("enabled", True) or not in_window(settings) or not localllm.available(settings):
         return None
     with tick_lock("tick", LOCAL_LOCK) as got:   # one model in memory at a time
         if not got:
@@ -542,16 +541,19 @@ def local_model_job() -> str | None:
         with session() as conn:
             movers_left = movers.pending_reasons(conn)
             policy_left = policy.pending(conn)
+        res_str = None
         if movers_left:
             res = movers_job(explain=True)
-            return f"movers:{(res or {}).get('explained', 0)} explained"
-        if policy_left:
+            res_str = f"movers:{(res or {}).get('explained', 0)} explained"
+        elif policy_left:
             res = policy_job(fetch=False, match=True)
-            return f"policy:{(res or {}).get('events', 0)} cards" if res else None
-        res = profiles_job()
-        if res and res.get("profiles"):
-            return f"profiles:{sum(1 for p in res['profiles'] if p.get('written'))}"
-        return None
+            res_str = f"policy:{(res or {}).get('events', 0)} cards" if res else None
+        else:
+            res = profiles_job()
+            if res and res.get("profiles"):
+                res_str = f"profiles:{sum(1 for p in res['profiles'] if p.get('written'))}"
+        localllm.unload(settings)
+        return res_str
 
 
 def profiles_job():
