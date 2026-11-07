@@ -116,8 +116,10 @@ DOCUMENT
 
 RESULTS_RULES = """
 - results: the quarter this document reports (prefer consolidated). Use the figures printed for the quarter and
-  the comparable quarters. vs_commitments: check each OPEN COMMITMENT the quarter speaks to — copy its text exactly
-  as given (the part before " — target"); "verdict" sums it up ("no_commitments" when none apply).
+  the comparable quarters. If the filing includes a cash flow statement (e.g. half-year H1 or annual FY results),
+  include the Net Cash Flow from Operating Activities (CFO) with current amount, previous period amount, and change.
+  vs_commitments: check each OPEN COMMITMENT the quarter speaks to — copy its text exactly as given (the part
+  before " — target"); "verdict" sums it up ("no_commitments" when none apply).
   pbt / finance cost / depreciation / other income / exceptional items: the quarter's figures as printed in the
   statement (exceptional_cr signed as it affects profit: a loss is negative), and the same for the year-ago quarter
   in prev_year. ebitda_cr and ebitda_margin_pct only when the document prints them — never derive them yourself.
@@ -190,9 +192,11 @@ RESPONSE_DIR = TRACKER_DIR / "llm"
 PROMPT_VERSION = "v6"          # v5: tables as rows (layout.py); v6: what a results summary covers, in order
 SUMMARY_ORDER = """
   When the document has the period's financials, the lines go in this order: revenue with YoY / QoQ; expenses,
-  EBITDA and margins (with the change in bps); net profit (PAT) and EPS, with YoY; the business's progress (orders,
-  capacity, launches, guidance with numbers); the main tailwinds and headwinds. Say which period each figure is
-  (Q2 FY27, H1 FY27) and whether it is consolidated or standalone."""
+  EBITDA and margins (with the change in bps); net profit (PAT) and EPS, with YoY; net cash flow from operating
+  activities (CFO) with current period amount, previous period amount, and change where the filing includes cash flows
+  (such as half-year H1 or annual statements); the business's progress (orders, capacity, launches, guidance with
+  numbers); the main tailwinds and headwinds. Say which period each figure is (Q2 FY27, H1 FY27) and whether it is
+  consolidated or standalone."""
 
 
 def llm_json(conn: sqlite3.Connection, settings: dict, prompt: str, *, purpose: str, sid: str | None,
@@ -781,14 +785,15 @@ Depreciation | 985.30 | 920.10 | 790.20 | 1,905.40 | 1,510.20
 Profit before tax | 6,686.70 | 4,640.20 | 3,149.70 | 11,326.90 | 4,769.60
 Net profit for the period | 4,791.20 | 3,340.50 | 2,666.10 | 8,131.70 | 3,420.50
 Basic EPS (₹) | 3.27 | 2.28 | 1.82 | 5.55 | 2.33
+Net cash flow from operating activities in H1 FY27 was ₹142.10 Cr vs ₹68.40 Cr in H1 FY26 (+107.7% YoY).
 Order book stands at ₹1,450 Cr as of 30 September 2026. Management raised FY27 revenue growth guidance to 60%+ with 11-12% EBITDA margin.""",
         json.dumps({
             "summary": [
                 "Q2 FY27 consolidated revenue ₹719.85 Cr, up 72.6% YoY and 29.6% QoQ; H1 FY27 revenue ₹1,275.36 Cr, up 84.4% YoY",
                 "Operating EBITDA ₹87.80 Cr, up 78.3% YoY; EBITDA margin 12.2%, up 34 bps YoY and 26 bps QoQ",
                 "Consolidated PAT ₹47.91 Cr, up 79.7% YoY and 43.4% QoQ; EPS ₹3.27 vs ₹1.82 a year ago",
-                "Unexecuted order book at ₹1,450 Cr (2.0x quarterly revenue) as of 30 Sep 2026; execution across 12-18 months",
-                "Management raised FY27 revenue growth guidance to 60%+ YoY (from 40%+), maintaining 11-12% EBITDA margin target"
+                "H1 FY27 cash flow from operations (CFO) was ₹142.10 Cr, up 107.7% YoY from ₹68.40 Cr",
+                "Unexecuted order book at ₹1,450 Cr as of 30 Sep 2026; Management raised FY27 revenue guidance to 60%+ YoY (from 40%+)"
             ]
         }, ensure_ascii=False)
     ),
