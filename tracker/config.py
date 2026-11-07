@@ -60,17 +60,17 @@ DEFAULTS: dict[str, Any] = {
     "schedule": {
         "feeds_from": "07:00",
         "feeds_to": "23:30",
-        "feeds_every_min": 10,             # all NSE feeds, inside feeds_from–feeds_to
-        "market_from": "09:00",            # weekdays in this window: announcements polled faster
+        "feeds_every_min": 1,             # all NSE and BSE feeds, inside feeds_from–feeds_to
+        "market_from": "09:00",            # market hours: announcements polled every 1 min
         "market_to": "18:00",
-        "announcements_every_min": 3,
-        "catch_up_every_min": 30,          # NSE date-range APIs: whatever the rolling RSS windows missed
+        "announcements_every_min": 1,
+        "catch_up_every_min": 15,          # date-range APIs: whatever rolling RSS missed
         "catch_up_max_days": 14,           # how far back the first catch-up after a long gap reaches
         "eod_after": "18:15",
         "deals_after": "17:15",
         "server_poll": True,               # `serve` runs a tick at start-up, then every server_every_min
-        "server_every_min": 3,
-        "launchd_every_min": 3,            # LaunchAgent interval written by scripts/tracker_schedule.sh
+        "server_every_min": 1,             # server poller ticks every 1 minute
+        "launchd_every_min": 1,            # LaunchAgent interval (60s)
     },
     "dashboard": {"port": 7788},
     # ── phase 2: document pipeline ──

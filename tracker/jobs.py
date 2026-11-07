@@ -331,8 +331,8 @@ def feed_cadence(now: datetime, feed: str, sch: dict) -> int | None:
     """Minutes between polls of `feed` right now (None = outside the polling window)."""
     if not (_after(now, sch["feeds_from"]) and not _after(now, sch["feeds_to"])):
         return None
-    market = now.weekday() < 5 and _after(now, sch["market_from"]) and not _after(now, sch["market_to"])
-    if feed == "announcements" and market:
+    market = now.weekday() <= 5 and _after(now, sch["market_from"]) and not _after(now, sch["market_to"])
+    if feed in ("announcements", "bse_announcements") and market:
         return int(sch["announcements_every_min"])
     return int(sch["feeds_every_min"])
 

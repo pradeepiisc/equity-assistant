@@ -25,17 +25,19 @@ from .util import IST, Http, norm_name, now_ist, to_float
 
 BASE = "https://nsearchives.nseindia.com/content/RSS/"
 FEEDS = {
-    "announcements": "Online_announcements.xml",
-    "sast29": "Sast_Regulation29.xml",
-    "sast31": "Sast_Regulation31.xml",
-    "encumbrance": "Sast_ReasonForEncumbrance.xml",
-    "insider": "InsiderTrading.xml",
-    "shareholding": "Shareholding_Pattern.xml",
-    "board": "Board_Meetings.xml",
-    "results": "Integrated_Filing_Financials.xml",
-    "corp_action": "Corporate_action.xml",
+    "announcements": "https://nsearchives.nseindia.com/content/RSS/Online_announcements.xml",
+    "bse_announcements": "https://www.bseindia.com/data/xml/announcements.aspx",
+    "bse_corp_action": "https://www.bseindia.com/data/XML/CorpActionFeed.aspx",
+    "sast29": "https://nsearchives.nseindia.com/content/RSS/Sast_Regulation29.xml",
+    "sast31": "https://nsearchives.nseindia.com/content/RSS/Sast_Regulation31.xml",
+    "encumbrance": "https://nsearchives.nseindia.com/content/RSS/Sast_ReasonForEncumbrance.xml",
+    "insider": "https://nsearchives.nseindia.com/content/RSS/InsiderTrading.xml",
+    "shareholding": "https://nsearchives.nseindia.com/content/RSS/Shareholding_Pattern.xml",
+    "board": "https://nsearchives.nseindia.com/content/RSS/Board_Meetings.xml",
+    "results": "https://nsearchives.nseindia.com/content/RSS/Integrated_Filing_Financials.xml",
+    "corp_action": "https://nsearchives.nseindia.com/content/RSS/Corporate_action.xml",
 }
-_DATE_FORMATS = ("%d-%b-%Y %H:%M:%S", "%d-%b-%Y %H:%M", "%Y-%m-%d %H:%M:%S", "%d-%b-%Y")   # also NSE API stamps
+_DATE_FORMATS = ("%d-%b-%Y %H:%M:%S", "%d-%b-%Y %H:%M", "%Y-%m-%d %H:%M:%S", "%d-%b-%Y")   # also NSE/BSE stamps
 
 
 def parse_ts(s: str) -> str:
@@ -62,12 +64,13 @@ def parse_rss(content: bytes) -> list[dict]:
             "link": fix_link((it.findtext("link") or "").strip()),
             "description": (it.findtext("description") or "").strip(),
             "pubDate": (it.findtext("pubDate") or "").strip(),
+            "scripcode": (it.findtext("scripcode") or "").strip(),
         })
     return items
 
 
 class Matcher:
-    """Maps a filing's company name / link / text to a tracked stock."""
+    """Maps a filing's company name / link / text / scripcode to a tracked stock."""
 
     def __init__(self, conn: sqlite3.Connection):
         self.by_norm: dict[str, sqlite3.Row] = {}
@@ -75,11 +78,27 @@ class Matcher:
         for r in conn.execute("SELECT * FROM refdata WHERE exch='NSE'"):
             self.by_norm.setdefault(r["norm_name"], r)
             self.by_code[r["code"]] = r
+        for r in conn.execute("SELECT * FROM refdata WHERE exch='BSE'"):
+            self.by_norm.setdefault(r["norm_name"], r)
+            self.by_code[r["code"]] = r
         self.tracked = {r["isin"]: r for r in conn.execute("SELECT * FROM stocks") if r["isin"]}
+        self.tracked_bse = {r["bse_code"]: r for r in conn.execute("SELECT * FROM stocks WHERE bse_code IS NOT NULL")}
         self.tracked_norm = {norm_name(r["name"]): r for r in self.tracked.values() if r["name"]}
 
-    def match(self, title: str, link: str, description: str) -> tuple[sqlite3.Row | None, sqlite3.Row | None]:
+    def match(self, title: str, link: str, description: str, scripcode: str = "") -> tuple[sqlite3.Row | None, sqlite3.Row | None]:
         """(refdata row, tracked stock row) — either may be None."""
+        if scripcode:
+            ref = self.by_code.get(scripcode)
+            stock = self.tracked_bse.get(scripcode) or (self.tracked.get(ref["isin"]) if ref is not None else None)
+            if stock is not None:
+                return ref, stock
+        bm = re.search(r"\((\d{6})\)", title)
+        if bm:
+            code = bm.group(1)
+            ref = self.by_code.get(code)
+            stock = self.tracked_bse.get(code) or (self.tracked.get(ref["isin"]) if ref is not None else None)
+            if stock is not None:
+                return ref, stock
         company = re.split(r"\s+-\s+Ex-Date", title)[0].strip()
         ref = self.by_norm.get(norm_name(company))
         if ref is None:
@@ -91,8 +110,7 @@ class Matcher:
             ref = self.by_code.get(token)
         stock = self.tracked.get(ref["isin"]) if ref is not None else None
         if stock is None and ref is None:
-            # by name only when the exchange master doesn't know the company: a known ISIN that isn't tracked
-            # is another company (SIYSIL's filings once matched 544047 by a wrong stored name)
+            # by name only when the exchange master doesn't know the company
             stock = self.tracked_norm.get(norm_name(company))
         return ref, stock
 
@@ -106,7 +124,7 @@ def _event_for(feed: str, it: dict, stock: sqlite3.Row, settings: dict) -> dict:
     """Event fields for one feed item of a tracked stock."""
     desc = it["description"]
     orders = settings["orders"]
-    if feed == "announcements":
+    if feed in ("announcements", "bse_announcements"):
         c = classify.classify_announcement(desc, sales_ttm_cr=stock["sales_ttm_cr"],
                                            high_pct=orders["high_pct_of_revenue"], usd_inr=orders["usd_inr"])
         text, subject = classify.split_subject(desc)
@@ -142,7 +160,7 @@ def _event_for(feed: str, it: dict, stock: sqlite3.Row, settings: dict) -> dict:
     if feed == "results":
         return {"kind": "filing", "type": "results", "severity": "medium", "title": "Results filed",
                 "detail": desc.replace("|", " · "), "data": {}}
-    if feed == "corp_action":
+    if feed in ("corp_action", "bse_corp_action"):
         purpose = re.search(r"PURPOSE:([^|]+)", desc)
         p = purpose.group(1).strip() if purpose else desc
         big = bool(re.search(r"bonus|split|sub-?division|buy\s*-?back|rights", p, re.I))
@@ -155,7 +173,7 @@ def _event_for(feed: str, it: dict, stock: sqlite3.Row, settings: dict) -> dict:
 
 def _goes_to_ai(feed: str, ev: dict, it: dict, settings: dict) -> bool:
     docs = settings.get("documents", {})
-    return (feed == "announcements" and docs.get("enabled", True) and settings.get("llm", {}).get("enabled", True)
+    return (feed in ("announcements", "bse_announcements") and docs.get("enabled", True) and settings.get("llm", {}).get("enabled", True)
             and ev["type"] in set(docs.get("kinds") or []) and (it.get("link") or "").lower().endswith(".pdf"))
 
 
@@ -188,6 +206,7 @@ def _ingest(conn: sqlite3.Connection, feed: str, it: dict, matcher: Matcher, set
             source: str) -> tuple[bool, bool]:
     """Store one feed item (once) and turn it into an event when it belongs to a tracked stock → (new, tracked)."""
     guid = _guid(feed, it)
+    scrip = it.get("scripcode", "")
     seen = conn.execute("SELECT guid, sid FROM feed_items WHERE feed=? AND guid=?", (feed, guid)).fetchone() or \
         (conn.execute("SELECT guid, sid FROM feed_items WHERE feed=? AND url=?", (feed, it["link"])).fetchone()
          if it["link"] else None)   # the same filing, already seen by the other path (RSS ↔ API)
@@ -195,7 +214,7 @@ def _ingest(conn: sqlite3.Connection, feed: str, it: dict, matcher: Matcher, set
         if seen["sid"] is not None:
             return False, False
         # stored while the company wasn't tracked: if it is now (added to the watchlist), it becomes an event
-        ref, stock = matcher.match(it["title"], it["link"], it["description"])
+        ref, stock = matcher.match(it["title"], it["link"], it["description"], scripcode=scrip)
         if stock is None:
             return False, False
         conn.execute("UPDATE feed_items SET sid=? WHERE feed=? AND guid=?", (stock["sid"], feed, seen["guid"]))
@@ -211,7 +230,7 @@ def _ingest(conn: sqlite3.Connection, feed: str, it: dict, matcher: Matcher, set
                   title=ev["title"], detail=ev.get("detail", ""), value_cr=ev.get("value_cr"),
                   url=it["link"], source=source, data=ev.get("data"), dedupe=f"feed:{feed}:{guid}")
         return False, True
-    ref, stock = matcher.match(it["title"], it["link"], it["description"])
+    ref, stock = matcher.match(it["title"], it["link"], it["description"], scripcode=scrip)
     ts = parse_ts(it["pubDate"])
     text, subject = classify.split_subject(it["description"])
     conn.execute(
@@ -245,16 +264,16 @@ def _ingest(conn: sqlite3.Connection, feed: str, it: dict, matcher: Matcher, set
 
 
 def poll(conn: sqlite3.Connection, http: Http, settings: dict, only: list[str] | None = None) -> dict:
-    """Poll the NSE feeds (all, or just the ones in `only`); returns per-feed counts."""
+    """Poll the NSE and BSE feeds (all, or just the ones in `only`); returns per-feed counts."""
     matcher = Matcher(conn)
     stamp = now_ist().isoformat(timespec="seconds")
     out: dict[str, object] = {}
-    for feed, fname in FEEDS.items():
+    for feed, url in FEEDS.items():
         if only is not None and feed not in only:
             continue
         kv_set(conn, f"feed_polled:{feed}", stamp)   # stamped even on failure: no retry storm
         try:
-            r = http.get(BASE + fname)
+            r = http.get(url)
         except Exception as exc:
             out[feed] = f"error: {exc}"
             continue
@@ -267,8 +286,9 @@ def poll(conn: sqlite3.Connection, http: Http, settings: dict, only: list[str] |
             out[feed] = f"parse error: {exc}"
             continue
         new = tracked = 0
+        src = f"BSE · {feed.removeprefix('bse_')}" if feed.startswith("bse_") else f"NSE · {feed}"
         for it in items:
-            n, t = _ingest(conn, feed, it, matcher, settings, stamp, f"NSE · {fname.removesuffix('.xml')}")
+            n, t = _ingest(conn, feed, it, matcher, settings, stamp, src)
             new, tracked = new + n, tracked + t
         out[feed] = {"items": len(items), "new": new, "tracked": tracked}
         if new or items:

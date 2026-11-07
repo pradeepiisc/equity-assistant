@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # Install / remove the macOS LaunchAgent that runs the stock tracker every few minutes.
 #
-#   bash scripts/tracker_schedule.sh install [seconds]   # start polling (default 180 s; runs once now)
+#   bash scripts/tracker_schedule.sh install [seconds]   # start polling (default 60 s; runs once now)
 #   bash scripts/tracker_schedule.sh uninstall   # stop and remove
 #   bash scripts/tracker_schedule.sh status
 #   bash scripts/tracker_schedule.sh logs
 #
 # Each pass runs only what is due (see `schedule:` in tracker.yaml): the announcements feed
-# every 3 min on weekdays 09:00–18:00, the other NSE feeds every 10 min (07:00–23:30),
+# every 1 min on trading days 09:00–18:00, other feeds every 1 min (07:00–23:30),
 # bulk/block deals after 17:15 and bhavcopy prices after 18:15 on trading days, then signals
 # and alerts. A lock file keeps it from overlapping the dashboard server's own poll loop.
 # Missed runs (Mac asleep) catch up on wake. LaunchAgents run in your login session, so
@@ -20,7 +20,7 @@ DOMAIN="gui/$(id -u)"
 
 case "${1:-status}" in
   install)
-    INTERVAL="${2:-180}"
+    INTERVAL="${2:-60}"
     mkdir -p "$HOME/Library/LaunchAgents" "$ROOT/data/tracker/logs"
     cat > "$PLIST" <<EOF
 <?xml version="1.0" encoding="UTF-8"?>

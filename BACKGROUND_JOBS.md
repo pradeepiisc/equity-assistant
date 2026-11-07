@@ -9,11 +9,11 @@ They are all macOS LaunchAgents in `~/Library/LaunchAgents/`, plus the dashboard
 
 | Job / Agent | Schedule / Interval | Purpose | Resource Impact |
 | :--- | :--- | :--- | :--- |
-| **`com.equity-assistant.tracker`** <br>*(LaunchAgent + Server Poller)* | **Every 3 minutes** (`StartInterval 180`) | Calls `scripts/tracker_tick.sh` → `python -m tracker tick`, which runs the price feeds, NSE filing downloads and LLM extractions. The dashboard (`python -m tracker serve`) also ticks every 3 min while it is open. A lock file lets only one tick run at a time. | **Very High** (starts the local LLM jobs below) |
-| ↳ **`local_model_job` (`local_read`)** | Every tick that has a pending filing *(until 2026-11-05)*; **now nightly 17:00–21:00 only, see §4** | Runs the local LLM (`qwen3.8:27b`) to write a second summary of each filing beside gpt-4.1's (`extract.shadow_read`). | **Highest CPU/GPU load** (1.5–3.5 min of full GPU per document) |
-| ↳ movers / policy / profiles | One task per tick (movers after EOD, PIB policy every 3 h, 5 profiles a day) | Local model: why a stock moved, which companies a PIB release affects, company profiles. | Medium (fewer and shorter calls) |
-| ↳ **`documents`** | Every tick (at most 60 s) | Downloads filing PDFs and extracts them with gpt-4.1 (Azure). | Low to Moderate (I/O & API calls) |
-| ↳ **`feeds` & `catch_up`** | Announcements every 3 min on weekdays 09:00–18:00; other feeds every 10 min, 07:00–23:30; catch-up every 30 min | Polls NSE announcements, corporate actions, results, SAST and the rest. | Very Low (fast HTTP polling) |
+| **`com.equity-assistant.tracker`** <br>*(LaunchAgent + Server Poller)* | **Every 1 minute** (`StartInterval 60`) | Calls `scripts/tracker_tick.sh` → `python -m tracker tick`, which polls NSE and BSE filing feeds, downloads PDFs and runs extractions. The dashboard (`python -m tracker serve`) also polls every 1 min while open. | Low to Moderate |
+| ↳ **`local_model_job` (`local_read`)** | Evening window 17:00–21:00 only | Runs local LLMs (`gemma4:26b-a4b`, `qwen3.8:27b`) for side-by-side filing reads (`llm_eval.py`). | High (evening window only) |
+| ↳ movers / policy / profiles | One task per tick when due | Local model: why a stock moved, PIB policy matching, company profiles. | Low to Medium |
+| ↳ **`documents`** | Every tick (at most 60 s) | Downloads filing PDFs (NSE and BSE direct) and extracts them with gpt-4.1 (Azure). | Low to Moderate |
+| ↳ **`feeds` & `catch_up`** | Every 1 min from 07:00–23:30 | Polls NSE announcements, BSE live announcements (`announcements.aspx`), corporate actions, results, SAST, etc. | Very Low (< 3s HTTP) |
 | ↳ **`prices` & `signals`** | Weekdays after 18:15 IST | Syncs the EOD bhavcopy prices and recalculates the DMA technicals. | Low |
 | ↳ `deals`, `shareholding`, `holders`, `results`, `history`, `alerts`, `bse_fallback`, `valuations` | When due inside a tick | Bulk/block deals, shareholding, XBRL results, alerts, the Screener fallback for BSE-only stocks, valuation memos (gpt-4.1). | Low |
 | **`com.equity-assistant.kite-daily`** | Weekdays every 30 min from 16:00 to 21:00 | Fetches the Kite portfolio holdings and updates the daily tracking files. Accounts already saved that day are skipped. | Low |
