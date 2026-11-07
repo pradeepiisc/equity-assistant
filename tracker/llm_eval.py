@@ -347,6 +347,58 @@ def nightly(settings: dict, force: bool = False) -> dict:
     return out
 
 
+def _wrong_figures_by_date(rows: list, models: list[str]) -> list[str]:
+    """Section at the bottom of final-eval.md detailing exactly which figures each model got wrong per filing."""
+    by_day: dict[str, list] = {}
+    for r in rows:
+        by_day.setdefault(r["day"], []).append(r)
+
+    lines = ["## Wrong Figures Analysis by Date", "",
+             "Specific examples of filings where each model reported incorrect numbers, wrong periods, "
+             "inverted YoY/QoQ directions, or unsupported figures as identified by blind evaluation against the source PDFs.", ""]
+
+    for day in sorted(by_day.keys(), reverse=True):
+        drows = by_day[day]
+        err_rows = []
+        for r in drows:
+            j = json.loads(r["data"])
+            if any((g.get("wrong_figures") or 0) > 0 for g in j["grades"].values()):
+                err_rows.append((r, j))
+
+        d_obj = date.fromisoformat(day)
+        lines.append(f"### {d_obj.strftime('%a %d %b %Y')} ({len(err_rows)} of {len(drows)} filings with errors)")
+        lines.append("")
+
+        if not err_rows:
+            lines.append("_No incorrect figures reported on this date._\n")
+            continue
+
+        for r, j in err_rows:
+            sid = r["sid"]
+            kind = r["kind"].replace("_", " ").title()
+            period = f" ({r['period']})" if r["period"] else ""
+            lines.append(f"#### {sid}: {kind}{period}")
+            lines.append(f"**PDF:** `{r['path']}`  ")
+            if j.get("note"):
+                lines.append(f"**Judge Evaluation:** {j['note']}  ")
+
+            for v in _order(j["summaries"]):
+                g = j["grades"].get(v) or {}
+                w = g.get("wrong_figures") or 0
+                tot = g.get("figures") or 0
+                lbl = label(v, models)
+                worst = g.get("worst")
+                if w > 0:
+                    lines.append(f"- **{lbl}**: **{w}/{tot} wrong figures**" + (f" — *Issue: {worst}*" if worst else ""))
+                    for s_line in j["summaries"][v]:
+                        lines.append(f"  - `{s_line}`")
+                else:
+                    lines.append(f"- **{lbl}**: 0 wrong figures ({tot} figures verified)")
+            lines.append("")
+
+    return lines
+
+
 def final(settings: dict, force: bool = False) -> dict:
     """Updates final-eval.md with the cumulative table across all graded evenings.
     Records the final decision in kv once weekdays_needed evenings are graded."""
@@ -358,7 +410,9 @@ def final(settings: dict, force: bool = False) -> dict:
             return {"skipped": "already decided", **already_decided}
         days = [r["day"] for r in conn.execute("SELECT DISTINCT day FROM eval_judgements WHERE day >= ? ORDER BY day",
                                                (cfg["from"],)) if date.fromisoformat(r["day"]).weekday() <= 5]
-        rows = conn.execute("SELECT * FROM eval_judgements WHERE day >= ?", (cfg["from"],)).fetchall()
+        rows = conn.execute("SELECT j.*, d.sid, d.kind, d.title, d.period, d.path FROM eval_judgements j "
+                            "JOIN documents d ON d.id=j.doc_id WHERE j.day >= ? ORDER BY j.day DESC, d.filed_at",
+                            (cfg["from"],)).fetchall()
         if not rows:
             return {"waiting": "nothing graded"}
         agg = aggregate(conn, rows)
@@ -390,6 +444,10 @@ def final(settings: dict, force: bool = False) -> dict:
         lines += ["Next step (not applied automatically): point the live filing read at the local model "
                   f"(`llm.local_model: {decision.removeprefix('local:')}` in tracker.yaml and a local path in "
                   "`extract.call_llm`). It takes minutes per filing instead of seconds, so alerts from filings arrive later.", ""]
+    
+    # Add the detailed wrong figures breakdown by date
+    lines += _wrong_figures_by_date(rows, models)
+
     EVAL_DIR.mkdir(parents=True, exist_ok=True)
     path = EVAL_DIR / "final-eval.md"
     path.write_text("\n".join(lines) + "\n")
